@@ -35,8 +35,8 @@ Obrazovky:
 Flutter:
 	- flutter_map
 	- sqflite
+	- connectivity_plus
 	- firebase_cloud_messaging
-	- firebase_storage ???
 	- shared_preferences
 	- flutter_staggered_grid_view
 	- camera
@@ -45,7 +45,7 @@ Flutter:
 	- get_it
 	- animated_bottom_navigation_bar
 	- either
-	- google_fonts
+
 Spring boot:
 	- OAuth
 	- PostgreSQL (Spring data JPA)

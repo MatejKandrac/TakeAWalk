@@ -1,0 +1,55 @@
+# Authentification
+GET api/v1/auth/login?email=xxx$password=vijfd
+POST api/v1/auth/register?username=hvdujs&email=vijf&psassword=njvfi
+
+# Get invitations and myEvents
+GET events/{user_id}/invitations?paggination=1
+GET events/{user_id}/myEvents?paggination=1
+
+# Accept/Decline
+PUT events/{user_id}/invitations/accept?event_id=2
+PUT events/{user_id}/invitations/decline?event_id=2  (soft delete)
+
+# Filter
+GET events/{user_id}/invitations/filter?date=string&places=int&minPeople=int&orderBy=string&history=bool
+GET events/{user_id}/my-events/filter?date=string&places=int&minPeople=int&orderBy=string&history=bool
+
+# MAP
+GET events/{user_id}/myEvents/map?limit=int (limit bude null a na backende bude default)
+GET events/{event_id}/map/event_detail
+GET events/{event_id}/map/locations
+
+# Event detail
+GET event/{event_id}/host
+GET event/{event_id}/people
+GET event/{event_id}/description
+GET event/{event_id}/data # image links
+GET event/{event_id}/status
+
+# Event progress
+GET event/{event_id}/pictures
+POST event/[event_id}/picture
+DELETE event/{event_id}/picture?picture_id=long
+PUT event/{event_id}/description?newdescription=string
+PUT event/{event_id}/location-status?location_id=long&status=string
+
+# Profile
+GET user/{user_id}/profile
+
+# Profile edit
+PUT user/{user_id}/edit?data=(payload) # username, password, description
+PUT user/{user_id}/profile-picture
+
+# Chat
+GET chat/{chat_id}/messages?paggination=1
+POST chat/{chat_id}/message?data=(payload)  # user_id, msg_text
+
+
+
+# Weather API
+/data/2.5/forecast?lat=48.148598&lon=17.107748&appid={appid}&units=metric
+/data/2.5/weather?lat=48.148598&lon=17.107748&appid={appid}&units=metric
+
+https://api.openweathermap.org/data/2.5/forecast?lat=48.148598&lon=17.107748&appid={appid}&units=metric
+
+
