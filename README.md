@@ -37,8 +37,25 @@ flutterfire configure --project=takeawalk-65934
 To generate launcher icons, run in project root directory:
 ```
 flutter pub get
-
 flutter pub run icons_launcher:create
 ```
 
 This step is required only if app launcher icon in assets folder was edited.
+
+## Splash generation
+To generate splash view, run in project root directory:
+```
+flutter pub get
+flutter pub run flutter_native_splash:create
+```
+
+## Retrofit api generator
+To generate retrofit api requests, run command:
+```
+flutter pub get
+flutter pub run build_runner build
+```
+
+
+## FEATURE FLOW
+view -> bloc -> repository impl -> datasource
