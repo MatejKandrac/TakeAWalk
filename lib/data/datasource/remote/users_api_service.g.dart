@@ -12,7 +12,9 @@ class _UsersApiService implements UsersApiService {
   _UsersApiService(
     this._dio, {
     this.baseUrl,
-  });
+  }) {
+    baseUrl ??= 'http://127.0.0.1:8080';
+  }
 
   final Dio _dio;
 
@@ -39,6 +41,32 @@ class _UsersApiService implements UsersApiService {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = AuthResponse.fromMap(_result.data!);
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<ProfileResponse>> getProfile(userId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{
+      "Authorization" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXRrZW5rYW5AZ21haWwuY29tIiwiZXhwIjoxNjgxMDQzODk5LCJ1c2VySWQiOiIyIn0.CpV7F_GpXYdC71n5cBwY8USn1umEJOrTvumquSPtYa6MjC-6GF5JoipjDI_WmMDAFn_YfaBb4dP5a2djd5jiEw"
+    };
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<ProfileResponse>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/user/${userId}/profile',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ProfileResponse.fromMap(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

@@ -5,7 +5,7 @@ class AppConstants {
 
   static const appName = "TakeAWalk";
 
-  static const baseUrl = "192.168.137.1:8080";
+  static const baseUrl = "http://127.0.0.1:8080";
   static const storageKeyToken = "TAKEAWALK_TOKEN_KEY";
 }
 

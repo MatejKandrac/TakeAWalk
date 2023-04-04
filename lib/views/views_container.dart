@@ -1,6 +1,6 @@
 
-export 'auth/login/login_view.dart';
-export 'auth/register/register_view.dart';
+export 'login/login_view.dart';
+export 'register/register_view.dart';
 export 'chat/chat_view.dart';
 export 'event/create/create_event/create_event_view.dart';
 export 'event/create/pick_location/pick_location_view.dart';

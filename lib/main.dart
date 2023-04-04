@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/di.dart';
+import 'package:take_a_walk_app/views/bloc_container.dart';
 
 import 'config/firebase_options.dart';
 import 'config/theme.dart';
@@ -29,15 +31,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _appRouter.config(
-        initialRoutes: [
-          const SplashRoute()
-        ]
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SplashBloc>(create: (context) => di()),
+        BlocProvider<LoginBloc>(create: (context) => di(), lazy: true),
+        BlocProvider<RegisterBloc>(create: (context) => di(), lazy: true),
+      ],
+      child: MaterialApp.router(
+        routerConfig: _appRouter.config(
+          initialRoutes: [
+            const SplashRoute()
+          ]
+        ),
+        title: 'TakeAWalk',
+        debugShowCheckedModeBanner: false,
+        theme: themeData
       ),
-      title: 'TakeAWalk',
-      debugShowCheckedModeBanner: false,
-      theme: themeData
     );
   }
 }

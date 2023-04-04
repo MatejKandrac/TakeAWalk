@@ -2,7 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'ui/bloc/bloc_container.dart';
+import 'views/bloc_container.dart';
 import 'data/repositories_impl_container.dart';
 import 'domain/repositories_container.dart';
 
@@ -17,7 +17,7 @@ initDependencies() async {
   // BLOCS
   di.registerFactory<SplashBloc>(() => SplashBloc());
   di.registerFactory<LoginBloc>(() => LoginBloc(di()));
-
+  di.registerFactory<RegisterBloc>(() => RegisterBloc());
   // REPOSITORIES
   di.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(di()));
 
