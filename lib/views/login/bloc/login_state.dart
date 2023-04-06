@@ -7,14 +7,12 @@ abstract class LoginState {
 
 class LoginFormState extends LoginState{
 
-  final String? initialEmail;
-  final String? emailError;
-  final String? passwordError;
+  final bool emailError;
+  final bool passwordError;
 
   const LoginFormState({
-    this.initialEmail,
-    this.emailError,
-    this.passwordError
+    this.emailError = false,
+    this.passwordError = false
   });
 }
 
@@ -24,4 +22,9 @@ class LoginLoadingState extends LoginState {
 
 class LoginSuccessState extends LoginState {
   const LoginSuccessState();
+}
+
+class LoginErrorState extends LoginState {
+  final String errorText;
+  const LoginErrorState(this.errorText);
 }

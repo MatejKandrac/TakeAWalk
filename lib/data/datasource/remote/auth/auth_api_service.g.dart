@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'users_api_service.dart';
+part of 'auth_api_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'users_api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers
 
-class _UsersApiService implements UsersApiService {
-  _UsersApiService(
+class _AuthApiService implements AuthApiService {
+  _AuthApiService(
     this._dio, {
     this.baseUrl,
   }) {
@@ -21,12 +21,12 @@ class _UsersApiService implements UsersApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<AuthResponse>> login(loginRequest) async {
+  Future<HttpResponse<AuthResponse>> login(request) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(loginRequest?.toMap() ?? <String, dynamic>{});
+    _data.addAll(request?.toMap() ?? <String, dynamic>{});
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<AuthResponse>>(Options(
       method: 'POST',
@@ -46,25 +46,50 @@ class _UsersApiService implements UsersApiService {
   }
 
   @override
-  Future<HttpResponse<ProfileResponse>> getProfile(userId) async {
+  Future<HttpResponse<AuthResponse>> register(request) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final Map<String, dynamic>? _data = null;
+    final _data = <String, dynamic>{};
+    _data.addAll(request?.toMap() ?? <String, dynamic>{});
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<ProfileResponse>>(Options(
-      method: 'GET',
+        _setStreamType<HttpResponse<AuthResponse>>(Options(
+      method: 'POST',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              '/v1/user/${userId}/profile',
+              '/auth/register',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = ProfileResponse.fromMap(_result.data!);
+    final value = AuthResponse.fromMap(_result.data!);
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<AuthResponse>> refreshToken(refreshToken) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = refreshToken;
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<HttpResponse<AuthResponse>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/auth/refresh',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = AuthResponse.fromMap(_result.data!);
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

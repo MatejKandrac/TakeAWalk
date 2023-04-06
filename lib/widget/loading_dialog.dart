@@ -21,7 +21,7 @@ class LoadingDialog extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const CircularProgressIndicator(),
-            Text(loadingText)
+            Text(loadingText, textAlign: TextAlign.center,)
           ],
         ),
       ),

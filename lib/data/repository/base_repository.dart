@@ -22,9 +22,7 @@ abstract class BaseApiRepository {
         return Left(response.response.statusCode.toRequestError());
       }
     } on DioError catch (e) {
-      debugPrint(e.toString());
-      return const Left(RequestError.unknown);
+      return Left(e.response?.statusCode.toRequestError() ?? RequestError.unknown);
     }
-    
   }
 }

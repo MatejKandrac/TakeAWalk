@@ -26,6 +26,22 @@ class LoginPage extends HookWidget {
     AutoRouter.of(context).push(const RegisterRoute());
   }
 
+  _onLoading(BuildContext context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const LoadingDialog(loadingText: "Logging in, please wait...")
+    );
+  }
+
+  _onError(BuildContext context, String error) {
+    Navigator.of(context).pop(); // Pop loading dialog
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.red,
+      content: Text(error, style: Theme.of(context).textTheme.bodySmall),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     final emailController = useTextEditingController();
@@ -34,92 +50,95 @@ class LoginPage extends HookWidget {
       listener: (context, state) {
         if (state is LoginSuccessState) {
           _onLoginSuccess(context);
-        } if (state is LoginLoadingState) {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (context) => const LoadingDialog(loadingText: "Logging in, please wait...")
-          );
+        } else if (state is LoginLoadingState) {
+          _onLoading(context);
+        } else if (state is LoginErrorState) {
+          _onError(context, state.errorText);
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
-        builder: (context, state) => SafeArea(
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Padding(
-              padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Login", style: Theme.of(context).textTheme.displayMedium),
-                  const SizedBox(height: 10),
-                  Expanded(
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            top: 35,
-                            child: Card(
-                              elevation: 10,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15)
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10, right: 10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    AppTextField(
-                                      controller: emailController,
-                                      labelText: "E-mail",
-                                      icon: const Icon(Icons.email_outlined, size:35),
-                                      inputAction: TextInputAction.next,
-                                    ),
-                                    const SizedBox(height: 30),
-                                    AppTextField(
-                                      controller: passwordController,
-                                      labelText: "Password",
-                                      icon: const Icon(Icons.lock_outline, size:35),
-                                      inputAction: TextInputAction.next,
-                                      obscureText: true,
-                                    )
-                                  ],
+        buildWhen: (previous, current) => current is LoginFormState,
+        builder: (context, state) {
+          return SafeArea(
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: Padding(
+                padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Login", style: Theme.of(context).textTheme.displayMedium),
+                    const SizedBox(height: 10),
+                    Expanded(
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              top: 35,
+                              child: Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 10, right: 10),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      AppTextField(
+                                        controller: emailController,
+                                        labelText: "E-mail",
+                                        icon: const Icon(Icons.email_outlined, size:35),
+                                        inputAction: TextInputAction.next,
+                                        errorText: (state as LoginFormState).emailError ? "This field is required" : null,
+                                      ),
+                                      const SizedBox(height: 30),
+                                      AppTextField(
+                                        controller: passwordController,
+                                        labelText: "Password",
+                                        icon: const Icon(Icons.lock_outline, size:35),
+                                        inputAction: TextInputAction.next,
+                                        obscureText: true,
+                                        errorText: state.passwordError ? "This field is required" : null,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const Align(
-                            alignment: Alignment.topCenter,
-                            child: Icon(Icons.account_circle, size: 70),
-                          )
-                        ],
-                      )
-                  ),
-                  Expanded(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          AppButton.gradient(
-                              onPressed: () => _onLogin(emailController.text, passwordController.text, context),
-                              child: Text("Login", style: Theme.of(context).textTheme.bodyMedium)
-                          ),
-                          Text("Don't have an account?", style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.bold
-                          )),
-                          AppButton.text(
-                              child: Text("Create new account", style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: const Color(0xff7740c2)
-                              )),
-                              onPressed: () => _onRegister(context)
-                          )
-                        ],
-                      )
-                  )
-                ],
+                            const Align(
+                              alignment: Alignment.topCenter,
+                              child: Icon(Icons.account_circle, size: 70),
+                            )
+                          ],
+                        )
+                    ),
+                    Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            AppButton.gradient(
+                                onPressed: () => _onLogin(emailController.text, passwordController.text, context),
+                                child: Text("Login", style: Theme.of(context).textTheme.bodyMedium)
+                            ),
+                            Text("Don't have an account?", style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                fontWeight: FontWeight.bold
+                            )),
+                            AppButton.text(
+                                child: Text("Create new account", style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: const Color(0xff7740c2)
+                                )),
+                                onPressed: () => _onRegister(context)
+                            )
+                          ],
+                        )
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
