@@ -11,4 +11,5 @@ export 'map/map_view.dart';
 export 'my_events/my_events_view.dart';
 export 'splash/splash_view.dart';
 export 'profile/profile_view.dart';
+export 'profile/profile_edit_view.dart';
 export 'filter/filter_view.dart';

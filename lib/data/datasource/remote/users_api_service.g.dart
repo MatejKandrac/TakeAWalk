@@ -49,9 +49,7 @@ class _UsersApiService implements UsersApiService {
   Future<HttpResponse<ProfileResponse>> getProfile(userId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{
-      "Authorization" : "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXRrZW5rYW5AZ21haWwuY29tIiwiZXhwIjoxNjgxMDQzODk5LCJ1c2VySWQiOiIyIn0.CpV7F_GpXYdC71n5cBwY8USn1umEJOrTvumquSPtYa6MjC-6GF5JoipjDI_WmMDAFn_YfaBb4dP5a2djd5jiEw"
-    };
+    final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<HttpResponse<ProfileResponse>>(Options(
