@@ -7,7 +7,7 @@ class AppButton extends StatelessWidget {
     Key? key,
     required this.child,
     required this.onPressed,
-    this.height = 60,
+    this.height = 55,
   }) : backgroundColor = Colors.transparent,
         gradient = null,
         outlineColor = null,
@@ -18,7 +18,7 @@ class AppButton extends StatelessWidget {
     Key? key,
     required this.child,
     required this.onPressed,
-    this.height = 60,
+    this.height = 55,
     this.backgroundColor = const Color(0xff7740c2),
   }) : gradient = null,
         outlineColor = null,
@@ -29,7 +29,7 @@ class AppButton extends StatelessWidget {
     Key? key,
     required this.child,
     required this.onPressed,
-    this.height = 60,
+    this.height = 55,
     this.backgroundColor = const Color(0xffF20AB8),
   }) : gradient = null,
         outlineColor = null,
@@ -46,7 +46,7 @@ class AppButton extends StatelessWidget {
           Color(0xff6C30E8)
         ]
     ),
-    this.height = 60,
+    this.height = 55,
   }) : outlineColor = null,
         radius = 30,
         backgroundColor = Colors.transparent,
@@ -58,7 +58,7 @@ class AppButton extends StatelessWidget {
     required this.outlineColor,
     required this.onPressed,
     this.radius = 30,
-    this.height = 60,
+    this.height = 55,
     this.backgroundColor = Colors.transparent,
   }) : gradient = null, super(key: key);
 
@@ -70,7 +70,7 @@ class AppButton extends StatelessWidget {
     this.outlineColor,
     this.gradient,
     this.radius = 30,
-    this.height = 60
+    this.height = 55
   }) : super(key: key);
 
   final double height;
@@ -79,7 +79,7 @@ class AppButton extends StatelessWidget {
   final Color? outlineColor;
   final Color backgroundColor;
   final double radius;
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {

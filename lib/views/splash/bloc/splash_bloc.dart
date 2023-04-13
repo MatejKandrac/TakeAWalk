@@ -15,7 +15,7 @@ class SplashBloc extends Cubit<SplashState> {
 
   checkLoggedIn() async {
     emit(const SplashState(""));
-    await storage.deleteAll(); // TODO ONLY FOR DEBUG PURPOSES, REMOVE LATER
+    // await storage.deleteAll(); // TODO ONLY FOR DEBUG PURPOSES, REMOVE LATER
     if (await storage.containsKey(key: AppConstants.storageKeyToken)) {
       emit(const SplashState("", continueMain: true));
     } else {

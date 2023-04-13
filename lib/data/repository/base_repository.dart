@@ -22,6 +22,9 @@ abstract class BaseApiRepository {
         return Left(response.response.statusCode.toRequestError());
       }
     } on DioError catch (e) {
+      if (e.response == null) {
+        return const Left(RequestError.noInternet);
+      }
       return Left(e.response?.statusCode.toRequestError() ?? RequestError.unknown);
     }
   }
