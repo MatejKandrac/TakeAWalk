@@ -1,9 +1,11 @@
 
 
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:take_a_walk_app/config/constants.dart';
+import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
 import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
 import 'package:take_a_walk_app/views/event/create/create_event/widgets/location_widget.dart';
@@ -22,7 +24,11 @@ class CreateEventPage extends HookWidget {
     ProfileResponse(username: "Tomasko", email: "")
   ];
 
-  _onLocationPick(BuildContext context, TextEditingController dateController) {
+  _onPickPerson(BuildContext context) {
+    AutoRouter.of(context).push(const PickPersonRoute());
+  }
+
+  _onDatePick(BuildContext context, TextEditingController dateController) {
     showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -73,7 +79,7 @@ class CreateEventPage extends HookWidget {
                   labelText: "Date",
                   inputType: TextInputType.datetime,
                   icon: InkWell(
-                    onTap: () => _onLocationPick(context, dateController),
+                    onTap: () => _onDatePick(context, dateController),
                     child: const Icon(Icons.calendar_today),
                   ),
                 ),
@@ -150,18 +156,19 @@ class CreateEventPage extends HookWidget {
                   ),
                 ),
                 const SizedBox(height: 10),
-                AppButton.outlined(outlineColor: Colors.white, onPressed: () {},
+                AppButton.outlined(outlineColor: Colors.white,
+                    onPressed: () => _onPickPerson(context),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text("Add"),
-                        SizedBox(width: 5),
-                        Icon(Icons.add)
+                      children: [
+                        Text("Add", style: Theme.of(context).textTheme.bodySmall),
+                        const SizedBox(width: 5),
+                        const Icon(Icons.add)
                       ],
                     )
                 ),
                 const SizedBox(height: 20),
-                AppButton.gradient(child: Text("Create event"), onPressed: () {})
+                AppButton.gradient(child: Text("Create event", style: Theme.of(context).textTheme.bodySmall), onPressed: () {})
               ],
             ),
           ),

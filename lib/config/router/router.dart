@@ -24,7 +24,7 @@ class AppRouter extends _$AppRouter {
     CustomRoute(page: ProfileEditRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
     CustomRoute(page: ChatRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
     CustomRoute(page: PickPersonRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
-    CustomRoute(page: LocationPickRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
+    CustomRoute(page: PickLocationRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
     CustomRoute(page: FilterRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
   ];
 
