@@ -3,14 +3,16 @@ import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_a_walk_app/domain/models/requests/register_request.dart';
 import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
+import 'package:take_a_walk_app/utils/messaging_service.dart';
 
 part 'register_state.dart';
 
 class RegisterBloc extends Cubit<RegisterState> {
   
   final AuthRepository _authRepository;
+  final MessagingService _messagingService;
   
-  RegisterBloc(this._authRepository) : super(const RegisterFormState());
+  RegisterBloc(this._authRepository, this._messagingService) : super(const RegisterFormState());
 
   void register(String username, String email, String password, String confirmPass) {
     String? usernameErr = username.isEmpty ? "This field is required" : null;
@@ -37,6 +39,7 @@ class RegisterBloc extends Cubit<RegisterState> {
         if (!result) {
           emit(const RegisterErrorState("Failed to save data"));
         } else {
+          _messagingService.registerDeviceToken();
           emit(const RegisterSuccessState());
         }
       },

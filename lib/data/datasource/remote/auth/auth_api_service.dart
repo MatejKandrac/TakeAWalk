@@ -21,4 +21,7 @@ abstract class AuthApiService {
 
   @POST('/auth/refresh')
   Future<HttpResponse<AuthResponse>> refreshToken(@Body() String refreshToken);
+
+  @POST('/v1/user/{user_id}/device-token')
+  Future<HttpResponse<String>> sendDeviceToken(@Path('user_id') int userId, @Header("Authorization") String token, @Body() String deviceToken);
 }

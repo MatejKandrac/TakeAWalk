@@ -25,6 +25,7 @@ dependencies:
   latlong2: ^0.8.1
   date_field: ^3.0.0
   numberpicker: ^2.1.1
+  firebase_messaging: ^14.4.0
 
 dev_dependencies:
   flutter_test:

@@ -4,14 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:take_a_walk_app/domain/models/requests/login_request.dart';
 import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
+import 'package:take_a_walk_app/utils/messaging_service.dart';
 
 part 'login_state.dart';
 
 class LoginBloc extends Cubit<LoginState> {
 
   final AuthRepository repository;
+  final MessagingService messagingService;
 
-  LoginBloc(this.repository) : super(const LoginFormState());
+  LoginBloc(this.repository, this.messagingService) : super(const LoginFormState());
 
   void login(String email, String password) async {
     emit(const LoginLoadingState());
@@ -29,6 +31,7 @@ class LoginBloc extends Cubit<LoginState> {
         (data) async {
           var result = await repository.persistAuthData(data.token, data.refreshToken);
           if (result) {
+            messagingService.registerDeviceToken();
             emit(const LoginSuccessState());
           } else {
             emit(const LoginErrorState("Unable to save login data"));

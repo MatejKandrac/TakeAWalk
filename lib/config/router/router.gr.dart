@@ -102,12 +102,6 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const MapPage(),
       );
     },
-    LocationPickRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const PickLocationPage(),
-      );
-    },
     LoginRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -364,20 +358,6 @@ class MapRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'MapRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [LocationPickPage]
-class LocationPickRoute extends PageRouteInfo<void> {
-  const LocationPickRoute({List<PageRouteInfo>? children})
-      : super(
-          LocationPickRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'LocationPickRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

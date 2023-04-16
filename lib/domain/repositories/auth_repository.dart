@@ -12,6 +12,8 @@ abstract class AuthRepository {
 
   Future<Either<RequestError, AuthResponse>> refreshToken(String refreshToken);
 
+  Future<Either<RequestError, dynamic>> sendDeviceToken(int userId, String deviceToken);
+
   Future<bool> persistAuthData(String token, String refreshToken);
 
   Future<String?> getToken();

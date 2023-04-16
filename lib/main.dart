@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_a_walk_app/config/router/router.dart';
@@ -10,6 +11,11 @@ import 'package:take_a_walk_app/views/bloc_container.dart';
 import 'config/firebase_options.dart';
 import 'config/theme.dart';
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
@@ -17,6 +23,7 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   } else {
     debugPrint("WARNING, YOU ARE RUNNING THIS APP ON UNSUPPORTED PLATFORM, FIREBASE NOT INITIALIZED");
   }

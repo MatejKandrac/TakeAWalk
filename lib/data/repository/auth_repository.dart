@@ -40,6 +40,16 @@ class AuthRepositoryImpl extends BaseApiRepository implements AuthRepository {
   }
 
   @override
+  Future<Either<RequestError, dynamic>> sendDeviceToken(int userId, String deviceToken) async {
+    String? token = await getToken();
+    if (token == null) {
+      return const Left(RequestError.unauthenticated);
+    }
+    print(token);
+    return makeRequest(request: () => apiService.sendDeviceToken(userId, "Bearer $token", deviceToken));
+  }
+
+  @override
   Future<String?> getToken() {
     return localService.getToken();
   }
