@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
 import 'package:take_a_walk_app/views/views_container.dart';
 
+import '../../views/map/location_pick_view.dart';
+
 part 'router.gr.dart';
 
 @AutoRouterConfig()
@@ -24,7 +26,7 @@ class AppRouter extends _$AppRouter {
     CustomRoute(page: ProfileEditRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
     CustomRoute(page: ChatRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
     CustomRoute(page: PickPersonRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
-    CustomRoute(page: PickLocationRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
+    CustomRoute(page: LocationPickRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
     CustomRoute(page: FilterRoute.page, transitionsBuilder: TransitionsBuilders.noTransition),
   ];
 
