@@ -15,9 +15,9 @@ abstract class UsersApiService {
   @GET('/v1/user/{user-id}/profile')
   Future<HttpResponse<ProfileResponse>> getProfile(@Path('user-id') int userId);
 
-  @PUT('/user/{user-id}/edit')
+  @PUT('/v1/user/{user-id}/edit')
   Future<HttpResponse<String>> editUserProfile(@Path('user-id') int userId, @Body() ProfileEditRequest request);
 
-  @PUT('/user/{user-id}/profile-picture')
+  @PUT('/v1/user/{user-id}/profile-picture')
   Future<HttpResponse<String>> editUserProfilePicture(@Path('user-id') int userId, MultipartFile file);
 }
