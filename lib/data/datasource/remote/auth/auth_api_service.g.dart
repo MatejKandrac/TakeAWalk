@@ -13,7 +13,7 @@ class _AuthApiService implements AuthApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.141.205:8080';
+    baseUrl ??= 'http://192.168.0.10:8080';
   }
 
   final Dio _dio;
@@ -104,7 +104,7 @@ class _AuthApiService implements AuthApiService {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'Authorization': token};
     _headers.removeWhere((k, v) => v == null);
-    final _data = {"deviceToken": deviceToken};
+    final _data = deviceToken;
     final _result =
         await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
       method: 'POST',
