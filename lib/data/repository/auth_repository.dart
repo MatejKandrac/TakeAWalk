@@ -1,4 +1,5 @@
 
+import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:take_a_walk_app/data/datasource/local/auth_local_service.dart';
 import 'package:take_a_walk_app/data/datasource/remote/auth/auth_api_service.dart';
@@ -13,40 +14,70 @@ class AuthRepositoryImpl extends BaseApiRepository implements AuthRepository {
 
   final AuthApiService apiService;
   final AuthLocalService localService;
+  final Dio dio;
 
   const AuthRepositoryImpl({
     required this.apiService,
-    required this.localService
+    required this.localService,
+    required this.dio
   });
 
   @override
-  Future<Either<RequestError, AuthResponse>> login(LoginRequest request) {
-    return makeRequest(request: () => apiService.login(request));
-  }
-
-  @override
-  Future<bool> persistAuthData(String token, String refreshToken) {
-    return localService.persistData(token, refreshToken);
-  }
-
-  @override
-  Future<Either<RequestError, AuthResponse>> refreshToken(String refreshToken) {
-    return makeRequest(request: () => apiService.refreshToken(refreshToken));
-  }
-
-  @override
-  Future<Either<RequestError, AuthResponse>> register(RegisterRequest request) {
-    return makeRequest(request: () => apiService.register(request));
-  }
-
-  @override
-  Future<Either<RequestError, dynamic>> sendDeviceToken(int userId, String deviceToken) async {
-    String? token = await getToken();
-    if (token == null) {
-      return const Left(RequestError.unauthenticated);
+  Future<RequestError?> login(LoginRequest request) async {
+    var result = await makeRequest(request: () => apiService.login(request));
+    if (result.isRight) {
+      var saveResult = await persistAuthData(result.right);
+      if (!saveResult) {
+        return const RequestError.custom("Unable to save data");
+      } else {
+        dio.options.headers = {'Authorization': 'Bearer ${result.right.token}'};
+        return null;
+      }
     }
-    print(token);
-    return makeRequest(request: () => apiService.sendDeviceToken(userId, "Bearer $token", deviceToken));
+    return result.left;
+  }
+
+  @override
+  Future<RequestError?> refreshToken(String refreshToken) async {
+    var result = await makeRequest(request: () => apiService.refreshToken(refreshToken));
+    if (result.isRight) {
+      var saveResult = await persistAuthData(result.right);
+      if (!saveResult) {
+        return const RequestError.custom("Unable to save data");
+      } else {
+        dio.options.headers = {'Authorization': 'Bearer ${result.right.token}'};
+        return null;
+      }
+    }
+    return result.left;
+  }
+
+  @override
+  Future<RequestError?> register(RegisterRequest request) async {
+    var result = await makeRequest(request: () => apiService.register(request));
+    if (result.isRight) {
+      var saveResult = await persistAuthData(result.right);
+      if (!saveResult) {
+        return const RequestError.custom("Unable to save data");
+      } else {
+        dio.options.headers = {'Authorization': 'Bearer ${result.right.token}'};
+        return null;
+      }
+    }
+    return result.left;
+  }
+
+  @override
+  Future<bool> persistAuthData(AuthResponse data) {
+    return localService.persistData(data.token, data.refreshToken);
+  }
+
+  @override
+  Future<RequestError?> sendDeviceToken(int userId, String deviceToken) {
+    return makeRequest(request: () => apiService.sendDeviceToken(userId, deviceToken)).fold(
+            (left) => left,
+            (right) => null
+    );
   }
 
   @override

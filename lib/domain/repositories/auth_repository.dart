@@ -6,15 +6,15 @@ import 'package:take_a_walk_app/utils/request_error.dart';
 
 abstract class AuthRepository {
 
-  Future<Either<RequestError, AuthResponse>> login(LoginRequest request);
+  Future<RequestError?> login(LoginRequest request);
 
-  Future<Either<RequestError, AuthResponse>> register(RegisterRequest request);
+  Future<RequestError?> register(RegisterRequest request);
 
-  Future<Either<RequestError, AuthResponse>> refreshToken(String refreshToken);
+  Future<RequestError?> refreshToken(String refreshToken);
 
-  Future<Either<RequestError, dynamic>> sendDeviceToken(int userId, String deviceToken);
+  Future<RequestError?> sendDeviceToken(int userId, String deviceToken);
 
-  Future<bool> persistAuthData(String token, String refreshToken);
+  Future<bool> persistAuthData(AuthResponse authResponse);
 
   Future<String?> getToken();
 

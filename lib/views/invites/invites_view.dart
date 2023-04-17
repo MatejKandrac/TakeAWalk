@@ -3,6 +3,8 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
 import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
@@ -32,7 +34,7 @@ class InvitesPage extends StatelessWidget {
         dateStart: DateTime(2023,12,4),
         dateEnd: DateTime(2023, 12, 5),
         status: Status.ACCEPTED,
-        locations: [Location(lat: 48.140030, lon: 17.104622, name: "Bratislavsky hrad"), Location(lat: 17.107748, lon: 17.107748, name: "Co ja viem")],
+        locations: [Location(lat: 48.140030, lon: 17.104622, name: "Bratislavsky hrad"), Location(lat: 48.148598, lon: 17.107748, name: "Co ja viem")],
         profiles: [
           ProfileResponse(username: "Matejko", email: "")
         ]),

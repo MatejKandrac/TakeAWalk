@@ -12,9 +12,7 @@ class _UsersApiService implements UsersApiService {
   _UsersApiService(
     this._dio, {
     this.baseUrl,
-  }) {
-    baseUrl ??= 'http://192.168.0.10:8080';
-  }
+  });
 
   final Dio _dio;
 
@@ -62,7 +60,7 @@ class _UsersApiService implements UsersApiService {
     )
             .compose(
               _dio.options,
-              '/user/${userId}/edit',
+              '/v1/user/${userId}/edit',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -89,7 +87,7 @@ class _UsersApiService implements UsersApiService {
     )
             .compose(
               _dio.options,
-              '/user/${userId}/profile-picture',
+              '/v1/user/${userId}/profile-picture',
               queryParameters: queryParameters,
               data: _data,
             )

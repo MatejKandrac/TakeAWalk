@@ -3,14 +3,13 @@ import 'dart:core';
 import 'package:dio/dio.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:take_a_walk_app/config/constants.dart';
 
 import '../../../../domain/models/requests/create_event_data.dart';
 import '../../../../domain/models/responses/event_response.dart';
 
 part 'events_api_service.g.dart';
 
-@RestApi(baseUrl: AppConstants.baseUrl, parser: Parser.MapSerializable)
+@RestApi(parser: Parser.MapSerializable)
 abstract class EventsApiService {
   factory EventsApiService(Dio dio, {String baseUrl}) = _EventsApiService;
 

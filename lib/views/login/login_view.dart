@@ -6,6 +6,7 @@ import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 import 'package:take_a_walk_app/widget/loading_dialog.dart';
+import 'package:take_a_walk_app/widget/success_dialog.dart';
 
 import 'bloc/login_bloc.dart';
 
@@ -14,8 +15,12 @@ class LoginPage extends HookWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   _onLoginSuccess(BuildContext context) {
-    Navigator.of(context).pop(); // Pop loading dialog
-    AutoRouter.of(context).replace(const MyEventsRoute());
+    Navigator.of(context).pop(); // pop loading
+    showStateDialog(
+        context: context,
+        isSuccess: true,
+        text: "Successfully logged in!")
+        .then((value) => AutoRouter.of(context).replace(const MyEventsRoute()));
   }
 
   _onLogin(String email, String password, BuildContext context) {

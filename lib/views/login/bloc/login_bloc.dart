@@ -26,18 +26,12 @@ class LoginBloc extends Cubit<LoginState> {
       ));
       return;
     }
-    repository.login(LoginRequest(email: email, password: password)).fold(
-        (error) => emit(LoginErrorState(error.getErrorText())),
-        (data) async {
-          var result = await repository.persistAuthData(data.token, data.refreshToken);
-          if (result) {
-            messagingService.registerDeviceToken();
-            emit(const LoginSuccessState());
-          } else {
-            emit(const LoginErrorState("Unable to save login data"));
-          }
-        }
-    );
+    var result = await repository.login(LoginRequest(email: email, password: password));
+    if (result != null) {
+      emit(LoginErrorState(result.getErrorText()));
+    } else {
+      emit(const LoginSuccessState());
+    }
   }
 
 }

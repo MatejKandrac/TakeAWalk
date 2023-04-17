@@ -14,7 +14,7 @@ class RegisterBloc extends Cubit<RegisterState> {
   
   RegisterBloc(this._authRepository, this._messagingService) : super(const RegisterFormState());
 
-  void register(String username, String email, String password, String confirmPass) {
+  void register(String username, String email, String password, String confirmPass) async {
     String? usernameErr = username.isEmpty ? "This field is required" : null;
     String? emailErr = _validateEmail(email);
     String? passwordErr = password.isEmpty ? "This field is required" : null;
@@ -28,22 +28,18 @@ class RegisterBloc extends Cubit<RegisterState> {
           confirmPassError: confirmErr));
       return;
     }
-    
-    _authRepository.register(RegisterRequest(
+
+    var result = await _authRepository.register(RegisterRequest(
         email: email,
         username: username,
-        password: password)).fold(
-      (left) => emit(RegisterErrorState(left.getErrorText())),
-      (right) async {
-        var result = await _authRepository.persistAuthData(right.token, right.refreshToken);
-        if (!result) {
-          emit(const RegisterErrorState("Failed to save data"));
-        } else {
-          _messagingService.registerDeviceToken();
-          emit(const RegisterSuccessState());
-        }
-      },
-    );
+        password: password));
+
+    if (result != null) {
+      emit(RegisterErrorState(result.getErrorText()));
+    } else {
+      _messagingService.registerDeviceToken();
+      emit(const RegisterSuccessState());
+    }
   }
 
   String? _validateEmail(String email) {

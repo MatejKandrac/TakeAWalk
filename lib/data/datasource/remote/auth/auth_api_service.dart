@@ -8,7 +8,7 @@ import 'package:take_a_walk_app/domain/models/responses/auth_response.dart';
 
 part 'auth_api_service.g.dart';
 
-@RestApi(baseUrl: AppConstants.baseUrl, parser: Parser.MapSerializable)
+@RestApi(parser: Parser.MapSerializable)
 abstract class AuthApiService {
 
   factory AuthApiService(Dio dio, {String baseUrl}) = _AuthApiService;
@@ -23,5 +23,5 @@ abstract class AuthApiService {
   Future<HttpResponse<AuthResponse>> refreshToken(@Body() String refreshToken);
 
   @POST('/v1/user/{user_id}/device-token')
-  Future<HttpResponse<String>> sendDeviceToken(@Path('user_id') int userId, @Header("Authorization") String token, @Body() String deviceToken);
+  Future<HttpResponse<String>> sendDeviceToken(@Path('user_id') int userId, @Body() String deviceToken);
 }

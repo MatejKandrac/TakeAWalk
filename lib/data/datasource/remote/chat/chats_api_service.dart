@@ -8,7 +8,7 @@ import '../../../../domain/models/requests/message_data_request.dart';
 import '../../../../domain/models/responses/chat_response.dart';
 part 'chats_api_service.g.dart';
 
-@RestApi(baseUrl: AppConstants.baseUrl, parser: Parser.MapSerializable)
+@RestApi(parser: Parser.MapSerializable)
 abstract class ChatsApiService {
   factory ChatsApiService(Dio dio, {String baseUrl}) = _ChatsApiService;
 

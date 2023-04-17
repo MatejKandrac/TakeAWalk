@@ -12,9 +12,7 @@ class _EventsApiService implements EventsApiService {
   _EventsApiService(
     this._dio, {
     this.baseUrl,
-  }) {
-    baseUrl ??= 'http://192.168.0.10:8080';
-  }
+  });
 
   final Dio _dio;
 
@@ -34,7 +32,7 @@ class _EventsApiService implements EventsApiService {
     )
             .compose(
               _dio.options,
-              '/events/${userId}/invitations',
+              '/v1/events/${userId}/invitations',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -59,7 +57,7 @@ class _EventsApiService implements EventsApiService {
     )
             .compose(
               _dio.options,
-              '/events/{user-id}/my-events',
+              '/v1/events/{user-id}/my-events',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -83,7 +81,7 @@ class _EventsApiService implements EventsApiService {
     )
         .compose(
           _dio.options,
-          '/event/${eventId}/host',
+          '/v1/event/${eventId}/host',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -106,7 +104,7 @@ class _EventsApiService implements EventsApiService {
     )
             .compose(
               _dio.options,
-              '/event/${eventId}/people',
+              '/v1/event/${eventId}/people',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -128,7 +126,7 @@ class _EventsApiService implements EventsApiService {
     )
         .compose(
           _dio.options,
-          '/event/${eventId}/description',
+          '/v1/event/${eventId}/description',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -150,7 +148,7 @@ class _EventsApiService implements EventsApiService {
     )
         .compose(
           _dio.options,
-          '/event/${eventId}/status',
+          '/v1/event/${eventId}/status',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -173,7 +171,7 @@ class _EventsApiService implements EventsApiService {
     )
             .compose(
               _dio.options,
-              '/event/${eventId}/data',
+              '/v1/event/${eventId}/data',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -200,7 +198,7 @@ class _EventsApiService implements EventsApiService {
     )
             .compose(
               _dio.options,
-              'event/${eventId}/picture',
+              '/v1/event/${eventId}/picture',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -228,7 +226,7 @@ class _EventsApiService implements EventsApiService {
     )
             .compose(
               _dio.options,
-              'event/${eventId}/description',
+              '/v1/event/${eventId}/description',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -256,7 +254,7 @@ class _EventsApiService implements EventsApiService {
     )
             .compose(
               _dio.options,
-              'event/${eventId}/location-status',
+              '/v1/event/${eventId}/location-status',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -280,7 +278,7 @@ class _EventsApiService implements EventsApiService {
     )
         .compose(
           _dio.options,
-          'event',
+          '/v1/event',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -307,7 +305,7 @@ class _EventsApiService implements EventsApiService {
     )
             .compose(
               _dio.options,
-              'events/${userId}/map/my-events',
+              '/v1/events/${userId}/map/my-events',
               queryParameters: queryParameters,
               data: _data,
             )
