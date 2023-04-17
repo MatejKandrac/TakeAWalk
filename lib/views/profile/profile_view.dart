@@ -18,14 +18,23 @@ class ProfilePage extends HookWidget {
     AutoRouter.of(context).push(const ProfileEditRoute());
   }
 
-  _onLoadData(BuildContext context) {
-    BlocProvider.of<ProfileBloc>(context).getProfileData(1);
+  _getProfileData(BuildContext context, int userId) {
+    BlocProvider.of<ProfileBloc>(context).getProfileData();
   }
 
   @override
   Widget build(BuildContext context) {
+    final bloc = useMemoized<ProfileBloc>(() => BlocProvider.of(context));
+    useEffect(() {
+      bloc.getProfileData();
+      return null;
+    }, const []);
     return BlocListener<ProfileBloc, ProfileState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is ProfileDataState) {
+          _getProfileData(context, 1);
+        }
+      },
       child: BlocBuilder<ProfileBloc, ProfileState>(
         buildWhen: (previous, current) => current is ProfileDataState,
         builder: (context, state) {
@@ -152,8 +161,8 @@ class ProfilePage extends HookWidget {
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             onTap: () {
-                              _onLoadData(context);
-                              // debugPrint('Logged out');
+                              // _onLoadData(context);
+                              debugPrint('Logged out');
                             },
                             child: Row(
                               children: const [

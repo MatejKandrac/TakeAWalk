@@ -32,7 +32,12 @@ class AuthLocalService {
 
   Future<int?> getUserId() async {
     try {
-      return _storage.read(key: AppConstants.storageKeyUserId) as int?;
+      String? stringId = await _storage.read(key: AppConstants.storageKeyUserId);
+      if (stringId != null) {
+        return int.parse(stringId);
+      } else {
+        return null;
+      }
     } catch (e, stacktrace) {
       print(e);
       print(stacktrace);

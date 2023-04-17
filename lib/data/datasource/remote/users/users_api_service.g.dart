@@ -62,7 +62,7 @@ class _UsersApiService implements UsersApiService {
     )
             .compose(
               _dio.options,
-              '/user/${userId}/edit',
+              '/v1/user/${userId}/edit',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -89,7 +89,7 @@ class _UsersApiService implements UsersApiService {
     )
             .compose(
               _dio.options,
-              '/user/${userId}/profile-picture',
+              '/v1/user/${userId}/profile-picture',
               queryParameters: queryParameters,
               data: _data,
             )

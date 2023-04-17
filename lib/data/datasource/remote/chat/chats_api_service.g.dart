@@ -34,7 +34,7 @@ class _ChatsApiService implements ChatsApiService {
     )
             .compose(
               _dio.options,
-              '/chat/${eventId}/messages',
+              '/v1/chat/${eventId}/messages',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -63,7 +63,7 @@ class _ChatsApiService implements ChatsApiService {
     )
             .compose(
               _dio.options,
-              'chat/${eventId}/message',
+              '/v1/chat/${eventId}/message',
               queryParameters: queryParameters,
               data: _data,
             )

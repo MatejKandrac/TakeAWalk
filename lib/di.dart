@@ -28,7 +28,7 @@ initDependencies() async {
   di.registerFactory<ProfileBloc>(() => ProfileBloc(di()));
 
   // REPOSITORIES
-  di.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(di()));
+  di.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(di(), di()));
   di.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(
       apiService: di(),
       localService: di())
