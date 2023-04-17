@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
-import 'package:take_a_walk_app/widget/map_picker_widget.dart';
+import 'package:take_a_walk_app/widget/map_widget.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 
 class EventItem extends StatelessWidget {
@@ -32,7 +32,7 @@ class EventItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            MapPickerWidget(
+            MapWidget(
               heroTag: event.id,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),

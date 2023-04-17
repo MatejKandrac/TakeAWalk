@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 
-class MapPickerWidget extends StatelessWidget {
-  const MapPickerWidget({
+class MapWidget extends StatelessWidget {
+  const MapWidget({
     Key? key,
     this.onAddPoint,
+    this.onPositionTap,
     this.height = 300,
     this.borderRadius,
+    this.layers = const [],
     required this.heroTag
   }) : super(key: key);
 
   final int heroTag;
   final double height;
+  final List<Widget> layers;
   final Function()? onAddPoint;
+  final Function(LatLng)? onPositionTap;
   final BorderRadiusGeometry? borderRadius;
 
   @override
@@ -29,17 +33,23 @@ class MapPickerWidget extends StatelessWidget {
               child: Hero(
                 tag: heroTag,
                 child: AbsorbPointer(
-                  absorbing: true,
+                  absorbing: onPositionTap == null,
                   child: FlutterMap(
                     options: MapOptions(
                         center: LatLng(48.148598, 17.107748),
-                        zoom: 10
+                        zoom: 10,
+                        onTap: (tapPosition, point) {
+                          if (onPositionTap != null) {
+                            onPositionTap!(point);
+                          }
+                        },
                     ),
                     nonRotatedChildren: [
                       TileLayer(
                         urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                         userAgentPackageName: 'com.takeawalk',
-                      )
+                      ),
+                      ...layers
                     ],
                   ),
                 ),

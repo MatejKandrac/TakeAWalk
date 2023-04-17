@@ -19,8 +19,8 @@ class LoginPage extends HookWidget {
     showStateDialog(
         context: context,
         isSuccess: true,
-        text: "Successfully logged in!")
-        .then((value) => AutoRouter.of(context).replace(const MyEventsRoute()));
+        text: "Successfully logged in!"
+    ).then((value) => AutoRouter.of(context).replace(const MyEventsRoute()));
   }
 
   _onLogin(String email, String password, BuildContext context) {

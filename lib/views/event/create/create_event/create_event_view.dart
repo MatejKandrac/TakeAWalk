@@ -9,7 +9,7 @@ import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
 import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
 import 'package:take_a_walk_app/views/event/create/create_event/widgets/location_widget.dart';
-import 'package:take_a_walk_app/widget/map_picker_widget.dart';
+import 'package:take_a_walk_app/widget/map_widget.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 
@@ -23,6 +23,14 @@ class CreateEventPage extends HookWidget {
     ProfileResponse(username: "Matejko", email: ""),
     ProfileResponse(username: "Tomasko", email: "")
   ];
+
+  _onAddLocation(BuildContext context) {
+    AutoRouter.of(context).push(const PickLocationRoute()).then((value) {
+      if (value != null) {
+
+      }
+    });
+  }
 
   _onPickPerson(BuildContext context) {
     AutoRouter.of(context).push(const PickPersonRoute());
@@ -41,7 +49,7 @@ class CreateEventPage extends HookWidget {
     });
   }
 
-  _onTimePick(BuildContext context, TextEditingController timeController){
+  _onTimePick(BuildContext context, TextEditingController timeController) {
     showTimePicker(
         context: context,
         initialTime: TimeOfDay.fromDateTime(DateTime.now())
@@ -110,9 +118,9 @@ class CreateEventPage extends HookWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                MapPickerWidget(
+                MapWidget(
                     heroTag: -1,
-                    onAddPoint: () {}
+                    onAddPoint: () => _onAddLocation(context)
                 ),
                 const SizedBox(height: 20),
                 Text("Locations:", style: Theme.of(context).textTheme.bodyMedium),
