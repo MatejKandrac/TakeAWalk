@@ -11,7 +11,7 @@ class LocationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 30,
+      height: 40,
       child: Row(
         children: [
           Expanded(
@@ -31,7 +31,7 @@ class LocationWidget extends StatelessWidget {
                 onTap: () => onDelete!(location),
                 child: const Icon(Icons.delete_outline),
               ),
-              if (isReorder) const SizedBox(width: 30)
+              if (isReorder) const Icon(Icons.reorder)
             ],
           )
         ],

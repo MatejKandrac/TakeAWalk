@@ -3,13 +3,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:take_a_walk_app/config/constants.dart';
-import 'package:take_a_walk_app/data/datasource/local/auth_local_service.dart';
-import 'package:take_a_walk_app/data/datasource/remote/auth/auth_api_service.dart';
 import 'package:take_a_walk_app/data/datasource/remote/event/events_api_service.dart';
-import 'package:take_a_walk_app/data/repository/auth_repository.dart';
-import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
 import 'package:take_a_walk_app/utils/messaging_service.dart';
-import 'package:take_a_walk_app/views/profile/bloc/profile_bloc.dart';
 import 'data/datasource/remote/chat/chats_api_service.dart';
 import 'views/bloc_container.dart';
 import 'data/repositories_impl_container.dart';
@@ -29,6 +24,8 @@ initDependencies() async {
   di.registerFactory<LoginBloc>(() => LoginBloc(di(), di()));
   di.registerFactory<RegisterBloc>(() => RegisterBloc(di(), di()));
   di.registerFactory<ProfileBloc>(() => ProfileBloc(di()));
+  di.registerFactory<CreateEventBloc>(() => CreateEventBloc(di()));
+  di.registerFactory<PickPersonBloc>(() => PickPersonBloc(di()));
 
   // REPOSITORIES
   di.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(di()));
@@ -37,6 +34,7 @@ initDependencies() async {
       localService: di(),
       dio: di()
   ));
+  di.registerLazySingleton<EventsRepository>(() => EventsRepositoryImpl());
 
   // DATASOURCES
   // REMOTE

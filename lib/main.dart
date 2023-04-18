@@ -31,7 +31,7 @@ void main() async {
 
   await flutterLocalNotificationsPlugin.initialize(
       const InitializationSettings(
-        android: AndroidInitializationSettings('app_icon'),
+        android: AndroidInitializationSettings('icon_white'),
         linux: LinuxInitializationSettings(defaultActionName: 'Open notification')
       ),
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
