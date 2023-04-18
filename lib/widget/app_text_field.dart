@@ -11,7 +11,8 @@ class AppTextField extends StatelessWidget {
     this.obscureText = false,
     this.inputType = TextInputType.text,
     this.inputAction = TextInputAction.done,
-    this.capitalizeText = false
+    this.capitalizeText = false,
+    // this.maxLines
   }) : super(key: key);
 
   final String? errorText;
@@ -22,6 +23,7 @@ class AppTextField extends StatelessWidget {
   final TextInputType inputType;
   final TextInputAction inputAction;
   final TextEditingController controller;
+  // final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class AppTextField extends StatelessWidget {
         keyboardType: inputType,
         obscureText: obscureText,
         textCapitalization:  capitalizeText ? TextCapitalization.words : TextCapitalization.none,
+        // maxLines: maxLines ?? 1,
         decoration: InputDecoration(
           label: labelText == null ? null : Text(labelText!),
           errorText: errorText,
