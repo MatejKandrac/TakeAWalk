@@ -2,11 +2,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/config/theme.dart';
 import 'package:take_a_walk_app/views/bloc_container.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 
 import '../../widget/app_button.dart';
+import '../../widget/success_dialog.dart';
 
 @RoutePage()
 class ProfileEditPage extends HookWidget {
@@ -14,7 +16,8 @@ class ProfileEditPage extends HookWidget {
 
   _onEdit(BuildContext context, String newUsername, String newPassword, String confirmPassword, String newBio) {
     BlocProvider.of<ProfileBloc>(context).editProfileData(newUsername, newPassword, confirmPassword, newBio);
-    Navigator.of(context).pop();
+    showStateDialog(context: context, isSuccess: true, text: "Changes saved!")
+        .then((value) => AutoRouter.of(context).replace(const ProfileRoute()));
   }
 
   @override
