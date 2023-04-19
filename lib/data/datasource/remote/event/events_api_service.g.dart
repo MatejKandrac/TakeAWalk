@@ -265,30 +265,33 @@ class _EventsApiService implements EventsApiService {
   }
 
   @override
-  Future<int>? createEvent(data) async {
+  Future<HttpResponse<int>> createEvent(data) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data?.toMap() ?? <String, dynamic>{});
-    final _result = await _dio.fetch<int>(_setStreamType<int>(Options(
+    print(_data);
+    final _result =
+        await _dio.fetch<int>(_setStreamType<HttpResponse<int>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/v1/event',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+            .compose(
+              _dio.options,
+              '/v1/event',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = _result.data!;
-    return value;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   @override
-  Future<List<MapEventObj>>? getMapEvents(
+  Future<List<MapEventObj>> getMapEvents(
     userId,
     limit,
   ) async {

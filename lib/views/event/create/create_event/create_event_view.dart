@@ -1,25 +1,28 @@
 
 
-import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/di.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
-import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
+import 'package:take_a_walk_app/domain/models/responses/search_person_response.dart';
+import 'package:take_a_walk_app/utils/transform_locations_mixin.dart';
 import 'package:take_a_walk_app/views/event/create/create_event/bloc/create_event_bloc.dart';
 import 'package:take_a_walk_app/views/event/create/create_event/widgets/location_widget.dart';
+import 'package:take_a_walk_app/widget/loading_dialog.dart';
 import 'package:take_a_walk_app/widget/map_widget.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
+import 'package:take_a_walk_app/widget/success_dialog.dart';
 
 import 'widgets/person_widget.dart';
 
 @RoutePage()
-class CreateEventPage extends HookWidget {
+class CreateEventPage extends HookWidget with TransformLocationsMixin {
   const CreateEventPage({Key? key}) : super(key: key);
 
   _onAddLocation(BuildContext context) {
@@ -33,20 +36,19 @@ class CreateEventPage extends HookWidget {
   _onPickPerson(BuildContext context) {
     AutoRouter.of(context).push(const PickPersonRoute()).then((value) {
       if (value != null) {
-        BlocProvider.of<CreateEventBloc>(context).addPerson(value as ProfileResponse);
+        BlocProvider.of<CreateEventBloc>(context).addPerson(value as SearchPersonResponse);
       }
     });
   }
 
   _onDatePick(BuildContext context, TextEditingController dateController) {
-    showDatePicker(
+    showDateRangePicker(
         context: context,
-        initialDate: DateTime.now(),
         firstDate: DateTime.now(),
-        lastDate: DateTime(3000)
+        lastDate: DateTime(3000),
     ).then((value) {
       if (value != null) {
-        dateController.text = AppConstants.dateFormat.format(value);
+        dateController.text = "${AppConstants.dateFormat.format(value.start)} - ${AppConstants.dateFormat.format(value.end)}";
       }
     });
   }
@@ -59,7 +61,7 @@ class CreateEventPage extends HookWidget {
     BlocProvider.of<CreateEventBloc>(context).onReorder(oldIndex, newIndex);
   }
 
-  _onDeletePerson(ProfileResponse person, BuildContext context) {
+  _onDeletePerson(SearchPersonResponse person, BuildContext context) {
     BlocProvider.of<CreateEventBloc>(context).deletePerson(person);
   }
 
@@ -74,18 +76,55 @@ class CreateEventPage extends HookWidget {
     });
   }
 
+  _onConfirm(String name, String date, String timeStart, String timeEnd, BuildContext context) {
+    BlocProvider.of<CreateEventBloc>(context).createEvent(name, date, timeStart, timeEnd);
+  }
+
   @override
   Widget build(BuildContext context) {
     final nameController = useTextEditingController();
     final dateController = useTextEditingController();
     final startTimeController = useTextEditingController();
     final endTimeController = useTextEditingController();
+    final scrollController = useScrollController();
     final bloc = useMemoized<CreateEventBloc>(() => di());
+    var loadingDialogShowing = useMemoized<bool>(() => false);
     return BlocProvider<CreateEventBloc>(
       create: (context) => bloc,
       child: BlocListener<CreateEventBloc, CreateEventState>(
         listener: (context, state) {
-
+          if (loadingDialogShowing) {
+            loadingDialogShowing = false;
+            Navigator.of(context).pop();
+          }
+          if (state is CreateLoadingState) {
+            loadingDialogShowing = true;
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => const LoadingDialog(loadingText: "Creating event...")
+            );
+          }
+          if (state is CreateSuccessState) {
+            showStateDialog(
+                context: context,
+                isSuccess: true,
+                text: "Event successfully created!"
+            ).then((value) => Navigator.of(context).pop());
+          }
+          if (state is CreateFormState) {
+            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+              scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+            });
+            if (state.dialogErrorText != null) {
+              showStateDialog(
+                  context: context,
+                  isSuccess: false,
+                  closeOnConfirm: true,
+                  text: state.dialogErrorText!
+              );
+            }
+          }
         },
         child: BlocBuilder<CreateEventBloc, CreateEventState>(
           buildWhen: (previous, current) => current is CreateFormState,
@@ -94,6 +133,7 @@ class CreateEventPage extends HookWidget {
                 title: Text("Create event", style: Theme.of(context).textTheme.bodyMedium),
               ),
               body: SingleChildScrollView(
+                controller: scrollController,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
                   child: Column(
@@ -103,12 +143,14 @@ class CreateEventPage extends HookWidget {
                       AppTextField(
                         controller: nameController,
                         labelText: "Name",
+                        errorText: (state as CreateFormState).nameError,
                       ),
                       const SizedBox(height: 10),
                       AppTextField(
                         controller: dateController,
-                        labelText: "Date",
+                        labelText: "Date range",
                         inputType: TextInputType.datetime,
+                        errorText: state.dateError,
                         icon: InkWell(
                           onTap: () => _onDatePick(context, dateController),
                           child: const Icon(Icons.calendar_today),
@@ -121,6 +163,7 @@ class CreateEventPage extends HookWidget {
                             child: AppTextField(
                               controller: startTimeController,
                               labelText: "From",
+                              errorText: state.timeFromError,
                               icon: InkWell(
                                 onTap: () => _onTimePick(context, startTimeController),
                                 child: const Icon(Icons.access_time_outlined),
@@ -132,6 +175,7 @@ class CreateEventPage extends HookWidget {
                             child: AppTextField(
                               controller: endTimeController,
                               labelText: "To",
+                              errorText: state.timeToError,
                               icon: InkWell(
                                 onTap: () => _onTimePick(context, endTimeController),
                                 child: const Icon(Icons.access_time_outlined),
@@ -141,15 +185,34 @@ class CreateEventPage extends HookWidget {
                         ],
                       ),
                       const SizedBox(height: 20),
+                      Text("Forecast:", style: Theme.of(context).textTheme.bodyMedium),
+                      const SizedBox(height: 5),
+                      Text(state.forecast == null ? "Forecast unavailable" : "",
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: 20),
                       MapWidget(
                           heroTag: -1,
+                          layers: [
+                            if (state.locations.isNotEmpty) MarkerLayer(
+                              markers: [
+                                for (var position in toListLatLon(state.locations))
+                                  Marker(
+                                      anchorPos: AnchorPos.align(AnchorAlign.top),
+                                      point: position,
+                                      builder: (context) => const Icon(Icons.location_on, color: Colors.red)
+                                  )
+                              ],
+                            )
+                          ],
+                          bounds: state.locations.isNotEmpty ? LatLngBounds.fromPoints(toListLatLon(state.locations)) : null,
                           onAddPoint: () => _onAddLocation(context)
                       ),
                       const SizedBox(height: 20),
                       Text("Locations:", style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(height: 10),
                       ReorderableListView.builder(
-                        itemCount: (state as CreateFormState).locations.length,
+                        itemCount: state.locations.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) => LocationWidget(
                           key: Key(index.toString()),
@@ -165,10 +228,15 @@ class CreateEventPage extends HookWidget {
                       ListView.builder(
                         shrinkWrap: true,
                         itemCount: state.people.length,
-                        itemBuilder: (context, index) => PersonWidget(
-                          profile: state.people[index],
-                          onDelete: (person) => _onDeletePerson(person, context)
-                        ),
+                        itemBuilder: (context, index) {
+                          var person = state.people[index];
+                          return PersonWidget(
+                              name: person.username,
+                              bio: person.bio,
+                              picture: person.picture,
+                              onDelete: () => _onDeletePerson(person, context)
+                          );
+                        },
                       ),
                       const SizedBox(height: 10),
                       AppButton.outlined(outlineColor: Colors.white,
@@ -183,7 +251,13 @@ class CreateEventPage extends HookWidget {
                           )
                       ),
                       const SizedBox(height: 20),
-                      AppButton.gradient(child: Text("Create event", style: Theme.of(context).textTheme.bodySmall), onPressed: () {})
+                      AppButton.gradient(
+                          child: Text("Create event", style: Theme.of(context).textTheme.bodySmall),
+                          onPressed: () => _onConfirm(
+                              nameController.text, dateController.text,
+                              startTimeController.text, endTimeController.text,
+                              context)
+                      )
                     ],
                   ),
                 ),

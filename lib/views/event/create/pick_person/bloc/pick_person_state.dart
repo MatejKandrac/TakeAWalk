@@ -11,8 +11,9 @@ class PickPersonErrorState extends PickPersonState {
 }
 
 class PickPersonListState extends PickPersonState {
-  final List<ProfileResponse> people;
-  const PickPersonListState([this.people = const []]);
+  final List<SearchPersonResponse> people;
+  final SearchPersonResponse? selected;
+  const PickPersonListState([this.people = const [], this.selected]);
 }
 
 class PickPersonLoadingState extends PickPersonState {

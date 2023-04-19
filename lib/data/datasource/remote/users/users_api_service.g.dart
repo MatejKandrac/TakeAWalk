@@ -97,6 +97,34 @@ class _UsersApiService implements UsersApiService {
     return httpResponse;
   }
 
+  @override
+  Future<HttpResponse<List<SearchPersonResponse>>> searchPerson(
+      username) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'username': username};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<HttpResponse<List<SearchPersonResponse>>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/user/search',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) =>
+            SearchPersonResponse.fromMap(i as Map<String, dynamic>))
+        .toList();
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

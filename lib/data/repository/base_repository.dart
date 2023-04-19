@@ -16,12 +16,15 @@ abstract class BaseApiRepository {
   }) async {
     try {
       final response = await request();
+      print(response.response.statusCode);
       if (response.response.statusCode == HttpStatus.ok) {
         return Right(response.data);
       } else {
         return Left(response.response.statusCode.toRequestError());
       }
     } on DioError catch (e) {
+      print(e);
+      print(e.response?.statusCode);
       if (e.response == null) {
         return Left(RequestError.noInternet());
       }

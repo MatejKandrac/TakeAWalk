@@ -1,16 +1,26 @@
 
 import 'package:flutter/material.dart';
-import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
+import 'package:take_a_walk_app/config/constants.dart';
 
 class PersonWidget extends StatelessWidget {
-  const PersonWidget({Key? key, required this.profile, this.onDelete}) : super(key: key);
-  final ProfileResponse profile;
-  final Function(ProfileResponse profile)? onDelete;
+  const PersonWidget({
+    Key? key,
+    required this.name,
+    this.bio,
+    this.picture,
+    this.onDelete}) : super(key: key);
+
+  final String name;
+  final String? bio;
+  final String? picture;
+  final Function()? onDelete;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 30,
+    return Container(
+      color: const Color(0xff27283D),
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      height: 60,
       child: Row(
         children: [
           Expanded(
@@ -20,11 +30,13 @@ class PersonWidget extends StatelessWidget {
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: profile.image == null ? const Icon(Icons.account_circle) : Image.network(profile.image!),
+                  child: picture == null
+                      ? const Icon(Icons.account_circle, size: 20) :
+                      Image.network("${AppConstants.baseUrl}/v1/pictures/${picture!}"),
                 ),
                 const SizedBox(width: 10),
                 Expanded(child: Text(
-                    profile.username,
+                    name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall
@@ -32,9 +44,12 @@ class PersonWidget extends StatelessWidget {
               ],
             ),
           ),
-          if (onDelete != null)InkWell(
-            onTap: () => onDelete!(profile),
-            child: const Icon(Icons.delete_outline),
+          if (onDelete != null) Material(
+            color: const Color(0xff27283D),
+            child: IconButton(
+                onPressed: onDelete!,
+                icon: const Icon(Icons.delete)
+            ),
           ),
         ],
       ),

@@ -17,10 +17,15 @@ initDependencies() async {
   // REST CLIENT
   final dio = Dio();
   dio.options.baseUrl = AppConstants.baseUrl;
+  dio.options.connectTimeout = const Duration(seconds: 10);
   di.registerSingleton<Dio>(dio);
 
   // BLOCS
-  di.registerFactory<SplashBloc>(() => SplashBloc(di(), di()));
+  di.registerFactory<SplashBloc>(() => SplashBloc(
+      dio: di(),
+      messagingService: di(),
+    usersRepository: di()
+  ));
   di.registerFactory<LoginBloc>(() => LoginBloc(di(), di()));
   di.registerFactory<RegisterBloc>(() => RegisterBloc(di(), di()));
   di.registerFactory<ProfileBloc>(() => ProfileBloc(di()));
@@ -34,7 +39,10 @@ initDependencies() async {
       localService: di(),
       dio: di()
   ));
-  di.registerLazySingleton<EventsRepository>(() => EventsRepositoryImpl());
+  di.registerLazySingleton<EventsRepository>(() => EventsRepositoryImpl(
+    authRepository: di(),
+    eventsApiService: di()
+  ));
 
   // DATASOURCES
   // REMOTE

@@ -28,7 +28,7 @@ class RegisterBloc extends Cubit<RegisterState> {
           confirmPassError: confirmErr));
       return;
     }
-
+    emit(const RegisterLoadingState());
     var result = await _authRepository.register(RegisterRequest(
         email: email,
         username: username,

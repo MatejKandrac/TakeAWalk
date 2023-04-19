@@ -3,6 +3,7 @@ import 'package:either_dart/either.dart';
 import 'package:take_a_walk_app/data/datasource/remote/users/users_api_service.dart';
 import 'package:take_a_walk_app/data/repository/base_repository.dart';
 import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
+import 'package:take_a_walk_app/domain/models/responses/search_person_response.dart';
 import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
 import 'package:take_a_walk_app/domain/repositories/users_repository.dart';
 import 'package:take_a_walk_app/utils/request_error.dart';
@@ -20,7 +21,7 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
   Future<Either<RequestError, ProfileResponse>> getProfile() async {
     var userId = await _authRepository.getUserId();
     if (userId == null) {
-      return const Left(RequestError.badRequest);
+      return Left(RequestError.badRequest());
     }
     return makeRequest<ProfileResponse>(request: () => _usersApiService.getProfile(userId));
   }
@@ -29,9 +30,15 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
   Future<Either<RequestError, String>> editUserProfile(ProfileEditRequest request) async {
     var userId = await _authRepository.getUserId();
     if (userId == null) {
-      return const Left(RequestError.badRequest);
+      return Left(RequestError.badRequest());
     }
     return makeRequest<String>(request: () => _usersApiService.editUserProfile(userId, request));
   }
+
+  @override
+  Future<Either<RequestError, List<SearchPersonResponse>>> search(String username) {
+    return makeRequest<List<SearchPersonResponse>>(request: () => _usersApiService.searchPerson(username));
+  }
+
 
 }

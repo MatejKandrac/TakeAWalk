@@ -89,7 +89,8 @@ class InviteDetailPage extends StatelessWidget {
                               for (var point in points)
                                 Marker(
                                   point: point,
-                                  builder: (context) => const Icon(Icons.location_on, color: Colors.red))
+                                  builder: (context) => const Icon(Icons.location_on, color: Colors.red)
+                                )
                             ],
                           )
                         ],
@@ -120,7 +121,10 @@ class InviteDetailPage extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: event.profiles.length,
                   itemBuilder: (context, index) => PersonWidget(
-                      profile: event.profiles[index]
+                      name: event.profiles[index].username,
+                      bio: event.profiles[index].bio,
+                      picture: event.profiles[index].image,
+                      onDelete: () {},
                   ),
                 ),
                 const SizedBox(height: 10),

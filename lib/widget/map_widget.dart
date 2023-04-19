@@ -9,12 +9,14 @@ class MapWidget extends StatelessWidget {
     this.onPositionTap,
     this.height = 300,
     this.borderRadius,
+    this.bounds,
     this.layers = const [],
     required this.heroTag
   }) : super(key: key);
 
   final int heroTag;
   final double height;
+  final LatLngBounds? bounds;
   final List<Widget> layers;
   final Function()? onAddPoint;
   final Function(LatLng)? onPositionTap;
@@ -22,6 +24,9 @@ class MapWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (bounds != null) {
+      bounds!.pad(0.05);
+    }
     return ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.circular(15),
       child: SizedBox(
@@ -36,6 +41,7 @@ class MapWidget extends StatelessWidget {
                   absorbing: onPositionTap == null,
                   child: FlutterMap(
                     options: MapOptions(
+                        bounds: bounds,
                         center: LatLng(48.148598, 17.107748),
                         zoom: 10,
                         onTap: (tapPosition, point) {

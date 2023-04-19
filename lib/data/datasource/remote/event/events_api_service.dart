@@ -48,9 +48,9 @@ abstract class EventsApiService {
   Future<HttpResponse<String>> updateLocationStatus(@Path('event-id') int eventId, @Body() Map<String, dynamic> data);
 
   @POST('/v1/event')
-  Future<int>? createEvent(@Body() CreateEventData data);
+  Future<HttpResponse<int>> createEvent(@Body() CreateEventData data);
   
   @GET('/v1/events/{user-id}/map/my-events')
-  Future<List<MapEventObj>>? getMapEvents(@Path('user-id') int userId, @Query('limit') int? limit);
+  Future<List<MapEventObj>> getMapEvents(@Path('user-id') int userId, @Query('limit') int? limit);
   
 }

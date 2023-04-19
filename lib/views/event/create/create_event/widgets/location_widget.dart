@@ -10,8 +10,10 @@ class LocationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40,
+    return Container(
+      color: const Color(0xff27283D),
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      height: 60,
       child: Row(
         children: [
           Expanded(
@@ -22,15 +24,18 @@ class LocationWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.bodySmall
             ),
           ),
-          const SizedBox(width: 5),
+          const SizedBox(width: 10),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.sunny),
-              if (onDelete != null) InkWell(
-                onTap: () => onDelete!(location),
-                child: const Icon(Icons.delete_outline),
+              if (onDelete != null) Material(
+                color: const Color(0xff27283D),
+                child: IconButton(
+                    onPressed: () => onDelete!(location),
+                    icon: const Icon(Icons.delete)
+                ),
               ),
+              const SizedBox(width: 10),
               if (isReorder) const Icon(Icons.reorder)
             ],
           )

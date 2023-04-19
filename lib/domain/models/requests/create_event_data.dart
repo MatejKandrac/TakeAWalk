@@ -1,5 +1,6 @@
+
 class CreateEventData {
-  final int ownerId;
+  int? ownerId;
   final String? description;
   final DateTime start;
   final DateTime end;
@@ -8,8 +9,8 @@ class CreateEventData {
   final List<LocationData> locations;
 
   CreateEventData({
-    required this.ownerId,
     this.description,
+    this.ownerId,
     required this.start,
     required this.end,
     required this.name,
@@ -21,11 +22,11 @@ class CreateEventData {
     return {
       'ownerId': this.ownerId,
       'description': this.description,
-      'start': this.start,
-      'end': this.end,
+      'start': start.toIso8601String(),
+      'endDate': end.toIso8601String(),
       'name': this.name,
       'users': this.users,
-      'locations': this.locations,
+      'locations': locations.map((e) => e.toMap()).toList(),
     };
   }
 

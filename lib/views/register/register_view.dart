@@ -9,6 +9,7 @@ import 'package:take_a_walk_app/views/register/bloc/register_bloc.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 import 'package:take_a_walk_app/widget/loading_dialog.dart';
+import 'package:take_a_walk_app/widget/success_dialog.dart';
 
 @RoutePage()
 class RegisterPage extends HookWidget {
@@ -21,7 +22,11 @@ class RegisterPage extends HookWidget {
 
   void _onRegisterSuccess(BuildContext context) {
     Navigator.of(context).pop();
-    AutoRouter.of(context).replace(const MyEventsRoute());
+    showStateDialog(
+      context: context,
+      isSuccess: true,
+      text: "Account created successfully!"
+    ).then((value) => AutoRouter.of(context).replace(const MyEventsRoute()));
   }
 
   void _onLoading(BuildContext context) {
@@ -34,10 +39,7 @@ class RegisterPage extends HookWidget {
 
   void _onError(BuildContext context, String error) {
     Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(error, style: Theme.of(context).textTheme.bodySmall),
-      backgroundColor: Colors.red,
-    ));
+    showStateDialog(context: context, isSuccess: false, text: error, closeOnConfirm: true);
   }
 
   @override

@@ -70,7 +70,7 @@ class PickLocationPage extends HookWidget {
                     }
                   },
                   child: Text("Save changes",
-                      style: Theme.of(context).textTheme.bodyMedium),
+                      style: Theme.of(context).textTheme.bodySmall)
                 ),
               ],
             ),
