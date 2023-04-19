@@ -7,6 +7,7 @@ import 'package:take_a_walk_app/domain/models/responses/search_person_response.d
 import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
 import 'package:take_a_walk_app/domain/repositories/users_repository.dart';
 import 'package:take_a_walk_app/utils/request_error.dart';
+import 'package:flutter_bcrypt/flutter_bcrypt.dart';
 
 import '../../domain/models/requests/profile_edit_request.dart';
 
@@ -32,6 +33,11 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
     if (userId == null) {
       return Left(RequestError.badRequest());
     }
+
+    // TODO encrypt the password
+    // if (request.password != null) {
+    //   request.password =  await FlutterBcrypt.hashPw(password: request.password!, salt: '');
+    // }
     return makeRequest<String>(request: () => _usersApiService.editUserProfile(userId, request));
   }
 
