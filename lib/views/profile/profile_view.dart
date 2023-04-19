@@ -31,9 +31,9 @@ class ProfilePage extends HookWidget {
     }, const []);
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        if (state is ProfileDataState) {
-          _getProfileData(context, 1);
-        }
+        // if (state is ProfileDataState) {
+        //   _getProfileData(context, 1);
+        // }
       },
       child: BlocBuilder<ProfileBloc, ProfileState>(
         buildWhen: (previous, current) => current is ProfileDataState,

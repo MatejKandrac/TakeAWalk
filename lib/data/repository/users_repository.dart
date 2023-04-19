@@ -6,6 +6,7 @@ import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
 import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
 import 'package:take_a_walk_app/domain/repositories/users_repository.dart';
 import 'package:take_a_walk_app/utils/request_error.dart';
+import 'package:flutter_bcrypt/flutter_bcrypt.dart';
 
 import '../../domain/models/requests/profile_edit_request.dart';
 
@@ -20,7 +21,7 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
   Future<Either<RequestError, ProfileResponse>> getProfile() async {
     var userId = await _authRepository.getUserId();
     if (userId == null) {
-      return const Left(RequestError.badRequest);
+      return Left(RequestError.badRequest());
     }
     return makeRequest<ProfileResponse>(request: () => _usersApiService.getProfile(userId));
   }
@@ -29,8 +30,13 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
   Future<Either<RequestError, String>> editUserProfile(ProfileEditRequest request) async {
     var userId = await _authRepository.getUserId();
     if (userId == null) {
-      return const Left(RequestError.badRequest);
+      return Left(RequestError.badRequest());
     }
+
+    // TODO encrypt the password
+    // if (request.password != null) {
+    //   request.password =  await FlutterBcrypt.hashPw(password: request.password!, salt: '');
+    // }
     return makeRequest<String>(request: () => _usersApiService.editUserProfile(userId, request));
   }
 
