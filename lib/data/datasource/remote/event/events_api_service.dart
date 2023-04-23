@@ -1,10 +1,10 @@
 import 'dart:core';
 
 import 'package:dio/dio.dart';
-import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../../../domain/models/requests/create_event_data.dart';
+import '../../../../domain/models/requests/filter_data.dart';
 import '../../../../domain/models/responses/event_response.dart';
 
 part 'events_api_service.g.dart';
@@ -16,25 +16,42 @@ abstract class EventsApiService {
   // Invitations and Event
 
   @GET('/v1/events/{user-id}/invitations')
-  Future<List<EventObject>>? getUserInvitations(@Path('user-id') int userId);
+  Future<HttpResponse<List<EventObject>>> getUserInvitations(@Path('user-id') int userId);
 
   @GET('/v1/events/{user-id}/my-events')
-  Future<List<EventObject>>? getUserEvents(@Path('user_id') int userId);
+  Future<HttpResponse<List<EventObject>>> getUserEvents(@Path('user-id') int userId);
+  
+  // Accept & Decline
+  
+  @PUT('/v1/events/{event-id}/accept')
+  Future<HttpResponse<int>> acceptInvite(@Path('event-id') int eventId, @Query('user-id') int? userId);
+
+  @PUT('/v1/events/{event-id}/decline')
+  Future<HttpResponse<int>> declineInvite(@Path('event-id') int eventId, @Query('user-id') int? userId);
+
+
+  // Filter
+  @GET('/v1/events/{user-id}/my-events/filter')
+  Future<HttpResponse<List<EventObject>>> filterEvents(@Path('user-id') int userId, @Body() FilterData filter);
+
+  @GET('/v1/events/{user-id}/invitations/filter')
+  Future<HttpResponse<List<EventObject>>> filterInvitations(@Path('user-id') int userId, @Body() FilterData filter);
+
 
   @GET('/v1/event/{event-id}/host')
-  Future<String?> getEventOwner(@Path('event-id') int eventId);
+  Future<HttpResponse<String?>> getEventOwner(@Path('event-id') int eventId);
 
   @GET('/v1/event/{event-id}/people')
-  Future<List<String>>? getEventPeople(@Path('event-id') int eventId);
+  Future<HttpResponse<List<String>>?> getEventPeople(@Path('event-id') int eventId);
 
   @GET('/v1/event/{event-id}/description')
-  Future<String>? getEventDescription(@Path('event-id') int eventId);
+  Future<HttpResponse<String>?> getEventDescription(@Path('event-id') int eventId);
 
   @GET('/v1/event/{event-id}/status')
-  Future<String>? getEventStatus(@Path('event-id') int eventId);
+  Future<HttpResponse<String>?> getEventStatus(@Path('event-id') int eventId);
 
   @GET('/v1/event/{event-id}/data')
-  Future<EventData> getEventData(@Path('event-id') int eventId);
+  Future<HttpResponse<EventData>> getEventData(@Path('event-id') int eventId);
 
   // Event Progress
 
@@ -49,8 +66,7 @@ abstract class EventsApiService {
 
   @POST('/v1/event')
   Future<HttpResponse<int>> createEvent(@Body() CreateEventData data);
-  
+
   @GET('/v1/events/{user-id}/map/my-events')
-  Future<List<MapEventObj>> getMapEvents(@Path('user-id') int userId, @Query('limit') int? limit);
-  
+  Future<HttpResponse<List<MapEventObj>>> getMapEvents(@Path('user-id') int userId, @Query('limit') int? limit);
 }

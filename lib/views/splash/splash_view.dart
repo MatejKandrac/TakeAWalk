@@ -22,7 +22,7 @@ class SplashPage extends HookWidget {
     return BlocListener<SplashBloc, SplashState>(
       listener: (context, state) {
         if (state.continueMain) {
-          AutoRouter.of(context).replace(const MyEventsRoute());
+          AutoRouter.of(context).replace(MyEventsRoute());
         }
         if (state.continueLogIn) {
           AutoRouter.of(context).replace(const LoginRoute());

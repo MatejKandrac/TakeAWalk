@@ -10,6 +10,10 @@ import 'package:retrofit/dio.dart';
 abstract class BaseApiRepository {
 
   const BaseApiRepository();
+
+  static const successStates = [
+    HttpStatus.ok, HttpStatus.created, HttpStatus.accepted, HttpStatus.noContent
+  ];
   
   Future<Either<RequestError, T>> makeRequest<T>({
     required Future<HttpResponse<T>> Function() request
@@ -17,7 +21,7 @@ abstract class BaseApiRepository {
     try {
       final response = await request();
       print(response.response.statusCode);
-      if (response.response.statusCode == HttpStatus.ok) {
+      if (successStates.contains(response.response.statusCode)) {
         return Right(response.data);
       } else {
         return Left(response.response.statusCode.toRequestError());

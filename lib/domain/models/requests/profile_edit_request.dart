@@ -1,9 +1,9 @@
 class ProfileEditRequest {
-  final String? password;
+  String? password;
   final String? username;
   final String? bio;
 
-  const ProfileEditRequest({
+  ProfileEditRequest({
     this.password,
     this.username,
     this.bio

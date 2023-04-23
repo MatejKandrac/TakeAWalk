@@ -1,5 +1,6 @@
 
 import 'package:either_dart/either.dart';
+import 'package:flutter/services.dart';
 import 'package:take_a_walk_app/data/datasource/remote/users/users_api_service.dart';
 import 'package:take_a_walk_app/data/repository/base_repository.dart';
 import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
@@ -34,10 +35,17 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
       return Left(RequestError.badRequest());
     }
 
-    // TODO encrypt the password
-    // if (request.password != null) {
-    //   request.password =  await FlutterBcrypt.hashPw(password: request.password!, salt: '');
+    // try {
+    //   // TODO encrypt the password
+    //   if (request.password != null) {
+    //     var encryptedPassword = await FlutterBcrypt.hashPw(password: request.password!, salt: '');
+    //     request.password = encryptedPassword;
+    //     print(encryptedPassword);
+    //   }
+    // } on PlatformException {
+    //   print("error");
     // }
+
     return makeRequest<String>(request: () => _usersApiService.editUserProfile(userId, request));
   }
 
@@ -46,5 +54,14 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
     return makeRequest<List<SearchPersonResponse>>(request: () => _usersApiService.searchPerson(username));
   }
 
+  @override
+  Future<Either<RequestError, String>> deleteDeviceToken() async {
+    var userId = await _authRepository.getUserId();
+    if (userId == null) {
+      return Left(RequestError.badRequest());
+    }
+
+    return makeRequest<String>(request: () => _usersApiService.deleteDeviceToken(userId));
+  }
 
 }

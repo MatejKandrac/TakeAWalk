@@ -106,7 +106,7 @@ class CreateEventBloc extends Cubit<CreateEventState> {
               dateError = "End is before start";
             }
           }
-        } catch (e) {
+        } catch (e, stacktrace) {
           dateError = "Invalid format, use dd.MM.yyyy";
         }
       }
@@ -159,7 +159,10 @@ class CreateEventBloc extends Cubit<CreateEventState> {
         users: _profiles.map((e) => e.id).toList(),
         locations: locationData
     )).fold(
-      (left) => emit(CreateErrorState()),
+      (left) {
+        print(left);
+        emit(CreateErrorState());
+      },
       (right) => emit(CreateSuccessState()),
     );
 

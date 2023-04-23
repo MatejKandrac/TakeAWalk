@@ -13,4 +13,6 @@ abstract class UsersRepository {
 
   Future<Either<RequestError, List<SearchPersonResponse>>> search(String username);
 
+  Future<Either<RequestError, String>> deleteDeviceToken();
+
 }

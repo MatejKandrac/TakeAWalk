@@ -19,13 +19,13 @@ class _ChatsApiService implements ChatsApiService {
   String? baseUrl;
 
   @override
-  Future<List<MessageObj>>? getEventMessages(eventId) async {
+  Future<HttpResponse<List<MessageObj>>?> getEventMessages(eventId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<List<MessageObj>>(Options(
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<HttpResponse<List<MessageObj>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -40,7 +40,8 @@ class _ChatsApiService implements ChatsApiService {
     var value = _result.data!
         .map((dynamic i) => MessageObj.fromMap(i as Map<String, dynamic>))
         .toList();
-    return value;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   @override

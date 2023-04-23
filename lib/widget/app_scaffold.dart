@@ -21,7 +21,7 @@ class AppScaffold extends StatelessWidget {
     PageRouteInfo nextRoute;
     switch (value) {
       case 0:
-        nextRoute = const MyEventsRoute();
+        nextRoute = MyEventsRoute();
         break;
       case 1:
         nextRoute = InvitesRoute();

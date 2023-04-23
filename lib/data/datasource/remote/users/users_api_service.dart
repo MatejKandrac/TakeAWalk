@@ -23,4 +23,7 @@ abstract class UsersApiService {
 
   @GET('/v1/user/search')
   Future<HttpResponse<List<SearchPersonResponse>>> searchPerson(@Query('username') String username);
+
+  @DELETE('/v1/user/{user-id}/device-token')
+  Future<HttpResponse<String>> deleteDeviceToken(@Path('user-id') int userId);
 }

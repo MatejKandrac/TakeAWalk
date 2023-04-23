@@ -17,7 +17,8 @@ class ProfileEditPage extends HookWidget {
   _onEdit(BuildContext context, String newUsername, String newPassword, String confirmPassword, String newBio) {
     BlocProvider.of<ProfileBloc>(context).editProfileData(newUsername, newPassword, confirmPassword, newBio);
     showStateDialog(context: context, isSuccess: true, text: "Changes saved!")
-        .then((value) => AutoRouter.of(context).replace(const ProfileRoute()));
+        // .then((value) => AutoRouter.of(context).replace(const ProfileRoute()));
+        .then((value) => AutoRouter.of(context).pop());
   }
 
   @override

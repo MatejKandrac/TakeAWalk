@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_a_walk_app/domain/models/requests/register_request.dart';
@@ -52,5 +54,9 @@ class RegisterBloc extends Cubit<RegisterState> {
       }
     }
     return null;
+  }
+
+  void emitRegisterFormState() async {
+    emit(const RegisterFormState(usernameError: null));
   }
 }

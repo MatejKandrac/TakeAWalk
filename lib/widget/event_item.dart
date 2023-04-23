@@ -10,11 +10,13 @@ class EventItem extends StatelessWidget {
     Key? key,
     required this.event,
     required this.onTap,
+    required this.status,
     this.onAccept,
     this.onDecline
   }) : super(key: key);
 
-  final EventResponse event;
+  final EventObject event;
+  final Status status;
   final Function() onTap;
   final Function()? onAccept;
   final Function()? onDecline;
@@ -25,7 +27,7 @@ class EventItem extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15)
       ),
-      color: event.dateStart.isBefore(DateTime.now()) ? const Color(0xff7740c2) : null,
+      color: event.start.isBefore(DateTime.now()) ? const Color(0xff7740c2) : null,
       child: InkWell(
         onTap: onTap,
         child: Column(
@@ -33,7 +35,7 @@ class EventItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             MapWidget(
-              heroTag: event.id,
+              heroTag: event.eventId,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15)
@@ -46,7 +48,7 @@ class EventItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(event.name, style: Theme.of(context).textTheme.bodyLarge),
-                  Text(event.owner.username, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey)),
+                  Text(event.owner, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey)),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,7 +60,7 @@ class EventItem extends StatelessWidget {
                           children: [
                             Icon(Icons.access_time_outlined),
                             const SizedBox(width: 5),
-                            Text("${AppConstants.timeFormat.format(event.dateStart)} - ${AppConstants.timeFormat.format(event.dateEnd)}",
+                            Text("${AppConstants.timeFormat.format(event.start)} - ${AppConstants.timeFormat.format(event.end)}",
                               style: Theme.of(context).textTheme.bodySmall,)
                           ],
                         ),
@@ -70,7 +72,7 @@ class EventItem extends StatelessWidget {
                           children: [
                             Icon(Icons.person_2_outlined),
                             const SizedBox(width: 5),
-                            Text(event.profiles.length.toString(), style: Theme.of(context).textTheme.bodySmall,)
+                            Text(event.peopleGoing.toString(), style: Theme.of(context).textTheme.bodySmall,)
                           ],
                         ),
                       ),
@@ -87,7 +89,7 @@ class EventItem extends StatelessWidget {
                           children: [
                             Icon(Icons.date_range),
                             const SizedBox(width: 5),
-                            Text("${AppConstants.dateOnlyFormat.format(event.dateStart)} - ${AppConstants.dateOnlyFormat.format(event.dateEnd)}",
+                            Text("${AppConstants.dateOnlyFormat.format(event.start)} - ${AppConstants.dateOnlyFormat.format(event.start)}",
                               style: Theme.of(context).textTheme.bodySmall,)
                           ],
                         ),
@@ -99,14 +101,14 @@ class EventItem extends StatelessWidget {
                           children: [
                             Icon(Icons.location_on_outlined),
                             const SizedBox(width: 5),
-                            Text(event.locations.length.toString(), style: Theme.of(context).textTheme.bodySmall,)
+                            Text(event.places.toString(), style: Theme.of(context).textTheme.bodySmall,)
                           ],
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
-                  if (event.status == Status.PENDING) Row(
+                  if (status == Status.PENDING) Row(
                     children: [
                       Expanded(
                         child: AppButton.outlined(
