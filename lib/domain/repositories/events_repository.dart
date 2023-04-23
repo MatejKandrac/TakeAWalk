@@ -21,4 +21,6 @@ abstract class EventsRepository {
 
   Future<Either<RequestError, List<EventObject>>> filterInvitations(FilterData filter);
 
+  Future<Either<RequestError, List<MapEventObj>>> getMapEvents();
+
 }

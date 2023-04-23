@@ -27,7 +27,7 @@ class AppScaffold extends StatelessWidget {
         nextRoute = InvitesRoute();
         break;
       case 2:
-        nextRoute = const MapRoute();
+        nextRoute = MapRoute();
         break;
       case 3:
         nextRoute = const ProfileRoute();

@@ -94,4 +94,16 @@ class EventsRepositoryImpl extends BaseApiRepository implements EventsRepository
     return result;
   }
 
+  @override
+  Future<Either<RequestError, List<MapEventObj>>> getMapEvents() async {
+    int? id = await authRepository.getUserId();
+    if (id == null) {
+      return Left(RequestError.unauthenticated());
+    }
+
+    int limit = 5;
+    var result = await makeRequest(request: () => eventsApiService.getMapEvents(id, limit));
+    return result;
+  }
+
 }

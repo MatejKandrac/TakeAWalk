@@ -64,6 +64,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<ProfileBloc>(create: (context) => di(), lazy: true),
         BlocProvider<MyEventsBloc>(create: (context) => di(), lazy: true),
         BlocProvider<InvitesBloc>(create: (context) => di(), lazy: true),
+        BlocProvider<MapBloc>(create: (context) => di(), lazy: true),
       ],
       child: MaterialApp.router(
         routerConfig: _appRouter.config(

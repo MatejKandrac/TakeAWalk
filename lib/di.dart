@@ -33,6 +33,7 @@ initDependencies() async {
   di.registerFactory<PickPersonBloc>(() => PickPersonBloc(di()));
   di.registerFactory<MyEventsBloc>(() => MyEventsBloc(di()));
   di.registerFactory<InvitesBloc>(() => InvitesBloc(di()));
+  di.registerFactory<MapBloc>(() => MapBloc(di()));
 
   // REPOSITORIES
   di.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(di(), di()));
