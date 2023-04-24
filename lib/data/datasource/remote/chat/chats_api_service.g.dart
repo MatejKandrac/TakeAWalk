@@ -19,9 +19,16 @@ class _ChatsApiService implements ChatsApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<List<MessageObj>>?> getEventMessages(eventId) async {
+  Future<HttpResponse<List<MessageObj>>> getEventMessages(
+    eventId,
+    pageNumber,
+    pageSize,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': pageNumber,
+      r'size': pageSize,
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(

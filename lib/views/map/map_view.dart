@@ -40,8 +40,8 @@ class MapPage extends HookWidget {
               title: Text("Map", style: Theme.of(context).textTheme.bodyMedium),
             ),
             fab: FloatingActionButton(
-              onPressed: () {},
-              // onPressed: _onCenterGPS(context, state.locationData[0].lat, state.locationData[0].lon),
+              // onPressed: () {},
+              onPressed: () => _onCenterGPS(context, state.locationData[0].lat, state.locationData[0].lon),
               child: const Icon(Icons.gps_fixed),
             ),
             navigationIndex: 2,

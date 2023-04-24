@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/data/datasource/remote/event/events_api_service.dart';
+import 'package:take_a_walk_app/data/repository/chats_repository.dart';
+import 'package:take_a_walk_app/domain/repositories/chats_repository.dart';
 import 'package:take_a_walk_app/utils/messaging_service.dart';
 import 'data/datasource/remote/chat/chats_api_service.dart';
 import 'views/bloc_container.dart';
@@ -34,6 +36,7 @@ initDependencies() async {
   di.registerFactory<MyEventsBloc>(() => MyEventsBloc(di()));
   di.registerFactory<InvitesBloc>(() => InvitesBloc(di()));
   di.registerFactory<MapBloc>(() => MapBloc(di()));
+  di.registerFactory<ChatBloc>(() => ChatBloc(di(), di()));
 
   // REPOSITORIES
   di.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(di(), di()));
@@ -45,6 +48,10 @@ initDependencies() async {
   di.registerLazySingleton<EventsRepository>(() => EventsRepositoryImpl(
     authRepository: di(),
     eventsApiService: di()
+  ));
+  di.registerLazySingleton<ChatsRepository>(() => ChatsRepositoryImpl(
+      authRepository: di(),
+      chatsApiService: di()
   ));
 
   // DATASOURCES

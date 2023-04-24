@@ -9,7 +9,6 @@ import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/di.dart';
 import 'package:take_a_walk_app/views/bloc_container.dart';
 
-import 'config/constants.dart';
 import 'config/firebase_options.dart';
 import 'config/theme.dart';
 
@@ -65,6 +64,7 @@ class MyApp extends StatelessWidget {
         BlocProvider<MyEventsBloc>(create: (context) => di(), lazy: true),
         BlocProvider<InvitesBloc>(create: (context) => di(), lazy: true),
         BlocProvider<MapBloc>(create: (context) => di(), lazy: true),
+        BlocProvider<ChatBloc>(create: (context) => di(), lazy: true),
       ],
       child: MaterialApp.router(
         routerConfig: _appRouter.config(

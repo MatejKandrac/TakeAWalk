@@ -3,6 +3,7 @@ class MessageObj {
   final String message;
   final DateTime sent;
   final String username;
+  final int userId;
   final String? profilePicture;
 
   const MessageObj({
@@ -10,6 +11,7 @@ class MessageObj {
     required this.message,
     required this.sent,
     required this.username,
+    required this.userId,
     this.profilePicture,
   });
 
@@ -17,8 +19,9 @@ class MessageObj {
     return MessageObj(
       id: map['id'] as int,
       message: map['message'] as String,
-      sent: map['sent'] as DateTime,
-      username: map['username'] as String,
+      sent: DateTime.parse(map['sent'] as String),
+      username: map['userName'] as String,
+      userId: map['userId'] as int,
       profilePicture: map['profilePicture'] as String?,
     );
   }
