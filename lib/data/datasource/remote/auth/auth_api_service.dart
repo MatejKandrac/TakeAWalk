@@ -1,7 +1,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:take_a_walk_app/config/constants.dart';
+import 'package:take_a_walk_app/domain/models/requests/device_token_request.dart';
 import 'package:take_a_walk_app/domain/models/requests/login_request.dart';
 import 'package:take_a_walk_app/domain/models/requests/register_request.dart';
 import 'package:take_a_walk_app/domain/models/responses/auth_response.dart';
@@ -23,5 +23,5 @@ abstract class AuthApiService {
   Future<HttpResponse<AuthResponse>> refreshToken(@Body() String refreshToken);
 
   @POST('/v1/user/{user_id}/device-token')
-  Future<HttpResponse<String>> sendDeviceToken(@Path('user_id') int userId, @Body() String deviceToken);
+  Future<HttpResponse<String>> sendDeviceToken(@Path('user_id') int userId, @Body() DeviceTokenRequest request);
 }

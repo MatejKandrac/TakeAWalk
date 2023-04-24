@@ -6,7 +6,7 @@ import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 import 'package:take_a_walk_app/widget/loading_dialog.dart';
-import 'package:take_a_walk_app/widget/success_dialog.dart';
+import 'package:take_a_walk_app/widget/state_dialog.dart';
 
 import 'bloc/login_bloc.dart';
 

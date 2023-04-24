@@ -4,6 +4,7 @@ import 'package:either_dart/either.dart';
 import 'package:take_a_walk_app/data/datasource/local/auth_local_service.dart';
 import 'package:take_a_walk_app/data/datasource/remote/auth/auth_api_service.dart';
 import 'package:take_a_walk_app/data/repository/base_repository.dart';
+import 'package:take_a_walk_app/domain/models/requests/device_token_request.dart';
 import 'package:take_a_walk_app/domain/models/requests/login_request.dart';
 import 'package:take_a_walk_app/domain/models/requests/register_request.dart';
 import 'package:take_a_walk_app/domain/models/responses/auth_response.dart';
@@ -73,7 +74,11 @@ class AuthRepositoryImpl extends BaseApiRepository implements AuthRepository {
   }
 
   @override
-  Future<RequestError?> sendDeviceToken(int userId, String deviceToken) {
+  Future<RequestError?> sendDeviceToken(DeviceTokenRequest deviceToken) async {
+    var userId = await getUserId();
+    if (userId == null) {
+      return RequestError.unauthenticated();
+    }
     return makeRequest(request: () => apiService.sendDeviceToken(userId, deviceToken)).fold(
             (left) => left,
             (right) => null

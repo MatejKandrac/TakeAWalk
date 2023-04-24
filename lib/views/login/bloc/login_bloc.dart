@@ -30,6 +30,7 @@ class LoginBloc extends Cubit<LoginState> {
     if (result != null) {
       emit(LoginErrorState(result.getErrorText()));
     } else {
+      messagingService.registerDeviceToken();
       emit(const LoginSuccessState());
     }
   }

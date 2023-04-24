@@ -7,6 +7,7 @@ class MapWidget extends StatelessWidget {
     Key? key,
     this.onAddPoint,
     this.onPositionTap,
+    this.onCenterGps,
     this.height = 300,
     this.borderRadius,
     this.bounds,
@@ -19,6 +20,7 @@ class MapWidget extends StatelessWidget {
   final LatLngBounds? bounds;
   final List<Widget> layers;
   final Function()? onAddPoint;
+  final Function()? onCenterGps;
   final Function(LatLng)? onPositionTap;
   final BorderRadiusGeometry? borderRadius;
 
@@ -68,6 +70,15 @@ class MapWidget extends StatelessWidget {
                 child: FloatingActionButton(
                   onPressed: onAddPoint,
                   child: const Icon(Icons.add),
+                ),
+              )
+            else if (onCenterGps != null)
+              Positioned(
+                right: 10,
+                bottom: 10,
+                child: FloatingActionButton(
+                  onPressed: onCenterGps,
+                  child: const Icon(Icons.gps_fixed),
                 ),
               )
           ],

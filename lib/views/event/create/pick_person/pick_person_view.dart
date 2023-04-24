@@ -7,7 +7,7 @@ import 'package:take_a_walk_app/domain/models/responses/search_person_response.d
 import 'package:take_a_walk_app/views/event/create/pick_person/bloc/pick_person_bloc.dart';
 import 'package:take_a_walk_app/views/event/create/pick_person/widget/person_item.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
-import 'package:take_a_walk_app/widget/success_dialog.dart';
+import 'package:take_a_walk_app/widget/state_dialog.dart';
 
 @RoutePage()
 class PickPersonPage extends HookWidget {

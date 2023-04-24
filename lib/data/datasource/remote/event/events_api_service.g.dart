@@ -271,7 +271,6 @@ class _EventsApiService implements EventsApiService {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(data?.toMap() ?? <String, dynamic>{});
-    print(_data);
     final _result =
         await _dio.fetch<int>(_setStreamType<HttpResponse<int>>(Options(
       method: 'POST',

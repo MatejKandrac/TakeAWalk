@@ -95,12 +95,13 @@ class _AuthApiService implements AuthApiService {
   @override
   Future<HttpResponse<String>> sendDeviceToken(
     userId,
-    deviceToken,
+    request,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = deviceToken;
+    final _data = <String, dynamic>{};
+    _data.addAll(request?.toMap() ?? <String, dynamic>{});
     final _result =
         await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
       method: 'POST',

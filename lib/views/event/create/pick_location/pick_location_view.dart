@@ -5,15 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
+import 'package:take_a_walk_app/domain/models/responses/location.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
-import 'package:take_a_walk_app/widget/app_scaffold.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 import 'package:take_a_walk_app/widget/map_widget.dart';
 
 @RoutePage()
 class PickLocationPage extends HookWidget {
   const PickLocationPage({Key? key}) : super(key: key);
+
+  _onCenterGps(BuildContext context) {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +51,7 @@ class PickLocationPage extends HookWidget {
                         ],
                       )
                     ],
+                    onCenterGps: () => _onCenterGps(context),
                   ),
                 ),
                 const SizedBox(height: 10),

@@ -7,15 +7,22 @@ class AppConstants {
 
   static const appName = "TakeAWalk";
 
-  static const baseUrl = "http://127.0.0.1:8080";
+  static const baseUrl = "http://192.168.141.205:8080";
 
   static const storageKeyToken = "TAKEAWALK_TOKEN_KEY";
   static const storageKeyRefreshToken = "TAKEAWALK_REFRESH_TOKEN_KEY";
   static const storageKeyUserId = "TAKEAWALK_USER_ID_KEY";
 
+  static const notificationsChannelEventsName = "Events";
+  static const notificationChannelEventsId = "TAKEAWALK_NOTIFICATION_CHANNEL_EVENTS";
+
+  static const notificationChannelMessagesId = "TAKEWAWALK_NOTIFICATION_CHANNEL_MESSAGES";
+  static const notificationChannelMessagesName = "Messages";
+
   static final dateFormat = DateFormat("dd.MM.yyyy");
   static final dateOnlyFormat = DateFormat("dd.MM");
   static final timeFormat = DateFormat("HH:mm");
+  static final weatherDateFormat = DateFormat("yyyy-MM-dd");
 }
 
 class AppAssets {

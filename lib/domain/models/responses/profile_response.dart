@@ -16,7 +16,7 @@ class ProfileResponse {
       username: map['userName'] as String,
       email: map['email'] as String,
       bio: map['bio'] as String?,
-      image: map['image'] as String?,
+      image: map['profilePicture'] as String?,
     );
   }
 }

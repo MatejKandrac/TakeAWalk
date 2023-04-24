@@ -8,18 +8,18 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/di.dart';
-import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
+import 'package:take_a_walk_app/domain/models/responses/location.dart';
 import 'package:take_a_walk_app/domain/models/responses/search_person_response.dart';
 import 'package:take_a_walk_app/utils/transform_locations_mixin.dart';
 import 'package:take_a_walk_app/views/event/create/create_event/bloc/create_event_bloc.dart';
-import 'package:take_a_walk_app/views/event/create/create_event/widgets/location_widget.dart';
+import 'package:take_a_walk_app/widget/location_widget.dart';
 import 'package:take_a_walk_app/widget/loading_dialog.dart';
 import 'package:take_a_walk_app/widget/map_widget.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
-import 'package:take_a_walk_app/widget/success_dialog.dart';
+import 'package:take_a_walk_app/widget/state_dialog.dart';
 
-import 'widgets/person_widget.dart';
+import '../../../../widget/person_widget.dart';
 
 @RoutePage()
 class CreateEventPage extends HookWidget with TransformLocationsMixin {
@@ -71,13 +71,23 @@ class CreateEventPage extends HookWidget with TransformLocationsMixin {
         initialTime: TimeOfDay.fromDateTime(DateTime.now())
     ).then((value) {
       if (value != null) {
-        timeController.text = value.format(context);
+        var dateTime = DateTime.now().copyWith(
+          hour: value.hour,
+          minute: value.minute
+        );
+        timeController.text = AppConstants.timeFormat.format(dateTime);
       }
     });
   }
 
-  _onConfirm(String name, String date, String timeStart, String timeEnd, BuildContext context) {
-    BlocProvider.of<CreateEventBloc>(context).createEvent(name, date, timeStart, timeEnd);
+  _onWeatherDetail(String dateText, Location location, BuildContext context) {
+    AutoRouter.of(context).push(ForecastRoute(dateRange: dateText, location: location));
+  }
+
+  _weatherEnabled(String dateText, List<Location> locations) => dateText.isNotEmpty && locations.isNotEmpty;
+
+  _onConfirm(String name, String date, String timeStart, String timeEnd, String description, BuildContext context) {
+    BlocProvider.of<CreateEventBloc>(context).createEvent(name, date, timeStart, timeEnd, description);
   }
 
   @override
@@ -86,6 +96,7 @@ class CreateEventPage extends HookWidget with TransformLocationsMixin {
     final dateController = useTextEditingController();
     final startTimeController = useTextEditingController();
     final endTimeController = useTextEditingController();
+    final descriptionController = useTextEditingController();
     final scrollController = useScrollController();
     final bloc = useMemoized<CreateEventBloc>(() => di());
     var loadingDialogShowing = useMemoized<bool>(() => false);
@@ -113,9 +124,11 @@ class CreateEventPage extends HookWidget with TransformLocationsMixin {
             ).then((value) => Navigator.of(context).pop());
           }
           if (state is CreateFormState) {
-            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-              scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
-            });
+            if (state.nameError != null || state.timeToError != null || state.timeFromError != null || state.dateError != null) {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                scrollController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+              });
+            }
             if (state.dialogErrorText != null) {
               showStateDialog(
                   context: context,
@@ -185,12 +198,6 @@ class CreateEventPage extends HookWidget with TransformLocationsMixin {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      Text("Forecast:", style: Theme.of(context).textTheme.bodyMedium),
-                      const SizedBox(height: 5),
-                      Text(state.forecast == null ? "Forecast unavailable" : "",
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      const SizedBox(height: 20),
                       MapWidget(
                           heroTag: -1,
                           layers: [
@@ -214,6 +221,7 @@ class CreateEventPage extends HookWidget with TransformLocationsMixin {
                       ReorderableListView.builder(
                         itemCount: state.locations.length,
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) => LocationWidget(
                           key: Key(index.toString()),
                           location: state.locations[index],
@@ -223,7 +231,13 @@ class CreateEventPage extends HookWidget with TransformLocationsMixin {
                       ),
                       const Divider(height: 2, color: Colors.white),
                       const SizedBox(height: 20),
-                      Text("People:", style: Theme.of(context).textTheme.bodyMedium),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("People:", style: Theme.of(context).textTheme.bodyMedium),
+                          IconButton(onPressed: () => _onPickPerson(context), icon: const Icon(Icons.add))
+                        ]
+                      ),
                       const SizedBox(height: 10),
                       ListView.builder(
                         shrinkWrap: true,
@@ -238,17 +252,21 @@ class CreateEventPage extends HookWidget with TransformLocationsMixin {
                           );
                         },
                       ),
+                      const Divider(height: 2, color: Colors.white),
                       const SizedBox(height: 10),
-                      AppButton.outlined(outlineColor: Colors.white,
-                          onPressed: () => _onPickPerson(context),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text("Add", style: Theme.of(context).textTheme.bodySmall),
-                              const SizedBox(width: 5),
-                              const Icon(Icons.add)
-                            ],
-                          )
+                      Text("Description", style: Theme.of(context).textTheme.bodyMedium),
+                      const SizedBox(height: 5),
+                      AppTextField(
+                          controller: descriptionController,
+                          maxLines: 5,
+                          hint: "Event description... (Optional)",
+                      ),
+                      const SizedBox(height: 20),
+                      AppButton.outlined(
+                          outlineColor: Colors.white,
+                          onPressed: _weatherEnabled(dateController.text, state.locations) ?
+                              () => _onWeatherDetail(dateController.text, state.locations[0], context) : null,
+                          child: const Text("See forecast"),
                       ),
                       const SizedBox(height: 20),
                       AppButton.gradient(
@@ -256,7 +274,7 @@ class CreateEventPage extends HookWidget with TransformLocationsMixin {
                           onPressed: () => _onConfirm(
                               nameController.text, dateController.text,
                               startTimeController.text, endTimeController.text,
-                              context)
+                              descriptionController.text, context)
                       )
                     ],
                   ),

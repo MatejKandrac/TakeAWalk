@@ -8,12 +8,14 @@ class PersonWidget extends StatelessWidget {
     required this.name,
     this.bio,
     this.picture,
+    this.suffix,
     this.onDelete}) : super(key: key);
 
   final String name;
   final String? bio;
   final String? picture;
   final Function()? onDelete;
+  final Widget? suffix;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +30,10 @@ class PersonWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  width: 30,
-                  height: 30,
+                  width: 40,
+                  height: 40,
                   child: picture == null
-                      ? const Icon(Icons.account_circle, size: 20) :
+                      ? const Icon(Icons.account_circle, size: 40) :
                       Image.network("${AppConstants.baseUrl}/v1/pictures/${picture!}"),
                 ),
                 const SizedBox(width: 10),
@@ -51,6 +53,7 @@ class PersonWidget extends StatelessWidget {
                 icon: const Icon(Icons.delete)
             ),
           ),
+          if (suffix != null) suffix!
         ],
       ),
     );

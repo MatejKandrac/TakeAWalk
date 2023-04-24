@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
+import 'package:take_a_walk_app/domain/models/responses/location.dart';
 import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
 import 'package:take_a_walk_app/widget/app_scaffold.dart';
 import 'package:take_a_walk_app/widget/event_item.dart';
@@ -43,7 +44,7 @@ class InvitesPage extends StatelessWidget {
   _onOpenFilter(BuildContext context) {}
 
   _onDetail(BuildContext context, int index) {
-    AutoRouter.of(context).push(InviteDetailRoute(event: events[index]));
+    AutoRouter.of(context).push(EventDetailRoute(eventId: 2));
   }
 
   @override

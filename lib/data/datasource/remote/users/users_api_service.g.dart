@@ -99,7 +99,9 @@ class _UsersApiService implements UsersApiService {
 
   @override
   Future<HttpResponse<List<SearchPersonResponse>>> searchPerson(
-      username) async {
+    userId,
+    username,
+  ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'username': username};
     final _headers = <String, dynamic>{};
@@ -112,7 +114,7 @@ class _UsersApiService implements UsersApiService {
     )
             .compose(
               _dio.options,
-              '/v1/user/search',
+              '/v1/user/${userId}/search',
               queryParameters: queryParameters,
               data: _data,
             )

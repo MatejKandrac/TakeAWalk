@@ -1,3 +1,4 @@
+import 'location.dart';
 import 'profile_response.dart';
 
 class EventResponse {
@@ -32,14 +33,6 @@ class EventResponse {
       profiles: map['profiles'] as List<ProfileResponse>,
     );
   }
-}
-
-class Location {
-  final double lat;
-  final double lon;
-  final String name;
-
-  const Location({required this.lat, required this.lon, required this.name});
 }
 
 enum Status {

@@ -57,7 +57,7 @@ class _StateDialog extends HookWidget {
               },
               repeat: false),
           const SizedBox(height: 10),
-          Text(contentText, style: Theme.of(context).textTheme.bodyMedium),
+          Text(contentText, style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
           if (closeOnConfirm) const SizedBox(height: 10),
           if (closeOnConfirm) AppButton.primary(
               child: Text("OK", style: Theme.of(context).textTheme.bodyMedium),

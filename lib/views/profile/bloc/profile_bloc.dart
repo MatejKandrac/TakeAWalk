@@ -1,15 +1,20 @@
+import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_a_walk_app/domain/repositories/users_repository.dart';
+import 'package:take_a_walk_app/utils/network_image_mixin.dart';
 
 import '../../../domain/models/requests/profile_edit_request.dart';
 
 part 'profile_state.dart';
 
-class ProfileBloc extends Cubit<ProfileState> {
+class ProfileBloc extends Cubit<ProfileState> with NetworkImageMixin {
   final UsersRepository repository;
+  final Dio dio;
 
-  ProfileBloc(this.repository) : super(ProfileDataState.empty());
+  ProfileBloc({
+    required this.repository,
+    required this.dio}) : super(ProfileDataState.empty());
 
   void getProfileData() async {
     repository.getProfile().fold((error) => () {}, (data) async {
@@ -33,6 +38,8 @@ class ProfileBloc extends Cubit<ProfileState> {
     repository.editUserProfile(request);
     getProfileData();
   }
+
+  getHeaders() => getImageHeaders(dio);
 
   void emitProfileFormState() async {
     emit(ProfileFormState(false, false));

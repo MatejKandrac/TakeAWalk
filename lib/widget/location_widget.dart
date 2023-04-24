@@ -1,10 +1,20 @@
 
 import 'package:flutter/material.dart';
-import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
+import 'package:take_a_walk_app/domain/models/responses/location.dart';
 
 class LocationWidget extends StatelessWidget {
-  const LocationWidget({Key? key, required this.location, this.onDelete, this.isReorder = true}) : super(key: key);
+  const LocationWidget({
+    Key? key,
+    required this.location,
+    this.onDelete,
+    this.isReorder = true,
+    this.visited = false,
+    this.textPrefix = ""
+  }) : super(key: key);
+
+  final String textPrefix;
   final Location location;
+  final bool visited;
   final Function(Location location)? onDelete;
   final bool isReorder;
 
@@ -18,10 +28,13 @@ class LocationWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              location.name,
+              "$textPrefix${location.name}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                decoration: visited ? TextDecoration.lineThrough : TextDecoration.none,
+                decorationThickness: 4
+              )
             ),
           ),
           const SizedBox(width: 10),
@@ -35,7 +48,7 @@ class LocationWidget extends StatelessWidget {
                     icon: const Icon(Icons.delete)
                 ),
               ),
-              const SizedBox(width: 10),
+              if (isReorder) const SizedBox(width: 10),
               if (isReorder) const Icon(Icons.reorder)
             ],
           )

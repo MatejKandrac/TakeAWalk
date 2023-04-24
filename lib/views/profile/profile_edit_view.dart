@@ -8,7 +8,7 @@ import 'package:take_a_walk_app/views/bloc_container.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 
 import '../../widget/app_button.dart';
-import '../../widget/success_dialog.dart';
+import '../../widget/state_dialog.dart';
 
 @RoutePage()
 class ProfileEditPage extends HookWidget {

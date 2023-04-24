@@ -14,92 +14,27 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    ChatRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ChatPage(),
-      );
-    },
-    CreateEventRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const CreateEventPage(),
-      );
-    },
-    PickLocationRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const PickLocationPage(),
-      );
-    },
-    PickPersonRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const PickPersonPage(),
-      );
-    },
-    ActiveDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<ActiveDetailRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: ActiveDetailPage(
-          key: args.key,
-          event: args.event,
-        ),
-      );
-    },
-    InviteDetailRoute.name: (routeData) {
-      final args = routeData.argsAs<InviteDetailRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: InviteDetailPage(
-          key: args.key,
-          event: args.event,
-        ),
-      );
-    },
-    FilterRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const FilterPage(),
-      );
-    },
-    InvitesRoute.name: (routeData) {
-      final args = routeData.argsAs<InvitesRouteArgs>(
-          orElse: () => const InvitesRouteArgs());
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: InvitesPage(key: args.key),
-      );
-    },
-    LoginRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const LoginPage(),
-      );
-    },
-    MapRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const MapPage(),
-      );
-    },
     MyEventsRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const MyEventsPage(),
       );
     },
-    ProfileEditRoute.name: (routeData) {
+    ChatRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ProfileEditPage(),
+        child: const ChatPage(),
       );
     },
-    ProfileRoute.name: (routeData) {
+    ForecastRoute.name: (routeData) {
+      final args = routeData.argsAs<ForecastRouteArgs>();
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const ProfilePage(),
+        child: ForecastPage(
+          args.dateRange,
+          args.location,
+          key: args.key,
+        ),
       );
     },
     RegisterRoute.name: (routeData) {
@@ -114,7 +49,87 @@ abstract class _$AppRouter extends RootStackRouter {
         child: const SplashPage(),
       );
     },
+    CreateEventRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const CreateEventPage(),
+      );
+    },
+    PickPersonRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const PickPersonPage(),
+      );
+    },
+    PickLocationRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const PickLocationPage(),
+      );
+    },
+    EventDetailRoute.name: (routeData) {
+      final args = routeData.argsAs<EventDetailRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: EventDetailPage(
+          key: args.key,
+          eventId: args.eventId,
+        ),
+      );
+    },
+    ProfileEditRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ProfileEditPage(),
+      );
+    },
+    ProfileRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const ProfilePage(),
+      );
+    },
+    InvitesRoute.name: (routeData) {
+      final args = routeData.argsAs<InvitesRouteArgs>(
+          orElse: () => const InvitesRouteArgs());
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: InvitesPage(key: args.key),
+      );
+    },
+    MapRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const MapPage(),
+      );
+    },
+    LoginRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const LoginPage(),
+      );
+    },
+    FilterRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const FilterPage(),
+      );
+    },
   };
+}
+
+/// generated route for
+/// [MyEventsPage]
+class MyEventsRoute extends PageRouteInfo<void> {
+  const MyEventsRoute({List<PageRouteInfo>? children})
+      : super(
+          MyEventsRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MyEventsRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -127,6 +142,77 @@ class ChatRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'ChatRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ForecastPage]
+class ForecastRoute extends PageRouteInfo<ForecastRouteArgs> {
+  ForecastRoute({
+    required String dateRange,
+    required Location location,
+    Key? key,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ForecastRoute.name,
+          args: ForecastRouteArgs(
+            dateRange: dateRange,
+            location: location,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ForecastRoute';
+
+  static const PageInfo<ForecastRouteArgs> page =
+      PageInfo<ForecastRouteArgs>(name);
+}
+
+class ForecastRouteArgs {
+  const ForecastRouteArgs({
+    required this.dateRange,
+    required this.location,
+    this.key,
+  });
+
+  final String dateRange;
+
+  final Location location;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'ForecastRouteArgs{dateRange: $dateRange, location: $location, key: $key}';
+  }
+}
+
+/// generated route for
+/// [RegisterPage]
+class RegisterRoute extends PageRouteInfo<void> {
+  const RegisterRoute({List<PageRouteInfo>? children})
+      : super(
+          RegisterRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'RegisterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SplashPage]
+class SplashRoute extends PageRouteInfo<void> {
+  const SplashRoute({List<PageRouteInfo>? children})
+      : super(
+          SplashRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SplashRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -146,20 +232,6 @@ class CreateEventRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [PickLocationPage]
-class PickLocationRoute extends PageRouteInfo<void> {
-  const PickLocationRoute({List<PageRouteInfo>? children})
-      : super(
-          PickLocationRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'PickLocationRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
 /// [PickPersonPage]
 class PickPersonRoute extends PageRouteInfo<void> {
   const PickPersonRoute({List<PageRouteInfo>? children})
@@ -174,91 +246,81 @@ class PickPersonRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ActiveDetailPage]
-class ActiveDetailRoute extends PageRouteInfo<ActiveDetailRouteArgs> {
-  ActiveDetailRoute({
-    Key? key,
-    required EventResponse event,
-    List<PageRouteInfo>? children,
-  }) : super(
-          ActiveDetailRoute.name,
-          args: ActiveDetailRouteArgs(
-            key: key,
-            event: event,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ActiveDetailRoute';
-
-  static const PageInfo<ActiveDetailRouteArgs> page =
-      PageInfo<ActiveDetailRouteArgs>(name);
-}
-
-class ActiveDetailRouteArgs {
-  const ActiveDetailRouteArgs({
-    this.key,
-    required this.event,
-  });
-
-  final Key? key;
-
-  final EventResponse event;
-
-  @override
-  String toString() {
-    return 'ActiveDetailRouteArgs{key: $key, event: $event}';
-  }
-}
-
-/// generated route for
-/// [InviteDetailPage]
-class InviteDetailRoute extends PageRouteInfo<InviteDetailRouteArgs> {
-  InviteDetailRoute({
-    Key? key,
-    required EventResponse event,
-    List<PageRouteInfo>? children,
-  }) : super(
-          InviteDetailRoute.name,
-          args: InviteDetailRouteArgs(
-            key: key,
-            event: event,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'InviteDetailRoute';
-
-  static const PageInfo<InviteDetailRouteArgs> page =
-      PageInfo<InviteDetailRouteArgs>(name);
-}
-
-class InviteDetailRouteArgs {
-  const InviteDetailRouteArgs({
-    this.key,
-    required this.event,
-  });
-
-  final Key? key;
-
-  final EventResponse event;
-
-  @override
-  String toString() {
-    return 'InviteDetailRouteArgs{key: $key, event: $event}';
-  }
-}
-
-/// generated route for
-/// [FilterPage]
-class FilterRoute extends PageRouteInfo<void> {
-  const FilterRoute({List<PageRouteInfo>? children})
+/// [PickLocationPage]
+class PickLocationRoute extends PageRouteInfo<void> {
+  const PickLocationRoute({List<PageRouteInfo>? children})
       : super(
-          FilterRoute.name,
+          PickLocationRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'FilterRoute';
+  static const String name = 'PickLocationRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [EventDetailPage]
+class EventDetailRoute extends PageRouteInfo<EventDetailRouteArgs> {
+  EventDetailRoute({
+    Key? key,
+    required int eventId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          EventDetailRoute.name,
+          args: EventDetailRouteArgs(
+            key: key,
+            eventId: eventId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'EventDetailRoute';
+
+  static const PageInfo<EventDetailRouteArgs> page =
+      PageInfo<EventDetailRouteArgs>(name);
+}
+
+class EventDetailRouteArgs {
+  const EventDetailRouteArgs({
+    this.key,
+    required this.eventId,
+  });
+
+  final Key? key;
+
+  final int eventId;
+
+  @override
+  String toString() {
+    return 'EventDetailRouteArgs{key: $key, eventId: $eventId}';
+  }
+}
+
+/// generated route for
+/// [ProfileEditPage]
+class ProfileEditRoute extends PageRouteInfo<void> {
+  const ProfileEditRoute({List<PageRouteInfo>? children})
+      : super(
+          ProfileEditRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ProfileEditRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [ProfilePage]
+class ProfileRoute extends PageRouteInfo<void> {
+  const ProfileRoute({List<PageRouteInfo>? children})
+      : super(
+          ProfileRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ProfileRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
@@ -293,20 +355,6 @@ class InvitesRouteArgs {
 }
 
 /// generated route for
-/// [LoginPage]
-class LoginRoute extends PageRouteInfo<void> {
-  const LoginRoute({List<PageRouteInfo>? children})
-      : super(
-          LoginRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'LoginRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
 /// [MapPage]
 class MapRoute extends PageRouteInfo<void> {
   const MapRoute({List<PageRouteInfo>? children})
@@ -321,71 +369,29 @@ class MapRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [MyEventsPage]
-class MyEventsRoute extends PageRouteInfo<void> {
-  const MyEventsRoute({List<PageRouteInfo>? children})
+/// [LoginPage]
+class LoginRoute extends PageRouteInfo<void> {
+  const LoginRoute({List<PageRouteInfo>? children})
       : super(
-          MyEventsRoute.name,
+          LoginRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'MyEventsRoute';
+  static const String name = 'LoginRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
-/// [ProfileEditPage]
-class ProfileEditRoute extends PageRouteInfo<void> {
-  const ProfileEditRoute({List<PageRouteInfo>? children})
+/// [FilterPage]
+class FilterRoute extends PageRouteInfo<void> {
+  const FilterRoute({List<PageRouteInfo>? children})
       : super(
-          ProfileEditRoute.name,
+          FilterRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'ProfileEditRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [ProfilePage]
-class ProfileRoute extends PageRouteInfo<void> {
-  const ProfileRoute({List<PageRouteInfo>? children})
-      : super(
-          ProfileRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'ProfileRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [RegisterPage]
-class RegisterRoute extends PageRouteInfo<void> {
-  const RegisterRoute({List<PageRouteInfo>? children})
-      : super(
-          RegisterRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'RegisterRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [SplashPage]
-class SplashRoute extends PageRouteInfo<void> {
-  const SplashRoute({List<PageRouteInfo>? children})
-      : super(
-          SplashRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'SplashRoute';
+  static const String name = 'FilterRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

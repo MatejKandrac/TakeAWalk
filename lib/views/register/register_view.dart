@@ -9,7 +9,7 @@ import 'package:take_a_walk_app/views/register/bloc/register_bloc.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 import 'package:take_a_walk_app/widget/loading_dialog.dart';
-import 'package:take_a_walk_app/widget/success_dialog.dart';
+import 'package:take_a_walk_app/widget/state_dialog.dart';
 
 @RoutePage()
 class RegisterPage extends HookWidget {

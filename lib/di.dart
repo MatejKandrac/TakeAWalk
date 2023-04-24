@@ -1,6 +1,7 @@
 
 
 import 'package:dio/dio.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/data/datasource/remote/event/events_api_service.dart';
@@ -28,9 +29,14 @@ initDependencies() async {
   ));
   di.registerFactory<LoginBloc>(() => LoginBloc(di(), di()));
   di.registerFactory<RegisterBloc>(() => RegisterBloc(di(), di()));
-  di.registerFactory<ProfileBloc>(() => ProfileBloc(di()));
+  di.registerFactory<ProfileBloc>(() => ProfileBloc(
+      dio: di(),
+      repository: di()
+  ));
   di.registerFactory<CreateEventBloc>(() => CreateEventBloc(di()));
   di.registerFactory<PickPersonBloc>(() => PickPersonBloc(di()));
+  di.registerFactory<EventDetailBloc>(() => EventDetailBloc());
+  di.registerFactory<ForecastBloc>(() => ForecastBloc(di()));
 
   // REPOSITORIES
   di.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(di(), di()));
@@ -43,6 +49,7 @@ initDependencies() async {
     authRepository: di(),
     eventsApiService: di()
   ));
+  di.registerLazySingleton<WeatherRepository>(() => WeatherRepositoryImpl(di()));
 
   // DATASOURCES
   // REMOTE
@@ -50,10 +57,12 @@ initDependencies() async {
   di.registerLazySingleton<AuthApiService>(() => AuthApiService(di()));
   di.registerLazySingleton<EventsApiService>(() => EventsApiService(di()));
   di.registerLazySingleton<ChatsApiService>(() => ChatsApiService(di()));
+  di.registerLazySingleton<WeatherApiService>(() => WeatherApiService(di()));
 
   // LOCAL
   di.registerLazySingleton<AuthLocalService>(() => AuthLocalService());
 
   // UTILS
-  di.registerLazySingleton<MessagingService>(() => MessagingService(di()));
+  di.registerLazySingleton<MessagingService>(() => MessagingService(di(), di()));
+  di.registerLazySingleton(() => FlutterLocalNotificationsPlugin());
 }

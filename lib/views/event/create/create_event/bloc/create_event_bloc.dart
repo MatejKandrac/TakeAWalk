@@ -3,7 +3,7 @@ import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/domain/models/requests/create_event_data.dart';
-import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
+import 'package:take_a_walk_app/domain/models/responses/location.dart';
 import 'package:take_a_walk_app/domain/models/responses/search_person_response.dart';
 import 'package:take_a_walk_app/domain/repositories/events_repository.dart';
 
@@ -48,7 +48,7 @@ class CreateEventBloc extends Cubit<CreateEventState> {
     emit(CreateFormState(locations: _locations, people: _profiles));
   }
 
-  void createEvent(String name, String date, String timeStartText, String timeEndText) {
+  void createEvent(String name, String date, String timeStartText, String timeEndText, String description) {
     emit(const CreateLoadingState());
     // Check for errors
     String? nameError;
@@ -156,11 +156,12 @@ class CreateEventBloc extends Cubit<CreateEventState> {
         start: dateStart,
         end: dateEnd,
         name: name,
+        description: description.isEmpty ? null : description,
         users: _profiles.map((e) => e.id).toList(),
         locations: locationData
     )).fold(
-      (left) => emit(CreateErrorState()),
-      (right) => emit(CreateSuccessState()),
+      (left) => emit(const CreateErrorState()),
+      (right) => emit(const CreateSuccessState()),
     );
 
   }

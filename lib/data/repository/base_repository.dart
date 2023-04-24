@@ -17,7 +17,7 @@ abstract class BaseApiRepository {
     try {
       final response = await request();
       print(response.response.statusCode);
-      if (response.response.statusCode == HttpStatus.ok) {
+      if (response.response.statusCode! >= 200 && response.response.statusCode! < 300) {
         return Right(response.data);
       } else {
         return Left(response.response.statusCode.toRequestError());
