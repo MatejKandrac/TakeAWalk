@@ -21,6 +21,9 @@ abstract class UsersApiService {
   @PUT('/v1/user/{user-id}/profile-picture')
   Future<HttpResponse<String>> editUserProfilePicture(@Path('user-id') int userId, MultipartFile file);
 
+  @DELETE('/v1/user/{user-id}/device-token')
+  Future<HttpResponse<String>> deleteDeviceToken(@Path('user-id') int userId);
+
   @GET('/v1/user/{user-id}/search')
   Future<HttpResponse<List<SearchPersonResponse>>> searchPerson(
       @Path('user-id') int userId,

@@ -1,7 +1,5 @@
 
-import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:take_a_walk_app/domain/models/requests/login_request.dart';
 import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
 import 'package:take_a_walk_app/utils/messaging_service.dart';
@@ -33,6 +31,10 @@ class LoginBloc extends Cubit<LoginState> {
       messagingService.registerDeviceToken();
       emit(const LoginSuccessState());
     }
+  }
+
+  void emitLoginFormState() async {
+    emit(const LoginFormState(emailError: false, passwordError: false));
   }
 
 }

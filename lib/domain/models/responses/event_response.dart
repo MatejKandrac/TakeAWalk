@@ -44,8 +44,10 @@ enum Status {
 class EventObject {
   final String name;
   final String owner;
-  final DateTime? start;
-  final DateTime? end;
+  final DateTime start;
+  // final String? start;
+  final DateTime end;
+  // final String? end;
   final int? peopleGoing;
   final int? places;
   final int eventId;
@@ -53,8 +55,8 @@ class EventObject {
   const EventObject({
     required this.name,
     required this.owner,
-    this.start,
-    this.end,
+    required this.start,
+    required this.end,
     this.peopleGoing,
     this.places,
     required this.eventId,
@@ -64,8 +66,10 @@ class EventObject {
     return EventObject(
       name: map['name'] as String,
       owner: map['owner'] as String,
-      start: map['start'] as DateTime?,
-      end: map['end'] as DateTime?,
+      start: DateTime.parse(map['start'] as String),
+      // start: map['start'] as String?,
+      // end: map['end'] as DateTime?,
+      end: DateTime.parse(map['end'] as String),
       peopleGoing: map['peopleGoing'] as int?,
       places: map['places'] as int?,
       eventId: map['eventId'] as int,
@@ -143,8 +147,10 @@ class MapEventObj {
       lat: map['lat'] as double,
       lon: map['lon'] as double,
       name: map['name'] as String,
-      dateStart: map['dateStart'] as DateTime,
-      dateEnd: map['dateEnd'] as DateTime,
+      // dateStart: map['dateStart'] as DateTime,
+      dateStart: DateTime.parse(map['dateStart'] as String),
+      // dateEnd: map['dateEnd'] as DateTime,
+      dateEnd: DateTime.parse(map['dateEnd'] as String),
       eventId: map['eventId'] as int,
     );
   }

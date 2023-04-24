@@ -32,6 +32,18 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
     if (userId == null) {
       return Left(RequestError.badRequest());
     }
+
+    // try {
+    //   // TODO encrypt the password
+    //   if (request.password != null) {
+    //     var encryptedPassword = await FlutterBcrypt.hashPw(password: request.password!, salt: '');
+    //     request.password = encryptedPassword;
+    //     print(encryptedPassword);
+    //   }
+    // } on PlatformException {
+    //   print("error");
+    // }
+
     return makeRequest<String>(request: () => _usersApiService.editUserProfile(userId, request));
   }
 
@@ -44,5 +56,14 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
     return makeRequest<List<SearchPersonResponse>>(request: () => _usersApiService.searchPerson(userId, username));
   }
 
+  @override
+  Future<Either<RequestError, String>> deleteDeviceToken() async {
+    var userId = await _authRepository.getUserId();
+    if (userId == null) {
+      return Left(RequestError.badRequest());
+    }
+
+    return makeRequest<String>(request: () => _usersApiService.deleteDeviceToken(userId));
+  }
 
 }

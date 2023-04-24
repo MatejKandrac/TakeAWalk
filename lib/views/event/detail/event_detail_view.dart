@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/di.dart';
 import 'package:take_a_walk_app/utils/transform_locations_mixin.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
@@ -40,7 +41,7 @@ class EventDetailPage extends HookWidget with TransformLocationsMixin {
   }
 
   _onOpenChat(BuildContext context) {
-
+    AutoRouter.of(context).push(ChatRoute(eventId: eventId));
   }
 
   _onAddImage(BuildContext context) {

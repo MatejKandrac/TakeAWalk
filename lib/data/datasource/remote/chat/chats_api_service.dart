@@ -13,7 +13,7 @@ abstract class ChatsApiService {
   factory ChatsApiService(Dio dio, {String baseUrl}) = _ChatsApiService;
 
   @GET('/v1/chat/{event-id}/messages')
-  Future<List<MessageObj>>? getEventMessages(@Path('event-id') int eventId);
+  Future<HttpResponse<List<MessageObj>>> getEventMessages(@Path('event-id') int eventId, @Query('page') int pageNumber, @Query('size') int pageSize);
 
   @POST('/v1/chat/{event-id}/message')
   Future<HttpResponse<String>> postEventMessage(

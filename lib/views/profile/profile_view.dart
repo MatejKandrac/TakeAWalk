@@ -1,25 +1,26 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/views/bloc_container.dart';
 import 'package:take_a_walk_app/widget/app_scaffold.dart';
-
-import '../../widget/app_swith.dart';
-
-import 'bloc/profile_bloc.dart';
 
 @RoutePage()
 class ProfilePage extends HookWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   _onEdit(BuildContext context) {
-    AutoRouter.of(context).push(const ProfileEditRoute());
+    AutoRouter.of(context).push(const ProfileEditRoute()).then((value) => BlocProvider.of<ProfileBloc>(context).getProfileData());
   }
 
-  _getProfileData(BuildContext context, int userId) {
+  _onLogOut(BuildContext context) {
+    BlocProvider.of<ProfileBloc>(context).logOut();
+    AutoRouter.of(context).replace(LoginRoute());
+  }
+
+  _getProfileData(BuildContext context) {
     BlocProvider.of<ProfileBloc>(context).getProfileData();
   }
 
@@ -32,9 +33,9 @@ class ProfilePage extends HookWidget {
     }, const []);
     return BlocListener<ProfileBloc, ProfileState>(
       listener: (context, state) {
-        // if (state is ProfileDataState) {
-        //   _getProfileData(context, 1);
-        // }
+        if (state is ProfileFormState) {
+          _getProfileData(context);
+        }
       },
       child: BlocBuilder<ProfileBloc, ProfileState>(
         buildWhen: (previous, current) => current is ProfileDataState,
@@ -76,7 +77,7 @@ class ProfilePage extends HookWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
-                                      (state as ProfileDataState).username,
+                                        (state as ProfileDataState).profileData.username,
                                         // 'User name',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -85,10 +86,10 @@ class ProfilePage extends HookWidget {
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      if (state. bio != null) Text(
+                                      if (state.profileData.bio != null) Text(
                                         // 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
                                         // 'This is my profile description with my info, my interests but most importantly, I am just interested in how it is going to fit inside this card',
-                                        state.bio!,
+                                        state.profileData.bio!,
                                         textAlign: TextAlign.center,
                                       ),
                                       const SizedBox(
@@ -110,7 +111,7 @@ class ProfilePage extends HookWidget {
                                             Text(
                                                 // 'kenji_matej@gmail.com'
                                               // (state as ProfileDataState).email
-                                              state.email
+                                              state.profileData.email
                                             )
                                           ],
                                         ),
@@ -127,9 +128,9 @@ class ProfilePage extends HookWidget {
                                 height: 100,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(50),
-                                  child: state.image != null ?
+                                  child: state.profileData.image != null ?
                                   Image.network(
-                                      bloc.getImageUrl(state.image!),
+                                      bloc.getImageUrl(state.profileData.image!),
                                       headers: bloc.getHeaders(),
                                     fit: BoxFit.cover,
                                   ):
@@ -147,21 +148,32 @@ class ProfilePage extends HookWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Row(
-                            children: const [
-                              Icon(
-                                Icons.notifications_active_outlined,
-                                size: 35,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Notifications',
-                                style: TextStyle(fontSize: 25),
-                              ),
-                              Spacer(),
-                              AppSwitch(),
-                            ],
+                          padding: const EdgeInsets.all(10),
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              AppSettings.openNotificationSettings();
+                              // print('Settings');
+                            },
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  Icons.notifications_active_outlined,
+                                  size: 35,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Notifications',
+                                  style: TextStyle(fontSize: 25),
+                                ),
+                                // Spacer(),
+                                // ElevatedButton(
+                                //     onPressed: AppSettings.openNotificationSettings,
+                                //     child: Text('Settings')
+                                // )
+                                // AppSwitch(),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -175,8 +187,8 @@ class ProfilePage extends HookWidget {
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             onTap: () {
-                              // _onLoadData(context);
-                              debugPrint('Logged out');
+                              _onLogOut(context);
+                              // debugPrint('Logged out');
                             },
                             child: Row(
                               children: const [

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
 import 'package:take_a_walk_app/domain/repositories/users_repository.dart';
 import 'package:take_a_walk_app/utils/network_image_mixin.dart';
 
@@ -12,13 +14,15 @@ class ProfileBloc extends Cubit<ProfileState> with NetworkImageMixin {
   final UsersRepository repository;
   final Dio dio;
 
+  FlutterSecureStorage storage = const FlutterSecureStorage();
+
   ProfileBloc({
     required this.repository,
     required this.dio}) : super(ProfileDataState.empty());
 
   void getProfileData() async {
     repository.getProfile().fold((error) => () {}, (data) async {
-      emit(ProfileDataState(username: data.username, email: data.email, bio: data.bio, image: data.image));
+      emit(ProfileDataState(profileData: data));
     });
   }
 
@@ -44,4 +48,10 @@ class ProfileBloc extends Cubit<ProfileState> with NetworkImageMixin {
   void emitProfileFormState() async {
     emit(ProfileFormState(false, false));
   }
+
+  void logOut() async {
+    storage.deleteAll();
+    repository.deleteDeviceToken();
+  }
+
 }

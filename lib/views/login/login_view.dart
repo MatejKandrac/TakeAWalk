@@ -20,7 +20,7 @@ class LoginPage extends HookWidget {
         context: context,
         isSuccess: true,
         text: "Successfully logged in!"
-    ).then((value) => AutoRouter.of(context).replace(const MyEventsRoute()));
+    ).then((value) => AutoRouter.of(context).replace(MyEventsRoute()));
   }
 
   _onLogin(String email, String password, BuildContext context) {
@@ -49,6 +49,11 @@ class LoginPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = useMemoized<LoginBloc>(() => BlocProvider.of(context));
+    useEffect(() {
+      bloc.emitLoginFormState();
+      return null;
+    }, const []);
     final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
     return BlocListener<LoginBloc, LoginState>(
@@ -136,8 +141,8 @@ class LoginPage extends HookWidget {
                                 onPressed: () => _onRegister(context)
                             )
                           ],
-                        )
-                    )
+                        ),
+                    ),
                   ],
                 ),
               ),

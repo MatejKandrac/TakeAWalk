@@ -26,7 +26,7 @@ class RegisterPage extends HookWidget {
       context: context,
       isSuccess: true,
       text: "Account created successfully!"
-    ).then((value) => AutoRouter.of(context).replace(const MyEventsRoute()));
+    ).then((value) => AutoRouter.of(context).replace(MyEventsRoute()));
   }
 
   void _onLoading(BuildContext context) {
@@ -44,6 +44,11 @@ class RegisterPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = useMemoized<RegisterBloc>(() => BlocProvider.of(context));
+    useEffect(() {
+      bloc.emitRegisterFormState();
+      return null;
+    }, const []);
     final emailController = useTextEditingController();
     final passwordController = useTextEditingController();
     final confirmPassController = useTextEditingController();
