@@ -1,5 +1,7 @@
+import 'dart:io';
 
 import 'package:either_dart/either.dart';
+import 'package:take_a_walk_app/data/datasource/local/profile_local_service.dart';
 import 'package:take_a_walk_app/data/datasource/remote/users/users_api_service.dart';
 import 'package:take_a_walk_app/data/repository/base_repository.dart';
 import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
@@ -11,11 +13,11 @@ import 'package:take_a_walk_app/utils/request_error.dart';
 import '../../domain/models/requests/profile_edit_request.dart';
 
 class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
-
   final UsersApiService _usersApiService;
+  final ProfileLocalService profileLocalService;
   final AuthRepository _authRepository;
 
-  const UsersRepositoryImpl(this._usersApiService, this._authRepository);
+  const UsersRepositoryImpl(this._usersApiService, this._authRepository, this.profileLocalService);
 
   @override
   Future<Either<RequestError, ProfileResponse>> getProfile() async {
@@ -23,7 +25,26 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
     if (userId == null) {
       return Left(RequestError.badRequest());
     }
-    return makeRequest<ProfileResponse>(request: () => _usersApiService.getProfile(userId));
+
+    var response = await makeRequest<ProfileResponse>(
+      request: () => _usersApiService.getProfile(userId),
+      localRequest: () => profileLocalService.getProfile(userId)
+    );
+
+    if (response.isRight) {
+
+      print('It is right');
+
+      var isPresent = await profileLocalService.isPresent(userId);
+
+      if (isPresent) {
+        profileLocalService.updateProfile(userId, response.right);
+      } else {
+        profileLocalService.saveProfile(response.right, userId);
+      }
+    }
+
+    return response;
   }
 
   @override
@@ -32,17 +53,6 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
     if (userId == null) {
       return Left(RequestError.badRequest());
     }
-
-    // try {
-    //   // TODO encrypt the password
-    //   if (request.password != null) {
-    //     var encryptedPassword = await FlutterBcrypt.hashPw(password: request.password!, salt: '');
-    //     request.password = encryptedPassword;
-    //     print(encryptedPassword);
-    //   }
-    // } on PlatformException {
-    //   print("error");
-    // }
 
     return makeRequest<String>(request: () => _usersApiService.editUserProfile(userId, request));
   }
@@ -65,5 +75,4 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
 
     return makeRequest<String>(request: () => _usersApiService.deleteDeviceToken(userId));
   }
-
 }

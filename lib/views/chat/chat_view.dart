@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:take_a_walk_app/views/bloc_container.dart';
 
-import '../../domain/models/responses/chat_response.dart';
-
 @RoutePage()
 class ChatPage extends HookWidget {
   ChatPage({Key? key, required this.eventId}) : super(key: key);
@@ -17,26 +15,26 @@ class ChatPage extends HookWidget {
   _loadMessages(BuildContext context) {
     pageNumber += 1;
     BlocProvider.of<ChatBloc>(context).loadMoreMessages(eventId, pageNumber);
-    print('Load more messages');
   }
 
   _onSendMessage(BuildContext context, String message) {
-    BlocProvider.of<ChatBloc>(context).sendEventMessage(eventId, message);
+    BlocProvider.of<ChatBloc>(context).sendEventMessage(eventId, message, pageNumber);
   }
 
   @override
   Widget build(BuildContext context) {
     final messageController = useTextEditingController();
     final bloc = useMemoized<ChatBloc>(() => BlocProvider.of(context));
+
     useEffect(() {
       bloc.getMessageData(eventId, pageNumber);
-      return null;
+      return () => bloc.dispose();
     }, const []);
     return BlocListener<ChatBloc, ChatState>(
       listener: (context, state) {
-        // if (state is ProfileFormState) {
-        //   _getProfileData(context);
-        // }
+        if (state is ChatNewMessageState) {
+          print('New message received');
+        }
       },
       child: BlocBuilder<ChatBloc, ChatState>(
         buildWhen: (previous, current) => current is ChatDataState,
@@ -47,92 +45,93 @@ class ChatPage extends HookWidget {
               title: Text("Chat", style: Theme.of(context).textTheme.bodyMedium),
             ),
             body: SafeArea(
-              child: Scaffold(
-                body: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: SingleChildScrollView(
-                          // controller: _controller,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: SingleChildScrollView(
+                        // controller: _controller,
 
-                          scrollDirection: Axis.vertical,
-                          reverse: true,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                        scrollDirection: Axis.vertical,
+                        reverse: true,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: IconButton(onPressed: () => _loadMessages(context), icon: const Icon(Icons.refresh)),
+                            ),
+                            for (var data in state.messages)
+                              if (data.userId == state.userId)
+                                MyMessage(message: data.message)
+                              else
+                                Message(username: data.username, message: data.message),
+
+                            // Message(username: 'Tester1', message: 'first message'),
+                            // MyMessage(message: 'My message'),
+                            // Message(username: 'Tester2', message: 'second message'),
+                            // MyMessage(message: 'My message'),
+                            // MyMessage(message: 'My message'),
+                            // Message(username: 'Tester2', message: 'second message'),
+                            // MyMessage(message: 'My message'),
+                            // MyMessage(message: 'My message'),
+                            // Message(username: 'Tester2', message: 'second message'),
+                            // MyMessage(message: 'My message'),
+                            // MyMessage(message: 'My message'),
+                            // Message(username: 'Tester2', message: 'second message'),
+                            // MyMessage(message: 'My message'),
+                            // MyMessage(message: 'My message'),
+
+                            const SizedBox(
+                              height: 100,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        color: Colors.white,
+                        elevation: 10,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10, left: 10),
+                          child: Row(
                             children: [
-                              Align(
-                                alignment: Alignment.topCenter,
-                                child: IconButton(onPressed: () => _loadMessages(context), icon: const Icon(Icons.refresh)),
+                              Expanded(
+                                child: TextField(
+                                  style: const TextStyle(color: Colors.black),
+                                  controller: messageController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Enter message',
+                                    labelStyle: TextStyle(color: Colors.black),
+                                  ),
+                                ),
                               ),
-                              for (var data in state.messages)
-                                if (data.userId == state.userId)
-                                  MyMessage(message: data.message)
-                                else
-                                  Message(username: data.username, message: data.message),
-
-                              // Message(username: 'Tester1', message: 'first message'),
-                              // MyMessage(message: 'My message'),
-                              // Message(username: 'Tester2', message: 'second message'),
-                              // MyMessage(message: 'My message'),
-                              // MyMessage(message: 'My message'),
-                              // Message(username: 'Tester2', message: 'second message'),
-                              // MyMessage(message: 'My message'),
-                              // MyMessage(message: 'My message'),
-                              // Message(username: 'Tester2', message: 'second message'),
-                              // MyMessage(message: 'My message'),
-                              // MyMessage(message: 'My message'),
-                              // Message(username: 'Tester2', message: 'second message'),
-                              // MyMessage(message: 'My message'),
-                              // MyMessage(message: 'My message'),
-
+                              // Spacer(),
                               const SizedBox(
-                                height: 100,
+                                width: 10,
+                              ),
+                              IconButton(
+                                onPressed: () => {
+                                  _onSendMessage(context, messageController.text),
+                                  messageController.clear()
+                                },
+                                icon: const Icon(
+                                  Icons.send_outlined,
+                                  color: Colors.black,
+                                ),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          color: Colors.white,
-                          elevation: 10,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 10, left: 10),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    style: const TextStyle(color: Colors.black),
-                                    controller: messageController,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Enter message',
-                                      labelStyle: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                ),
-                                // Spacer(),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                IconButton(
-                                  onPressed: () => _onSendMessage(context, messageController.text),
-                                  icon: const Icon(
-                                    Icons.send_outlined,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

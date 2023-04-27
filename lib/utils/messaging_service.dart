@@ -53,16 +53,36 @@ class MessagingService {
 
   final AuthRepository _authRepository;
   final FlutterLocalNotificationsPlugin notificationsPlugin;
+  bool Function(RemoteMessage message)? _onChatMessage;
 
-  const MessagingService(this._authRepository, this.notificationsPlugin);
+  MessagingService(this._authRepository, this.notificationsPlugin);
+
+  registerListener(bool Function(RemoteMessage) listener) {
+    _onChatMessage = listener;
+  }
+
+  removeListener() {
+    _onChatMessage = null;
+  }
 
   registerDeviceToken() async {
     if (Platform.isAndroid) {
       FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
       await _initNotifications(notificationsPlugin);
       print("Initializing messaging service");
-      FirebaseMessaging.onMessage.listen((event) => _showNotification(notificationsPlugin, event));
-      FirebaseMessaging.onMessageOpenedApp.listen((event) => _showNotification(notificationsPlugin, event));
+      FirebaseMessaging.onMessage.listen((event) {
+        var showNotification = true;
+        // print(event.data);
+        print(_onChatMessage.toString());
+        print('toto teraz zafungovalo');
+        if (_onChatMessage != null) {
+          showNotification = _onChatMessage!(event);
+        }
+        if (showNotification) {
+          _showNotification(notificationsPlugin, event);
+        }
+      });
+      // FirebaseMessaging.onMessageOpenedApp.listen((event) => _showNotification(notificationsPlugin, event));
       final fcmToken = await FirebaseMessaging.instance.getToken();
       if (fcmToken != null) {
         _sendDeviceToken(fcmToken);

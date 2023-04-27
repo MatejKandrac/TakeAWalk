@@ -21,3 +21,17 @@ class ChatDataState extends ChatState {
   factory ChatDataState.empty() => ChatDataState(messages: [MessageObj(id: -1, message: '', sent: DateTime.now(), username: '', userId: -1)], userId: -1);
 
 }
+
+class ChatNewMessageState extends ChatState {
+
+  @override
+  final int userId;
+
+  @override
+  final List<MessageObj> messages;
+
+  const ChatNewMessageState({required this.messages, required this.userId}) : super(messages, userId);
+
+  factory ChatNewMessageState.empty() => ChatNewMessageState(messages: [MessageObj(id: -1, message: '', sent: DateTime.now(), username: '', userId: -1)], userId: -1);
+
+}
