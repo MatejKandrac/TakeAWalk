@@ -211,13 +211,18 @@ class _EventsApiService implements EventsApiService {
   }
 
   @override
-  Future<HttpResponse<List<String>>?> getEventPeople(eventId) async {
+  Future<HttpResponse<List<EventPersonResponse>>> getEventPeople(
+    eventId,
+    includePending,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'include-pending': includePending
+    };
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<List<dynamic>>(
-        _setStreamType<HttpResponse<List<String>>>(Options(
+        _setStreamType<HttpResponse<List<EventPersonResponse>>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -229,7 +234,10 @@ class _EventsApiService implements EventsApiService {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data!.cast<String>();
+    var value = _result.data!
+        .map((dynamic i) =>
+            EventPersonResponse.fromMap(i as Map<String, dynamic>))
+        .toList();
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
@@ -283,13 +291,16 @@ class _EventsApiService implements EventsApiService {
   }
 
   @override
-  Future<HttpResponse<EventData>> getEventData(eventId) async {
+  Future<HttpResponse<EventDataResponse>> getEventData(
+    eventId,
+    userId,
+  ) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'user-id': userId};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<HttpResponse<EventData>>(Options(
+        _setStreamType<HttpResponse<EventDataResponse>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -301,7 +312,31 @@ class _EventsApiService implements EventsApiService {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = EventData.fromMap(_result.data!);
+    final value = EventDataResponse.fromMap(_result.data!);
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<List<String>>> getEventPictures(eventId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<HttpResponse<List<String>>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/v1/event/${eventId}/pictures',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!.cast<String>();
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
@@ -441,6 +476,41 @@ class _EventsApiService implements EventsApiService {
     var value = _result.data!
         .map((dynamic i) => MapEventObj.fromMap(i as Map<String, dynamic>))
         .toList();
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<String>> postEventImage(
+    eventId,
+    file,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.files.add(MapEntry(
+      'file',
+      MultipartFile.fromFileSync(
+        file.path,
+        filename: file.path.split(Platform.pathSeparator).last,
+      ),
+    ));
+    final _result =
+        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+      contentType: 'multipart/form-data',
+    )
+            .compose(
+              _dio.options,
+              '/v1/event/${eventId}/picture',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }

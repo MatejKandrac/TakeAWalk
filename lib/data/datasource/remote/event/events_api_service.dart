@@ -1,7 +1,9 @@
 import 'dart:core';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:take_a_walk_app/domain/models/responses/event_person_response.dart';
 
 import '../../../../domain/models/requests/create_event_data.dart';
 import '../../../../domain/models/requests/filter_data.dart';
@@ -42,7 +44,7 @@ abstract class EventsApiService {
   Future<HttpResponse<String?>> getEventOwner(@Path('event-id') int eventId);
 
   @GET('/v1/event/{event-id}/people')
-  Future<HttpResponse<List<String>>?> getEventPeople(@Path('event-id') int eventId);
+  Future<HttpResponse<List<EventPersonResponse>>> getEventPeople(@Path('event-id') int eventId, @Query('include-pending') bool includePending);
 
   @GET('/v1/event/{event-id}/description')
   Future<HttpResponse<String>?> getEventDescription(@Path('event-id') int eventId);
@@ -51,9 +53,12 @@ abstract class EventsApiService {
   Future<HttpResponse<String>?> getEventStatus(@Path('event-id') int eventId);
 
   @GET('/v1/event/{event-id}/data')
-  Future<HttpResponse<EventData>> getEventData(@Path('event-id') int eventId);
+  Future<HttpResponse<EventDataResponse>> getEventData(@Path('event-id') int eventId, @Query('user-id') int userId);
 
   // Event Progress
+
+  @GET('/v1/event/{event-id}/pictures')
+  Future<HttpResponse<List<String>>> getEventPictures(@Path('event-id') int eventId);
 
   @DELETE('/v1/event/{event-id}/picture')
   Future<HttpResponse<String>> deleteEventPicture(@Path('event-id') int eventId, @Body() Map<String, dynamic> data);
@@ -69,4 +74,9 @@ abstract class EventsApiService {
 
   @GET('/v1/events/{user-id}/map/my-events')
   Future<HttpResponse<List<MapEventObj>>> getMapEvents(@Path('user-id') int userId, @Query('limit') int? limit);
+
+  @POST('/v1/event/{event-id}/picture')
+  @MultiPart()
+  Future<HttpResponse<String>> postEventImage(@Path('event-id') int eventId, @Part(name: 'file') File file);
+
 }

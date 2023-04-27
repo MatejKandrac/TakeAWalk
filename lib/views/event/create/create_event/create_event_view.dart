@@ -248,7 +248,9 @@ class CreateEventPage extends HookWidget with TransformLocationsMixin {
                               name: person.username,
                               bio: person.bio,
                               picture: person.picture,
-                              onDelete: () => _onDeletePerson(person, context)
+                              onDelete: () => _onDeletePerson(person, context),
+                              onImageUrl: bloc.getImageUrl,
+                              onRequestHeaders: bloc.getHeaders,
                           );
                         },
                       ),

@@ -1,4 +1,5 @@
 
+import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_a_walk_app/config/constants.dart';
@@ -6,14 +7,16 @@ import 'package:take_a_walk_app/domain/models/requests/create_event_data.dart';
 import 'package:take_a_walk_app/domain/models/responses/location.dart';
 import 'package:take_a_walk_app/domain/models/responses/search_person_response.dart';
 import 'package:take_a_walk_app/domain/repositories/events_repository.dart';
+import 'package:take_a_walk_app/utils/network_image_mixin.dart';
 
 part 'create_event_state.dart';
 
-class CreateEventBloc extends Cubit<CreateEventState> {
+class CreateEventBloc extends Cubit<CreateEventState> with NetworkImageMixin{
 
   final EventsRepository _repository;
+  final Dio _dio;
 
-  CreateEventBloc(this._repository) : super(const CreateFormState());
+  CreateEventBloc(this._repository, this._dio) : super(const CreateFormState());
 
   final List<Location> _locations = [];
   final List<SearchPersonResponse> _profiles = [];
@@ -165,5 +168,7 @@ class CreateEventBloc extends Cubit<CreateEventState> {
     );
 
   }
+
+  Map<String, String> getHeaders() => getImageHeaders(_dio);
 
 }

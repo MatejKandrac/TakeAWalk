@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/di.dart';
 import 'package:take_a_walk_app/views/bloc_container.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'config/firebase_options.dart';
 import 'config/theme.dart';
@@ -13,6 +14,7 @@ import 'config/theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
+  initializeDateFormatting();
   if (Platform.isAndroid) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -39,7 +41,6 @@ class MyApp extends StatelessWidget {
         BlocProvider<ProfileBloc>(create: (context) => di(), lazy: true),
         BlocProvider<MyEventsBloc>(create: (context) => di(), lazy: true),
         BlocProvider<InvitesBloc>(create: (context) => di(), lazy: true),
-        BlocProvider<MapBloc>(create: (context) => di(), lazy: true),
         BlocProvider<ChatBloc>(create: (context) => di(), lazy: true),
       ],
       child: MaterialApp.router(

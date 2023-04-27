@@ -6,8 +6,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/di.dart';
+import 'package:take_a_walk_app/domain/models/responses/event_person_response.dart';
+import 'package:take_a_walk_app/utils/request_error.dart';
 import 'package:take_a_walk_app/utils/transform_locations_mixin.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
+import 'package:take_a_walk_app/views/event/detail/widget/image_pick_choice.dart';
 import 'package:take_a_walk_app/widget/location_widget.dart';
 import 'package:take_a_walk_app/widget/map_widget.dart';
 import 'package:take_a_walk_app/widget/person_widget.dart';
@@ -45,7 +48,12 @@ class EventDetailPage extends HookWidget with TransformLocationsMixin {
   }
 
   _onAddImage(BuildContext context) {
-
+    showModalBottomSheet(context: context, builder: (context) => const ImagePickChoice())
+    .then((value) {
+      if (value != null) {
+        BlocProvider.of<EventDetailBloc>(context).addImage(value);
+      }
+    });
   }
 
   Widget _loadingBody(BuildContext context) {
@@ -92,7 +100,7 @@ class EventDetailPage extends HookWidget with TransformLocationsMixin {
                   if (state.editable) IconButton(onPressed: () => _onEdit(context), icon: const Icon(Icons.edit)),
                 ],
               ),
-              floatingActionButton: Column(
+              floatingActionButton: state.active ? Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   FloatingActionButton(
@@ -107,7 +115,7 @@ class EventDetailPage extends HookWidget with TransformLocationsMixin {
                       onPressed: () => _onAddImage(context)
                   ),
                 ],
-              ),
+              ) : null,
               body: Padding(
                 padding: const EdgeInsets.all(10),
                 child: SingleChildScrollView(
@@ -171,33 +179,76 @@ class EventDetailPage extends HookWidget with TransformLocationsMixin {
                       const SizedBox(height: 10),
                       Text("People:", style: Theme.of(context).textTheme.bodyMedium),
                       const SizedBox(height: 5),
-                      ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: state.people.length,
-                        itemBuilder: (context, index) => PersonWidget(
-                            name: state.people[index].name,
-                            picture: state.people[index].profileImage,
-                            suffix: Icon(state.people[index].inviteStatus.getInviteIcon()),
-                        ),
+                      StreamBuilder<List<EventPersonResponse>?>(
+                        stream: bloc.peopleStream,
+                        initialData: null,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text("Failed: ${(snapshot.error as RequestError).errorText}"),
+                            );
+                          }
+                          if (snapshot.data == null) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) => PersonWidget(
+                              name: snapshot.data![index].username,
+                              picture: snapshot.data![index].picture,
+                              suffix: Icon(snapshot.data![index].status.getInviteIcon()),
+                              onImageUrl: bloc.getImageUrl,
+                              onRequestHeaders: bloc.getHeaders,
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 5),
                       const Divider(height: 2, color: Colors.white),
                       const SizedBox(height: 10),
-                      if (state.pictures != null) Text("Event images:", style: Theme.of(context).textTheme.bodyMedium),
-                      if (state.pictures != null) const SizedBox(height: 5),
-                      if (state.pictures != null) SizedBox(
-                        height: 200,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.pictures!.length,
-                          itemBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Image.network(
-                              state.pictures![index]
-                            ),
-                          ),
-                        ),
+                      StreamBuilder<List<String>?>(
+                        initialData: null,
+                        stream: bloc.picturesStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text("Failed: ${(snapshot.error as RequestError).errorText}"),
+                            );
+                          }
+                          if (snapshot.data == null) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          else {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (snapshot.data!.isNotEmpty) Text("Event images:", style: Theme.of(context).textTheme.bodyMedium),
+                                if (snapshot.data!.isNotEmpty) const SizedBox(height: 5),
+                                if (snapshot.data!.isNotEmpty) SizedBox(
+                                  height: 200,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: snapshot.data!.length,
+                                    itemBuilder: (context, index) => Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Image.network(
+                                          bloc.getImageUrl(snapshot.data![index]),
+                                          headers: bloc.getHeaders(),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        },
                       ),
                       const SizedBox(height: 5),
                       if (state.isInvite) Row(

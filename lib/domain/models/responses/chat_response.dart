@@ -19,7 +19,7 @@ class MessageObj {
     return MessageObj(
       id: map['id'] as int,
       message: map['message'] as String,
-      sent: DateTime.parse(map['sent'] as String),
+      sent: DateTime.parse(map['sent'] as String).toLocal(),
       username: map['userName'] as String,
       userId: map['userId'] as int,
       profilePicture: map['profilePicture'] as String?,

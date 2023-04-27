@@ -1,11 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:take_a_walk_app/config/constants.dart';
 
 class PersonWidget extends StatelessWidget {
   const PersonWidget({
     Key? key,
     required this.name,
+    required this.onRequestHeaders,
+    required this.onImageUrl,
     this.bio,
     this.picture,
     this.suffix,
@@ -15,6 +16,8 @@ class PersonWidget extends StatelessWidget {
   final String? bio;
   final String? picture;
   final Function()? onDelete;
+  final Map<String, String> Function() onRequestHeaders;
+  final String Function(String base) onImageUrl;
   final Widget? suffix;
 
   @override
@@ -34,7 +37,10 @@ class PersonWidget extends StatelessWidget {
                   height: 40,
                   child: picture == null
                       ? const Icon(Icons.account_circle, size: 40) :
-                      Image.network("${AppConstants.baseUrl}/v1/pictures/${picture!}"),
+                      Image.network(
+                          onImageUrl(picture!),
+                        headers: onRequestHeaders(),
+                      ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(child: Text(

@@ -66,10 +66,10 @@ class EventObject {
     return EventObject(
       name: map['name'] as String,
       owner: map['owner'] as String,
-      start: DateTime.parse(map['start'] as String),
+      start: DateTime.parse(map['start'] as String).toLocal(),
       // start: map['start'] as String?,
       // end: map['end'] as DateTime?,
-      end: DateTime.parse(map['end'] as String),
+      end: DateTime.parse(map['end'] as String).toLocal(),
       peopleGoing: map['peopleGoing'] as int?,
       places: map['places'] as int?,
       eventId: map['eventId'] as int,
@@ -78,42 +78,49 @@ class EventObject {
 
 }
 
-class EventData {
+class EventDataResponse {
+  final int ownerId;
   final String eventHost;
-  final List<String>? eventPeople;
-  final List<LocationObject> eventLocations;
+  final String eventName;
+  final List<Location> eventLocations;
   final EventTimeDetailObj eventTime;
   final String? eventStatus;
+  final int currentIndex;
 
-  const EventData({
+  const EventDataResponse({
+    required this.ownerId,
     required this.eventHost,
-    this.eventPeople,
+    required this.eventName,
     required this.eventLocations,
     required this.eventTime,
     this.eventStatus,
+    required this.currentIndex,
   });
 
-  factory EventData.fromMap(Map<String, dynamic> map) {
-    return EventData(
+  Map<String, dynamic> toMap() {
+    return {
+      'ownerId': this.ownerId,
+      'eventHost': this.eventHost,
+      'eventName': this.eventName,
+      'eventLocations': this.eventLocations,
+      'eventTime': this.eventTime,
+      'eventStatus': this.eventStatus,
+      'currentIndex': this.currentIndex,
+    };
+  }
+
+  factory EventDataResponse.fromMap(Map<String, dynamic> map) {
+    return EventDataResponse(
+      ownerId: map['ownerId'] as int,
       eventHost: map['eventHost'] as String,
-      eventPeople: map['eventPeople'] as List<String>?,
-      eventLocations: map['eventLocations'] as List<LocationObject>,
-      eventTime: map['eventTime'] as EventTimeDetailObj,
+      eventName: map['eventName'] as String,
+      eventLocations: (map['eventLocations'] as List<dynamic>).map((e) => Location.fromMap(e)).toList(),
+      eventTime: EventTimeDetailObj.fromMap(map['eventTime']),
       eventStatus: map['eventStatus'] as String?,
+      currentIndex: map['currentIndex'] as int,
     );
   }
 
-}
-
-class LocationObject {
-  final String? name;
-  final double? latitude;
-  final double? longitude;
-  final int? order;
-  final bool? visited;
-
-  const LocationObject(
-      {this.name, this.latitude, this.longitude, this.order, this.visited});
 }
 
 class EventTimeDetailObj {
@@ -124,6 +131,20 @@ class EventTimeDetailObj {
     this.start,
     this.end,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'start': this.start,
+      'end': this.end,
+    };
+  }
+
+  factory EventTimeDetailObj.fromMap(Map<String, dynamic> map) {
+    return EventTimeDetailObj(
+      start: DateTime.parse(map['start']).toLocal(),
+      end: DateTime.parse(map['end']).toLocal(),
+    );
+  }
 }
 
 class MapEventObj {
@@ -148,9 +169,9 @@ class MapEventObj {
       lon: map['lon'] as double,
       name: map['name'] as String,
       // dateStart: map['dateStart'] as DateTime,
-      dateStart: DateTime.parse(map['dateStart'] as String),
+      dateStart: DateTime.parse(map['dateStart'] as String).toLocal(),
       // dateEnd: map['dateEnd'] as DateTime,
-      dateEnd: DateTime.parse(map['dateEnd'] as String),
+      dateEnd: DateTime.parse(map['dateEnd'] as String).toLocal(),
       eventId: map['eventId'] as int,
     );
   }

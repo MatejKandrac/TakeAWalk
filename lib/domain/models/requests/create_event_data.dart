@@ -22,8 +22,8 @@ class CreateEventData {
     return {
       'ownerId': this.ownerId,
       'description': this.description,
-      'start': start.toIso8601String(),
-      'endDate': end.toIso8601String(),
+      'start': start.toUtc().toIso8601String(),
+      'endDate': end.toUtc().toIso8601String(),
       'name': this.name,
       'users': this.users,
       'locations': locations.map((e) => e.toMap()).toList(),

@@ -48,13 +48,17 @@ class MyEventsPage extends HookWidget {
 
   _onOpenFilter(BuildContext context) {
     // BlocProvider.of<MyEventsBloc>(context).getEventsData();
-    AutoRouter.of(context).push(FilterRoute()).then((value) => {
+    AutoRouter.of(context).push(const FilterRoute()).then((value) => {
           BlocProvider.of<MyEventsBloc>(context).filterEvents(value as FilterData?),
         });
   }
 
   _getFilterEventData(BuildContext context, List<EventObject> events) {
     BlocProvider.of<MyEventsBloc>(context).emitDataState(events);
+  }
+
+  _onDetail(int eventId, BuildContext context) {
+    AutoRouter.of(context).push(EventDetailRoute(eventId: eventId));
   }
 
   @override
@@ -112,7 +116,7 @@ class MyEventsPage extends HookWidget {
                     // profiles: [],
                   ),
                   status: Status.ACCEPTED,
-                  onTap: () => {debugPrint(state.events.length.toString())},
+                  onTap: () => _onDetail(state.events[index].eventId, context),
                 ),
               ),
             ),

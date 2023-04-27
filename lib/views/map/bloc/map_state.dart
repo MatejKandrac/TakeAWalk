@@ -1,23 +1,20 @@
 part of 'map_bloc.dart';
 
 abstract class MapState {
-  final List<MapEventObj> locationData;
-
-  const MapState(this.locationData);
+  const MapState();
 }
 
 class MapDataState extends MapState {
   final List<MapEventObj> locationData;
+  final LatLng? gpsPosition;
+  final bool loading;
 
-  MapDataState({required this.locationData}) : super(locationData);
+  const MapDataState({required this.locationData, this.gpsPosition, this.loading = false});
 
-  factory MapDataState.empty() =>
-      MapDataState(locationData: [
-        MapEventObj(lat: -1,
-            lon: -1,
-            name: '',
-            dateStart: DateTime.now(),
-            dateEnd: DateTime.now(),
-            eventId: -1)
-      ]);
+  factory MapDataState.empty() => const MapDataState(locationData: []);
+}
+
+class MapErrorState extends MapState {
+  final String text;
+  const MapErrorState(this.text);
 }

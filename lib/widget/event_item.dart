@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
+import 'package:take_a_walk_app/utils/transform_locations_mixin.dart';
 import 'package:take_a_walk_app/widget/map_widget.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 
-class EventItem extends StatelessWidget {
+class EventItem extends StatelessWidget with TransformLocationsMixin {
   const EventItem({
     Key? key,
     required this.event,
@@ -89,7 +90,7 @@ class EventItem extends StatelessWidget {
                           children: [
                             Icon(Icons.date_range),
                             const SizedBox(width: 5),
-                            Text("${AppConstants.dateOnlyFormat.format(event.start)} - ${AppConstants.dateOnlyFormat.format(event.start)}",
+                            Text("${AppConstants.dateOnlyFormat.format(event.start)} - ${AppConstants.dateOnlyFormat.format(event.end)}",
                               style: Theme.of(context).textTheme.bodySmall,)
                           ],
                         ),

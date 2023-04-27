@@ -16,7 +16,7 @@ class InvitesDataState extends InvitesState {
 
   InvitesDataState(this.events) : super(events);
 
-  factory InvitesDataState.empty() => InvitesDataState([EventObject(name: '', owner: '', eventId: -1, start: DateTime.now(), end: DateTime.now())]);
+  factory InvitesDataState.empty() => InvitesDataState([]);
 }
 
 class FilteredInviteDataState extends InvitesState {
@@ -26,6 +26,6 @@ class FilteredInviteDataState extends InvitesState {
 
   FilteredInviteDataState(this.events) : super(events);
 
-  factory FilteredInviteDataState.empty() => FilteredInviteDataState([EventObject(name: '', owner: '', eventId: -1, start: DateTime.now(), end: DateTime.now())]);
+  factory FilteredInviteDataState.empty() => FilteredInviteDataState([]);
 }
 

@@ -1,6 +1,4 @@
 
-// import '../../../domain/models/responses/event_response.dart';
-
 part of 'my_events_bloc.dart';
 
 abstract class MyEventsState {
@@ -17,7 +15,7 @@ class EventsDataState extends MyEventsState {
 
   EventsDataState(this.events) : super(events);
 
-  factory EventsDataState.empty() => EventsDataState([EventObject(name: '', owner: '', eventId: -1, start: DateTime.now(), end: DateTime.now())]);
+  factory EventsDataState.empty() => EventsDataState([]);
 }
 
 class FilteredDataState extends MyEventsState {
@@ -27,5 +25,5 @@ class FilteredDataState extends MyEventsState {
 
   FilteredDataState(this.events): super(events);
 
-  factory FilteredDataState.empty() => FilteredDataState([EventObject(name: '', owner: '', eventId: -1, start: DateTime.now(), end: DateTime.now())]);
+  factory FilteredDataState.empty() => FilteredDataState([]);
 }

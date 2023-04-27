@@ -35,9 +35,13 @@ initDependencies() async {
       dio: di(),
       repository: di()
   ));
-  di.registerFactory<CreateEventBloc>(() => CreateEventBloc(di()));
+  di.registerFactory<CreateEventBloc>(() => CreateEventBloc(di(), di()));
   di.registerFactory<PickPersonBloc>(() => PickPersonBloc(di()));
-  di.registerFactory<EventDetailBloc>(() => EventDetailBloc());
+  di.registerFactory<EventDetailBloc>(() => EventDetailBloc(
+    authRepository: di(),
+    repository: di(),
+    dio: di()
+  ));
   di.registerFactory<ForecastBloc>(() => ForecastBloc(di()));
   di.registerFactory<MyEventsBloc>(() => MyEventsBloc(di()));
   di.registerFactory<InvitesBloc>(() => InvitesBloc(di()));

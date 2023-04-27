@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:either_dart/either.dart';
 import 'package:take_a_walk_app/data/datasource/remote/event/events_api_service.dart';
 import 'package:take_a_walk_app/data/repository/base_repository.dart';
 import 'package:take_a_walk_app/domain/models/requests/create_event_data.dart';
+import 'package:take_a_walk_app/domain/models/responses/event_person_response.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
 import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
 import 'package:take_a_walk_app/domain/repositories/events_repository.dart';
@@ -104,6 +106,33 @@ class EventsRepositoryImpl extends BaseApiRepository implements EventsRepository
     int limit = 5;
     var result = await makeRequest(request: () => eventsApiService.getMapEvents(id, limit));
     return result;
+  }
+
+  @override
+  Future<Either<RequestError, EventDataResponse>> getEventDetail(int eventId) async {
+    int? id = await authRepository.getUserId();
+    if (id == null) {
+      return Left(RequestError.unauthenticated());
+    }
+    return makeRequest(request: () => eventsApiService.getEventData(eventId, id));
+  }
+
+  @override
+  Future<Either<RequestError, List<EventPersonResponse>>> getEventPeople(int eventId) {
+    return makeRequest(request: () => eventsApiService.getEventPeople(eventId, true));
+  }
+
+  @override
+  Future<Either<RequestError, List<String>>> getEventPictures(int eventId) {
+    return makeRequest(request: () => eventsApiService.getEventPictures(eventId));
+  }
+
+  @override
+  Future<RequestError?> postEventImage(int eventId, File file) {
+    return makeRequest(request: () => eventsApiService.postEventImage(eventId, file)).fold(
+            (left) => left,
+            (right) => null
+    );
   }
 
 }

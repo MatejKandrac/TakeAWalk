@@ -6,22 +6,36 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:take_a_walk_app/domain/models/responses/location.dart';
+import 'package:take_a_walk_app/utils/location_getter_mixin.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 import 'package:take_a_walk_app/widget/map_widget.dart';
+import 'package:take_a_walk_app/widget/state_dialog.dart';
 
 @RoutePage()
-class PickLocationPage extends HookWidget {
+class PickLocationPage extends HookWidget with LocationMixin {
   const PickLocationPage({Key? key}) : super(key: key);
 
-  _onCenterGps(BuildContext context) {
-
+  _onCenterGps(ValueNotifier<LatLng?> position, BuildContext context) async {
+    var gps = await getPosition().onError((error, stackTrace) {
+      showStateDialog(
+        context: context,
+        isSuccess: false,
+        text: "Could not get location",
+        closeOnConfirm: true
+      );
+      return null;
+    });
+    if (gps != null) {
+      position.value = LatLng(gps.latitude, gps.longitude);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final nameController = useTextEditingController();
     var latLon = useState<LatLng?>(null);
+    var position = useState<LatLng?>(null);
     var hasName = useState<bool?>(null);
 
     return Scaffold(
@@ -40,6 +54,7 @@ class PickLocationPage extends HookWidget {
                   child: MapWidget(
                     heroTag: -1,
                     onPositionTap: (p0) => latLon.value = p0,
+                    bounds: (position.value != null) ? LatLngBounds.fromPoints([position.value!]) : null,
                     layers: [
                       if(latLon.value != null) MarkerLayer(
                         markers: [
@@ -51,7 +66,7 @@ class PickLocationPage extends HookWidget {
                         ],
                       )
                     ],
-                    onCenterGps: () => _onCenterGps(context),
+                    onCenterGps: () => _onCenterGps(position, context),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -70,7 +85,9 @@ class PickLocationPage extends HookWidget {
                           Location(
                               lat: latLon.value!.latitude,
                               lon: latLon.value!.longitude,
-                              name: nameController.text));
+                              name: nameController.text
+                          )
+                      );
                     }
                   },
                   child: Text("Save changes",

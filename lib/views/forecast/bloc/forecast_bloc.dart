@@ -25,8 +25,8 @@ class ForecastBloc extends Cubit<ForecastState> {
     DateTime endDate;
 
     try {
-      startDate = AppConstants.dateFormat.parse(split[0]).toUtc();
-      endDate = AppConstants.dateFormat.parse(split[1]).toUtc();
+      startDate = AppConstants.dateFormat.parse(split[0]);
+      endDate = AppConstants.dateFormat.parse(split[1]);
     } catch (e) {
       emit(const ForecastResultState([]));
       return;
