@@ -52,7 +52,7 @@ class _ChatsApiService implements ChatsApiService {
   }
 
   @override
-  Future<HttpResponse<String>> postEventMessage(
+  Future<HttpResponse<int>> postEventMessage(
     eventId,
     message,
   ) async {
@@ -62,7 +62,7 @@ class _ChatsApiService implements ChatsApiService {
     final _data = <String, dynamic>{};
     _data.addAll(message?.toMap() ?? <String, dynamic>{});
     final _result =
-        await _dio.fetch<String>(_setStreamType<HttpResponse<String>>(Options(
+        await _dio.fetch<int>(_setStreamType<HttpResponse<int>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,

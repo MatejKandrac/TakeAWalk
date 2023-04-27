@@ -20,11 +20,13 @@ class InvitesBloc extends Cubit<InvitesState> {
   }
 
   void acceptInvite(int eventId) async {
-    repository.acceptInvite(eventId);
+    await repository.acceptInvite(eventId);
+    getInvitesData();
   }
 
   void declineInvite(int eventId) async {
-    repository.acceptInvite(eventId);
+    await repository.declineInvite(eventId);
+    getInvitesData();
   }
 
   void filterInvites(FilterData? filterData) async {

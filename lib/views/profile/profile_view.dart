@@ -12,7 +12,9 @@ class ProfilePage extends HookWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   _onEdit(BuildContext context) {
-    AutoRouter.of(context).push(const ProfileEditRoute()).then((value) => BlocProvider.of<ProfileBloc>(context).getProfileData());
+    AutoRouter.of(context)
+        .push(const ProfileEditRoute())
+        .then((value) => BlocProvider.of<ProfileBloc>(context).getProfileData());
   }
 
   _onLogOut(BuildContext context) {
@@ -42,21 +44,15 @@ class ProfilePage extends HookWidget {
         builder: (context, state) {
           return AppScaffold(
             appBar: AppBar(
-              title: Text("Profile",
-                  style: Theme.of(context).textTheme.bodyMedium),
+              title: Text("Profile", style: Theme.of(context).textTheme.bodyMedium),
               automaticallyImplyLeading: false,
-              actions: [
-                IconButton(
-                    onPressed: () => _onEdit(context),
-                    icon: const Icon(Icons.edit))
-              ],
+              actions: [IconButton(onPressed: () => _onEdit(context), icon: const Icon(Icons.edit))],
             ),
             navigationIndex: 3,
             child: SafeArea(
               child: Scaffold(
                 body: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 10, bottom: 10, right: 10, left: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10, left: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
@@ -71,27 +67,25 @@ class ProfilePage extends HookWidget {
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 60, left: 10, right: 10),
+                                  padding: const EdgeInsets.only(top: 60, left: 10, right: 10),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
                                         (state as ProfileDataState).profileData.username,
                                         // 'User name',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 30),
+                                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                                       ),
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      if (state.profileData.bio != null) Text(
-                                        // 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                                        // 'This is my profile description with my info, my interests but most importantly, I am just interested in how it is going to fit inside this card',
-                                        state.profileData.bio!,
-                                        textAlign: TextAlign.center,
-                                      ),
+                                      if (state.profileData.bio != null)
+                                        Text(
+                                          // 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+                                          // 'This is my profile description with my info, my interests but most importantly, I am just interested in how it is going to fit inside this card',
+                                          state.profileData.bio!,
+                                          textAlign: TextAlign.center,
+                                        ),
                                       const SizedBox(
                                         height: 10,
                                       ),
@@ -110,9 +104,8 @@ class ProfilePage extends HookWidget {
                                             SizedBox(width: 10),
                                             Text(
                                                 // 'kenji_matej@gmail.com'
-                                              // (state as ProfileDataState).email
-                                              state.profileData.email
-                                            )
+                                                // (state as ProfileDataState).email
+                                                state.profileData.email)
                                           ],
                                         ),
                                       ),
@@ -128,13 +121,13 @@ class ProfilePage extends HookWidget {
                                 height: 100,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(50),
-                                  child: state.profileData.image != null ?
-                                  Image.network(
-                                      bloc.getImageUrl(state.profileData.image!),
-                                      headers: bloc.getHeaders(),
-                                    fit: BoxFit.cover,
-                                  ):
-                                  const Icon(Icons.account_circle, size: 100),
+                                  child: state.profileData.image != null && state.profileData.image!.isNotEmpty
+                                      ? Image.network(
+                                          bloc.getImageUrl(state.profileData.image!),
+                                          headers: bloc.getHeaders(),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : const Icon(Icons.account_circle, size: 100),
                                 ),
                               ),
                             )
@@ -147,14 +140,12 @@ class ProfilePage extends HookWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              AppSettings.openNotificationSettings();
-                              // print('Settings');
-                            },
+                        child: InkWell(
+                          onTap: () {
+                            AppSettings.openNotificationSettings();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
                             child: Row(
                               children: const [
                                 Icon(
@@ -166,12 +157,6 @@ class ProfilePage extends HookWidget {
                                   'Notifications',
                                   style: TextStyle(fontSize: 25),
                                 ),
-                                // Spacer(),
-                                // ElevatedButton(
-                                //     onPressed: AppSettings.openNotificationSettings,
-                                //     child: Text('Settings')
-                                // )
-                                // AppSwitch(),
                               ],
                             ),
                           ),
@@ -182,14 +167,10 @@ class ProfilePage extends HookWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              _onLogOut(context);
-                              // debugPrint('Logged out');
-                            },
+                        child: InkWell(
+                          onTap: () => _onLogOut(context),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
                             child: Row(
                               children: const [
                                 Icon(

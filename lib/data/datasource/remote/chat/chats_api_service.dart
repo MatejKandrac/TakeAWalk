@@ -16,6 +16,6 @@ abstract class ChatsApiService {
   Future<HttpResponse<List<MessageObj>>> getEventMessages(@Path('event-id') int eventId, @Query('page') int pageNumber, @Query('size') int pageSize);
 
   @POST('/v1/chat/{event-id}/message')
-  Future<HttpResponse<String>> postEventMessage(
+  Future<HttpResponse<int>> postEventMessage(
       @Path('event-id') int eventId, @Body() MessageData message);
 }

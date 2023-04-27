@@ -24,7 +24,7 @@ class ChatsRepositoryImpl extends BaseApiRepository implements ChatsRepository {
   }
 
   @override
-  Future<Either<RequestError, String>> postEventMessage(int eventId, String message) async {
+  Future<Either<RequestError, int>> postEventMessage(int eventId, String message) async {
     int? id = await authRepository.getUserId();
     if (id == null) {
       return Left(RequestError.unauthenticated());

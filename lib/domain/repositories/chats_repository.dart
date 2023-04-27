@@ -7,6 +7,6 @@ abstract class ChatsRepository {
 
   Future<Either<RequestError, List<MessageObj>>> getEventMessages(int eventId, int pageNumber);
 
-  Future<Either<RequestError, String>> postEventMessage(int eventId, String message);
+  Future<Either<RequestError, int>> postEventMessage(int eventId, String message);
 
 }
