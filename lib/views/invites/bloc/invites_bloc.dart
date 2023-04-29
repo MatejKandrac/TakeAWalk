@@ -13,7 +13,9 @@ class InvitesBloc extends Cubit<InvitesState> {
   InvitesBloc(this.repository) : super(InvitesDataState.empty());
 
   void getInvitesData() async {
-    repository.getUserInvitations().fold((error) => () {}, (data) async {
+    repository.getUserInvitations().fold(
+            (error) async {emit(InviteErrorState([]));},
+            (data) async {
       emit(InvitesDataState(data));
       print(data);
     });

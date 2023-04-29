@@ -29,3 +29,8 @@ class FilteredInviteDataState extends InvitesState {
   factory FilteredInviteDataState.empty() => FilteredInviteDataState([]);
 }
 
+class InviteErrorState extends InvitesState {
+
+  InviteErrorState(super.events);
+
+}

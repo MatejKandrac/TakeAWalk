@@ -36,3 +36,15 @@ class ProfileDataState extends ProfileState {
 
   factory ProfileDataState.empty() => const ProfileDataState(profileData: ProfileResponse(username: "", email: ""));
 }
+
+class ProfileErrorState extends ProfileState {
+  final String errorText;
+
+  const ProfileErrorState(this.errorText);
+}
+
+class ProfileSuccessState extends ProfileState {
+  final String message;
+
+  const ProfileSuccessState(this.message);
+}

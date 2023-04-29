@@ -16,12 +16,12 @@ class ProfileBloc extends Cubit<ProfileState> with NetworkImageMixin {
 
   FlutterSecureStorage storage = const FlutterSecureStorage();
 
-  ProfileBloc({
-    required this.repository,
-    required this.dio}) : super(ProfileDataState.empty());
+  ProfileBloc({required this.repository, required this.dio}) : super(ProfileDataState.empty());
 
   void getProfileData() async {
-    repository.getProfile().fold((error) => () {}, (data) async {
+    repository.getProfile().fold((error) async {
+      emit(ProfileErrorState('Unable to sync data'));
+    }, (data) async {
       emit(ProfileDataState(profileData: data));
     });
   }
@@ -39,7 +39,11 @@ class ProfileBloc extends Cubit<ProfileState> with NetworkImageMixin {
     ProfileEditRequest request =
         ProfileEditRequest(username: newUsernameCheck, password: newPasswordCheck, bio: newBioCheck);
 
-    repository.editUserProfile(request);
+    repository.editUserProfile(request).fold((left) async {
+      emit(ProfileErrorState('Unable to edit data while offline'));
+    }, (right) async {
+      emit(ProfileSuccessState('Changes saved'));
+    });
     getProfileData();
   }
 
@@ -50,8 +54,9 @@ class ProfileBloc extends Cubit<ProfileState> with NetworkImageMixin {
   }
 
   void logOut() async {
-    storage.deleteAll();
-    repository.deleteDeviceToken();
+    await repository.deleteDeviceToken();
+    await repository.deleteDatabase();
+    await storage.deleteAll();
+    dio.options.headers = null;
   }
-
 }

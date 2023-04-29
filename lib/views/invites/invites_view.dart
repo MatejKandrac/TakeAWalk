@@ -11,6 +11,7 @@ import 'package:take_a_walk_app/widget/app_scaffold.dart';
 import 'package:take_a_walk_app/widget/event_item.dart';
 
 import '../../domain/models/requests/filter_data.dart';
+import '../../widget/state_dialog.dart';
 
 @RoutePage()
 class InvitesPage extends HookWidget {
@@ -82,6 +83,9 @@ class InvitesPage extends HookWidget {
       listener: (context, state) {
         if (state is FilteredInviteDataState) {
           _getFilterData(context, state.events);
+        }
+        if (state is InviteErrorState) {
+          showStateDialog(context: context, isSuccess: false, closeOnConfirm: true, text: 'Unable to sync data');
         }
       },
       child: BlocBuilder<InvitesBloc, InvitesState>(

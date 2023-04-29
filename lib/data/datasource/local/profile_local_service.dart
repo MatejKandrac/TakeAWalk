@@ -29,8 +29,6 @@ class ProfileLocalService {
     } else {
       return const ProfileResponse(username: '', email: '', bio: '', image: '');
     }
-
-    // return const ProfileResponse(username: 'test123', email: 'test123', bio: 'test123', image: 'test123');
   }
 
   void saveProfile(ProfileResponse profileData, int userId) {
@@ -69,4 +67,10 @@ class ProfileLocalService {
       return false;
     }
   }
+
+  Future<void> deleteDatabase() async {
+    database.database.delete('Profile');
+    database.database.delete('Event');
+  }
+
 }

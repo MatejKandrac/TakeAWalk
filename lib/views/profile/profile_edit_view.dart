@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/config/theme.dart';
 import 'package:take_a_walk_app/views/bloc_container.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
@@ -16,9 +15,6 @@ class ProfileEditPage extends HookWidget {
 
   _onEdit(BuildContext context, String newUsername, String newPassword, String confirmPassword, String newBio) {
     BlocProvider.of<ProfileBloc>(context).editProfileData(newUsername, newPassword, confirmPassword, newBio);
-    showStateDialog(context: context, isSuccess: true, text: "Changes saved!")
-        // .then((value) => AutoRouter.of(context).replace(const ProfileRoute()));
-        .then((value) => AutoRouter.of(context).pop());
   }
 
   @override
@@ -34,7 +30,12 @@ class ProfileEditPage extends HookWidget {
       return null;
     }, const []);
     return BlocListener<ProfileBloc, ProfileState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is ProfileSuccessState) {
+          showStateDialog(context: context, isSuccess: true, text: "Changes saved!")
+              .then((value) => AutoRouter.of(context).pop());
+        }
+      },
       child: BlocBuilder<ProfileBloc, ProfileState>(
         buildWhen: (previous, current) => current is ProfileFormState,
         builder: (context, state) {

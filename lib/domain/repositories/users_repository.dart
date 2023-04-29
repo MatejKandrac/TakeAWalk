@@ -15,4 +15,5 @@ abstract class UsersRepository {
 
   Future<Either<RequestError, String>> deleteDeviceToken();
 
+  Future<void> deleteDatabase();
 }

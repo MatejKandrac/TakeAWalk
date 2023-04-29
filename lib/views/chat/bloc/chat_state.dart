@@ -35,3 +35,11 @@ class ChatNewMessageState extends ChatState {
   factory ChatNewMessageState.empty() => ChatNewMessageState(messages: [MessageObj(id: -1, message: '', sent: DateTime.now(), username: '', userId: -1)], userId: -1);
 
 }
+
+class ChatErrorState extends ChatState {
+  final String errorText;
+
+  ChatErrorState(super.messages, super.userId, this.errorText);
+
+
+}

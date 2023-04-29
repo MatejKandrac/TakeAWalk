@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:take_a_walk_app/config/constants.dart';
+import 'package:take_a_walk_app/data/datasource/local/event_local_service.dart';
 import 'package:take_a_walk_app/data/datasource/local/profile_local_service.dart';
 import 'package:take_a_walk_app/data/datasource/remote/event/events_api_service.dart';
 import 'package:take_a_walk_app/data/repository/base_repository.dart';
@@ -51,7 +52,7 @@ initDependencies() async {
   // REPOSITORIES
   di.registerLazySingleton<UsersRepository>(() => UsersRepositoryImpl(di(), di(), di()));
   di.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(apiService: di(), localService: di(), dio: di()));
-  di.registerLazySingleton<EventsRepository>(() => EventsRepositoryImpl(authRepository: di(), eventsApiService: di()));
+  di.registerLazySingleton<EventsRepository>(() => EventsRepositoryImpl(authRepository: di(), eventsApiService: di(), eventLocalService: di()));
   di.registerLazySingleton<ChatsRepository>(() => ChatsRepositoryImpl(authRepository: di(), chatsApiService: di()));
   di.registerLazySingleton<WeatherRepository>(() => WeatherRepositoryImpl(di()));
 
@@ -66,6 +67,7 @@ initDependencies() async {
   // LOCAL
   di.registerLazySingleton<AuthLocalService>(() => AuthLocalService());
   di.registerLazySingleton<ProfileLocalService>(() => ProfileLocalService(di()));
+  di.registerLazySingleton<EventLocalService>(() => EventLocalService(di()));
 
   // UTILS
   di.registerLazySingleton<MessagingService>(() => MessagingService(di(), di()));

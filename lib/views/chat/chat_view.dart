@@ -4,6 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:take_a_walk_app/views/bloc_container.dart';
 
+import '../../di.dart';
+import '../../widget/state_dialog.dart';
+
 @RoutePage()
 class ChatPage extends HookWidget {
   ChatPage({Key? key, required this.eventId}) : super(key: key);
@@ -35,6 +38,9 @@ class ChatPage extends HookWidget {
         if (state is ChatNewMessageState) {
           print('New message received');
         }
+        if (state is ChatErrorState) {
+          showStateDialog(context: context, isSuccess: false, closeOnConfirm: true, text: state.errorText);
+        }
       },
       child: BlocBuilder<ChatBloc, ChatState>(
         buildWhen: (previous, current) => current is ChatDataState,
@@ -62,26 +68,12 @@ class ChatPage extends HookWidget {
                               alignment: Alignment.topCenter,
                               child: IconButton(onPressed: () => _loadMessages(context), icon: const Icon(Icons.refresh)),
                             ),
+
                             for (var data in state.messages)
                               if (data.userId == state.userId)
                                 MyMessage(message: data.message)
                               else
                                 Message(username: data.username, message: data.message),
-
-                            // Message(username: 'Tester1', message: 'first message'),
-                            // MyMessage(message: 'My message'),
-                            // Message(username: 'Tester2', message: 'second message'),
-                            // MyMessage(message: 'My message'),
-                            // MyMessage(message: 'My message'),
-                            // Message(username: 'Tester2', message: 'second message'),
-                            // MyMessage(message: 'My message'),
-                            // MyMessage(message: 'My message'),
-                            // Message(username: 'Tester2', message: 'second message'),
-                            // MyMessage(message: 'My message'),
-                            // MyMessage(message: 'My message'),
-                            // Message(username: 'Tester2', message: 'second message'),
-                            // MyMessage(message: 'My message'),
-                            // MyMessage(message: 'My message'),
 
                             const SizedBox(
                               height: 100,

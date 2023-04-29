@@ -41,13 +41,12 @@ class ChatBloc extends Cubit<ChatState> {
           userId: userId
       );
 
-
       messages.add(newMessage);
 
-      messages.forEach((element) {print(element.toString());});
-
+      var seen = Set<MessageObj>();
+      messages = messages.where((message) => seen.add(message)).toList();
       // emit(ChatNewMessageState(messages: messages, userId: userId));
-      emitNewMessage(messages, userId);
+      emitNewMessage(messages, currentUserId);
 
       return false;
     }
@@ -73,8 +72,12 @@ class ChatBloc extends Cubit<ChatState> {
       return;
     }
 
-    repository.postEventMessage(eventId, message).fold((left) => null, (right) {
+    repository.postEventMessage(eventId, message).fold(
+            (left) async {emit(ChatErrorState([], -1, 'Unable to send message'));},
+            (right) {
       messages.add(MessageObj(id: right, message: message, sent: DateTime.now(), username: '', userId: currentUserId));
+      var seen = Set<MessageObj>();
+      messages = messages.where((message) => seen.add(message)).toList();
       emit(ChatDataState(messages: messages, userId: currentUserId));
     });
   }

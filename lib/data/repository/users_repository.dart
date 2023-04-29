@@ -75,4 +75,8 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
 
     return makeRequest<String>(request: () => _usersApiService.deleteDeviceToken(userId));
   }
+
+  Future<void> deleteDatabase() async {
+    await profileLocalService.deleteDatabase();
+  }
 }

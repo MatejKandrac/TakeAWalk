@@ -63,13 +63,15 @@ class _$AppDatabase extends AppDatabase {
 
   ProfileDao? _profileDaoInstance;
 
+  EventDao? _eventDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -86,6 +88,8 @@ class _$AppDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Profile` (`id` INTEGER NOT NULL, `username` TEXT NOT NULL, `email` TEXT NOT NULL, `bio` TEXT, `profilePicture` TEXT, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Event` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `owner` TEXT NOT NULL, `start` TEXT NOT NULL, `end` TEXT NOT NULL, `people` INTEGER NOT NULL, `places` INTEGER NOT NULL, `eventId` INTEGER NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -96,6 +100,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   ProfileDao get profileDao {
     return _profileDaoInstance ??= _$ProfileDao(database, changeListener);
+  }
+
+  @override
+  EventDao get eventDao {
+    return _eventDaoInstance ??= _$EventDao(database, changeListener);
   }
 }
 
@@ -151,5 +160,89 @@ class _$ProfileDao extends ProfileDao {
   @override
   Future<void> insertProfile(Profile profile) async {
     await _profileInsertionAdapter.insert(profile, OnConflictStrategy.abort);
+  }
+}
+
+class _$EventDao extends EventDao {
+  _$EventDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _eventInsertionAdapter = InsertionAdapter(
+            database,
+            'Event',
+            (Event item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'owner': item.owner,
+                  'start': item.start,
+                  'end': item.end,
+                  'people': item.people,
+                  'places': item.places,
+                  'eventId': item.eventId
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Event> _eventInsertionAdapter;
+
+  @override
+  Future<List<Event>> getAllUserEvents() async {
+    return _queryAdapter.queryList('SELECT * FROM Event;',
+        mapper: (Map<String, Object?> row) => Event(
+            id: row['id'] as int,
+            name: row['name'] as String,
+            owner: row['owner'] as String,
+            start: row['start'] as String,
+            end: row['end'] as String,
+            people: row['people'] as int,
+            places: row['places'] as int,
+            eventId: row['eventId'] as int));
+  }
+
+  @override
+  Future<void> updateEvent(
+    int id,
+    String name,
+    String owner,
+    String start,
+    String end,
+    int people,
+    int places,
+    int eventId,
+  ) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE Event SET id = ?1, name = ?2, owner = ?3, start = ?4, end = ?5, people = ?6, places = ?7, eventId = ?8 WHERE eventId = ?8 ;',
+        arguments: [id, name, owner, start, end, people, places, eventId]);
+  }
+
+  @override
+  Future<Event?> isPresent(int eventId) async {
+    return _queryAdapter.query('SELECT * FROM Event WHERE eventId = ?1 ;',
+        mapper: (Map<String, Object?> row) => Event(
+            id: row['id'] as int,
+            name: row['name'] as String,
+            owner: row['owner'] as String,
+            start: row['start'] as String,
+            end: row['end'] as String,
+            people: row['people'] as int,
+            places: row['places'] as int,
+            eventId: row['eventId'] as int),
+        arguments: [eventId]);
+  }
+
+  @override
+  Future<void> deleteEvent(int eventId) async {
+    await _queryAdapter.queryNoReturn('DELETE FROM Event WHERE eventId = ?1 ;',
+        arguments: [eventId]);
+  }
+
+  @override
+  Future<void> insertEvent(Event event) async {
+    await _eventInsertionAdapter.insert(event, OnConflictStrategy.abort);
   }
 }

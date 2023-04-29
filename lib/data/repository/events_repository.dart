@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:either_dart/either.dart';
+import 'package:take_a_walk_app/data/datasource/local/event_local_service.dart';
 import 'package:take_a_walk_app/data/datasource/remote/event/events_api_service.dart';
 import 'package:take_a_walk_app/data/repository/base_repository.dart';
 import 'package:take_a_walk_app/domain/models/requests/create_event_data.dart';
@@ -16,8 +17,10 @@ import '../../domain/models/requests/filter_data.dart';
 class EventsRepositoryImpl extends BaseApiRepository implements EventsRepository {
   final AuthRepository authRepository;
   final EventsApiService eventsApiService;
+  final EventLocalService eventLocalService;
 
-  const EventsRepositoryImpl({required this.eventsApiService, required this.authRepository});
+  const EventsRepositoryImpl(
+      {required this.eventsApiService, required this.authRepository, required this.eventLocalService});
 
   @override
   Future<Either<RequestError, int>> createEvent(CreateEventData createEventData) async {
@@ -36,9 +39,26 @@ class EventsRepositoryImpl extends BaseApiRepository implements EventsRepository
     if (id == null) {
       return Left(RequestError.unauthenticated());
     }
-    var result = await makeRequest(request: () => eventsApiService.getUserEvents(id));
-    // return await makeRequest<List<EventObject>>(request: () => eventsApiService.getUserEvents(id));
-    return result;
+    var response = await makeRequest(
+        request: () => eventsApiService.getUserEvents(id),
+        localRequest: () => eventLocalService.getAllUserEvents(false));
+
+    if (response.isRight) {
+      print('It is right');
+      for (EventObject event in response.right) {
+        var isPresent = await eventLocalService.isPresent(event.eventId);
+        if (isPresent) {
+          print('Updating event');
+          print(event.end);
+          eventLocalService.updateEvent(event);
+        } else {
+          print('Saving event');
+          eventLocalService.saveEvent(event);
+        }
+      }
+    }
+
+    return response;
   }
 
   @override
@@ -75,18 +95,21 @@ class EventsRepositoryImpl extends BaseApiRepository implements EventsRepository
   }
 
   @override
-  Future<Either<RequestError, List<EventObject>>> filterEvents (FilterData filter) async {
+  Future<Either<RequestError, List<EventObject>>> filterEvents(FilterData filter) async {
     int? id = await authRepository.getUserId();
     if (id == null) {
       return Left(RequestError.unauthenticated());
     }
 
-    var result = await makeRequest(request: () => eventsApiService.filterEvents(id, filter));
+    var result = await makeRequest(
+        request: () => eventsApiService.filterEvents(id, filter),
+        localRequest: () => eventLocalService.filterUserEvents(id, filter)
+    );
     return result;
   }
 
   @override
-  Future<Either<RequestError, List<EventObject>>> filterInvitations (FilterData filter) async {
+  Future<Either<RequestError, List<EventObject>>> filterInvitations(FilterData filter) async {
     int? id = await authRepository.getUserId();
     if (id == null) {
       return Left(RequestError.unauthenticated());
@@ -129,10 +152,7 @@ class EventsRepositoryImpl extends BaseApiRepository implements EventsRepository
 
   @override
   Future<RequestError?> postEventImage(int eventId, File file) {
-    return makeRequest(request: () => eventsApiService.postEventImage(eventId, file)).fold(
-            (left) => left,
-            (right) => null
-    );
+    return makeRequest(request: () => eventsApiService.postEventImage(eventId, file))
+        .fold((left) => left, (right) => null);
   }
-
 }

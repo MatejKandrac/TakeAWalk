@@ -161,6 +161,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  charcode:
+    dependency: transitive
+    description:
+      name: charcode
+      sha256: fb98c0f6d12c920a02ee2d998da788bca066ca5f148492b7085ee23372b12306
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.1"
   checked_yaml:
     dependency: transitive
     description:
@@ -349,26 +357,26 @@ packages:
     dependency: "direct main"
     description:
       name: floor
-      sha256: "47b30dc15d2415533b6d09b9eaff8250472584db218869530c2b760e607ca7b5"
+      sha256: "52a8eac2c8d274e7c0c54251226f59786bb5b749365a2d8537d8095aa5132d92"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.1"
+    version: "1.4.2"
   floor_annotation:
     dependency: transitive
     description:
       name: floor_annotation
-      sha256: "7fea065005731da50ab2161a780228615acf6c9931dc32c2cd84298e466fbf3a"
+      sha256: fa3fa4f198cdd1d922a69ceb06e54663fe59256bf1cb3c036eff206b445a6960
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.1"
+    version: "1.4.2"
   floor_generator:
     dependency: "direct dev"
     description:
       name: floor_generator
-      sha256: "171158ad42cb6a5b1cda72f0446c67495910ca022d907db5d759fbf4e626ad34"
+      sha256: "40aaf1b619adc03367ce4b7c79161e3198d43b572b5ec9cc99a4a89de27b08d2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.1"
+    version: "1.4.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -1045,6 +1053,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  sqlparser:
+    dependency: transitive
+    description:
+      name: sqlparser
+      sha256: "91f47610aa54d8abf9d795a7b4e49b2a788f65d7493d5a68fbf180c3cbcc6f38"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.27.0"
   stack_trace:
     dependency: transitive
     description:

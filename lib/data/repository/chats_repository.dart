@@ -17,7 +17,7 @@ class ChatsRepositoryImpl extends BaseApiRepository implements ChatsRepository {
 
   @override
   Future<Either<RequestError, List<MessageObj>>> getEventMessages(int eventId, int pageNumber) async {
-    int pageSize = 3;
+    int pageSize = 12;
 
     var result = await makeRequest(request: () => chatsApiService.getEventMessages(eventId, pageNumber, pageSize));
     return result;

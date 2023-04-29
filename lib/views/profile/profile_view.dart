@@ -7,6 +7,8 @@ import 'package:take_a_walk_app/config/router/router.dart';
 import 'package:take_a_walk_app/views/bloc_container.dart';
 import 'package:take_a_walk_app/widget/app_scaffold.dart';
 
+import '../../widget/state_dialog.dart';
+
 @RoutePage()
 class ProfilePage extends HookWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -37,6 +39,9 @@ class ProfilePage extends HookWidget {
       listener: (context, state) {
         if (state is ProfileFormState) {
           _getProfileData(context);
+        }
+        if (state is ProfileErrorState) {
+          showStateDialog(context: context, isSuccess: false, closeOnConfirm: true, text: state.errorText);
         }
       },
       child: BlocBuilder<ProfileBloc, ProfileState>(
