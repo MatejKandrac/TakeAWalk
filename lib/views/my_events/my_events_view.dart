@@ -8,46 +8,13 @@ import 'package:take_a_walk_app/widget/app_scaffold.dart';
 
 import '../../domain/models/requests/filter_data.dart';
 import '../../domain/models/responses/event_response.dart';
-import '../../domain/models/responses/profile_response.dart';
 import '../../widget/event_item.dart';
 
 @RoutePage()
 class MyEventsPage extends HookWidget {
   MyEventsPage({Key? key}) : super(key: key);
 
-  // List<EventResponse> events = [
-  //   EventResponse(
-  //       id: 0,
-  //       name: "Rozbijacka",
-  //       status: Status.ACCEPTED,
-  //       owner: ProfileResponse(username: "Matej", email: ""),
-  //       dateStart: DateTime(2023, 1, 1),
-  //       dateEnd: DateTime(2023, 12, 5),
-  //       locations: [
-  //         Location(lat: 48.140030, lon: 17.104622, name: "Bratislavsky hrad"),
-  //         Location(lat: 48.148598, lon: 17.107748, name: "Co ja viem")
-  //       ],
-  //       profiles: [
-  //         ProfileResponse(username: "Matejko", email: "")
-  //       ]),
-  //   EventResponse(
-  //       id: 1,
-  //       name: "TestEvent",
-  //       owner: ProfileResponse(username: "Matej", email: ""),
-  //       dateStart: DateTime(2023, 12, 4),
-  //       dateEnd: DateTime(2023, 12, 5),
-  //       status: Status.ACCEPTED,
-  //       locations: [
-  //         Location(lat: 48.140030, lon: 17.104622, name: "Bratislavsky hrad"),
-  //         Location(lat: 48.148598, lon: 17.107748, name: "Co ja viem")
-  //       ],
-  //       profiles: [
-  //         ProfileResponse(username: "Matejko", email: "")
-  //       ]),
-  // ];
-
   _onOpenFilter(BuildContext context) {
-    // BlocProvider.of<MyEventsBloc>(context).getEventsData();
     AutoRouter.of(context).push(const FilterRoute()).then((value) => {
           BlocProvider.of<MyEventsBloc>(context).filterEvents(value as FilterData?),
         });
@@ -95,26 +62,7 @@ class MyEventsPage extends HookWidget {
               child: ListView.builder(
                 itemCount: (state).events.length,
                 itemBuilder: (context, index) => EventItem(
-                  // event: events[index],
-                  event: EventObject(
-                    name: state.events[index].name,
-                    owner: state.events[index].owner,
-                    start: state.events[index].start,
-                    end: state.events[index].end,
-                    places: state.events[index].places,
-                    peopleGoing: state.events[index].peopleGoing,
-                    eventId: state.events[index].eventId
-
-                    // id: (state).events[index].eventId,
-                    // name: (state).events[index].name,
-                    // // owner: ProfileResponse(username: (state).events[index].owner, email: ''),
-                    // owner: (state).events[index].owner,
-                    // dateStart: (state).events[index].start ?? DateTime(23, 12, 12),
-                    // dateEnd: (state).events[index].end ?? DateTime(23, 12, 12),
-                    // status: Status.ACCEPTED,
-                    // locations: [],
-                    // profiles: [],
-                  ),
+                  event: state.events[index],
                   status: Status.ACCEPTED,
                   onTap: () => _onDetail(state.events[index].eventId, context),
                 ),

@@ -75,4 +75,15 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
 
     return makeRequest<String>(request: () => _usersApiService.deleteDeviceToken(userId));
   }
+
+  @override
+  Future<RequestError?> updateProfileImage(File file) async {
+    var userId = await _authRepository.getUserId();
+    if (userId == null) {
+      return RequestError.badRequest();
+    }
+    return makeRequest(request: () => _usersApiService.updateProfilePicture(userId, file)).fold(
+            (left) => left,
+            (right) => null);
+  }
 }

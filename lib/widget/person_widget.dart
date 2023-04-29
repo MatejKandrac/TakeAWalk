@@ -32,15 +32,19 @@ class PersonWidget extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: picture == null
-                      ? const Icon(Icons.account_circle, size: 40) :
-                      Image.network(
-                          onImageUrl(picture!),
-                        headers: onRequestHeaders(),
-                      ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: picture == null
+                        ? const Icon(Icons.account_circle, size: 40) :
+                        Image.network(
+                            onImageUrl(picture!),
+                          headers: onRequestHeaders(),
+                          fit: BoxFit.cover,
+                        ),
+                  ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(child: Text(

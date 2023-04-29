@@ -1,6 +1,5 @@
 import 'package:either_dart/either.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
 import 'package:take_a_walk_app/domain/repositories/chats_repository.dart';
@@ -21,8 +20,6 @@ class ChatBloc extends Cubit<ChatState> {
   int currentUserId = -1;
 
   bool _onCloudNotification(int eventId, RemoteMessage message) {
-    // print(message.data);
-    // print(eventId);
 
     print('toto sa zavolalo');
     if (eventId == int.parse(message.data['event_id']) && message.data['message'] != null) {
@@ -59,11 +56,9 @@ class ChatBloc extends Cubit<ChatState> {
 
     var userId = await authRepository.getUserId();
     currentUserId = userId!;
-    // var userId = 1;
-
     repository.getEventMessages(eventId, pageNumber).fold((error) => () {}, (data) async {
       messages = data;
-      emit(ChatDataState(messages: data, userId: userId!));
+      emit(ChatDataState(data, userId!));
       print(data.toList());
     });
   }
@@ -75,19 +70,19 @@ class ChatBloc extends Cubit<ChatState> {
 
     repository.postEventMessage(eventId, message).fold((left) => null, (right) {
       messages.add(MessageObj(id: right, message: message, sent: DateTime.now(), username: '', userId: currentUserId));
-      emit(ChatDataState(messages: messages, userId: currentUserId));
+      emit(ChatDataState(messages, currentUserId));
     });
   }
 
   void loadMoreMessages(int eventId, int pageNumber) async {
     repository.getEventMessages(eventId, pageNumber).fold((error) => () {}, (data) async {
       messages = data + messages;
-      emit(ChatDataState(messages: messages, userId: currentUserId));
+      emit(ChatDataState(messages, currentUserId));
     });
   }
 
   void emitNewMessage(List<MessageObj> messages, int userId) async {
-    emit(ChatDataState(messages: messages, userId: userId));
+    emit(ChatDataState(messages, userId));
   }
 
   dispose() {

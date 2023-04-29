@@ -1,13 +1,21 @@
 
 import 'package:flutter/material.dart';
-import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/domain/models/responses/search_person_response.dart';
 
 class PersonItem extends StatelessWidget {
-  const PersonItem(this.person, {Key? key, this.selected = false, required this.onTap}) : super(key: key);
+  const PersonItem(this.person, {
+    Key? key,
+    this.selected = false,
+    required this.onTap,
+    required this.getImageLink,
+    required this.getImageHeaders
+  }) : super(key: key);
+
   final SearchPersonResponse person;
   final bool selected;
   final Function() onTap;
+  final Map<String, String> Function() getImageHeaders;
+  final String Function(String base) getImageLink;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +31,19 @@ class PersonItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              width: 70,
-              height: 70,
-              child: person.picture == null ?
-              const Icon(Icons.account_circle, size: 60) :
-              Image.network("${AppConstants.baseUrl}/v1/pictures/${person.picture!}"),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(35),
+              child: SizedBox(
+                width: 70,
+                height: 70,
+                child: person.picture == null ?
+                const Icon(Icons.account_circle, size: 60) :
+                Image.network(
+                  getImageLink(person.picture!),
+                  headers: getImageHeaders(),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             const SizedBox(width: 10),
             Expanded(

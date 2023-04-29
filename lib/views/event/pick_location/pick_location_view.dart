@@ -1,6 +1,7 @@
 
 
 import 'package:auto_route/annotations.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -16,7 +17,8 @@ import 'package:take_a_walk_app/widget/state_dialog.dart';
 class PickLocationPage extends HookWidget with LocationMixin {
   const PickLocationPage({Key? key}) : super(key: key);
 
-  _onCenterGps(ValueNotifier<LatLng?> position, BuildContext context) async {
+  _onCenterGps(ValueNotifier<bool> loading, ValueNotifier<LatLng?> position, BuildContext context) async {
+    loading.value = true;
     var gps = await getPosition().onError((error, stackTrace) {
       showStateDialog(
         context: context,
@@ -29,6 +31,7 @@ class PickLocationPage extends HookWidget with LocationMixin {
     if (gps != null) {
       position.value = LatLng(gps.latitude, gps.longitude);
     }
+    loading.value = false;
   }
 
   @override
@@ -37,6 +40,7 @@ class PickLocationPage extends HookWidget with LocationMixin {
     var latLon = useState<LatLng?>(null);
     var position = useState<LatLng?>(null);
     var hasName = useState<bool?>(null);
+    var loadingLocation = useState<bool>(false);
 
     return Scaffold(
       appBar: AppBar(
@@ -56,17 +60,32 @@ class PickLocationPage extends HookWidget with LocationMixin {
                     onPositionTap: (p0) => latLon.value = p0,
                     bounds: (position.value != null) ? LatLngBounds.fromPoints([position.value!]) : null,
                     layers: [
-                      if(latLon.value != null) MarkerLayer(
+                      MarkerLayer(
                         markers: [
-                          Marker(
+                          if(latLon.value != null) Marker(
                               point: latLon.value!,
                               anchorPos: AnchorPos.align(AnchorAlign.top),
                               builder: (context) => const Icon(Icons.location_on, color: Colors.red),
+                          ),
+                          if(position.value != null) Marker(
+                            point: position.value!,
+                            builder: (context) => AvatarGlow(
+                                endRadius: 60,
+                                glowColor: const Color(0xff2e69ff),
+                                child: Container(
+                                  width: 15,
+                                  height: 15,
+                                  decoration: const BoxDecoration(
+                                      color: Color(0xff2e69ff),
+                                      shape: BoxShape.circle
+                                  ),
+                                )
+                            ),
                           )
                         ],
                       )
                     ],
-                    onCenterGps: () => _onCenterGps(position, context),
+                    onCenterGps: () => _onCenterGps(loadingLocation, position, context),
                   ),
                 ),
                 const SizedBox(height: 10),

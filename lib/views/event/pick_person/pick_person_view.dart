@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:take_a_walk_app/di.dart';
 import 'package:take_a_walk_app/domain/models/responses/search_person_response.dart';
-import 'package:take_a_walk_app/views/event/create/pick_person/bloc/pick_person_bloc.dart';
-import 'package:take_a_walk_app/views/event/create/pick_person/widget/person_item.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/state_dialog.dart';
+
+import 'bloc/pick_person_bloc.dart';
+import 'widget/person_item.dart';
 
 @RoutePage()
 class PickPersonPage extends HookWidget {
@@ -91,6 +92,8 @@ class PickPersonPage extends HookWidget {
                                     itemCount: state.people.length,
                                     itemBuilder: (context, index) {
                                       return PersonItem(
+                                        getImageHeaders: bloc.getHeaders,
+                                        getImageLink: bloc.getImageUrl,
                                         state.people[index],
                                         onTap: () => _selectPerson(state.people[index], context),
                                         selected: state.selected == state.people[index],

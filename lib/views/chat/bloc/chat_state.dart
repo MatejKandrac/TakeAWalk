@@ -10,28 +10,16 @@ abstract class ChatState {
 
 class ChatDataState extends ChatState {
 
-  @override
-  final int userId;
+  const ChatDataState(super.messages, super.userId);
 
-  @override
-  final List<MessageObj> messages;
-
-  const ChatDataState({required this.messages, required this.userId}) : super(messages, userId);
-
-  factory ChatDataState.empty() => ChatDataState(messages: [MessageObj(id: -1, message: '', sent: DateTime.now(), username: '', userId: -1)], userId: -1);
+  factory ChatDataState.empty() => const ChatDataState([], -1);
 
 }
 
 class ChatNewMessageState extends ChatState {
 
-  @override
-  final int userId;
+  const ChatNewMessageState(super.messages, super.userId);
 
-  @override
-  final List<MessageObj> messages;
-
-  const ChatNewMessageState({required this.messages, required this.userId}) : super(messages, userId);
-
-  factory ChatNewMessageState.empty() => ChatNewMessageState(messages: [MessageObj(id: -1, message: '', sent: DateTime.now(), username: '', userId: -1)], userId: -1);
+  factory ChatNewMessageState.empty() => const ChatNewMessageState([], -1);
 
 }

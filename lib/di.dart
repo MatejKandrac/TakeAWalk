@@ -4,11 +4,11 @@ import 'package:get_it/get_it.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/data/datasource/local/profile_local_service.dart';
 import 'package:take_a_walk_app/data/datasource/remote/event/events_api_service.dart';
-import 'package:take_a_walk_app/data/repository/base_repository.dart';
 import 'package:take_a_walk_app/data/repository/chats_repository.dart';
 import 'package:take_a_walk_app/domain/repositories/chats_repository.dart';
 import 'package:take_a_walk_app/utils/messaging_service.dart';
 import 'package:take_a_walk_app/utils/persistence/app_database.dart';
+import 'package:take_a_walk_app/views/profile/edit/bloc/profile_edit_bloc.dart';
 import 'data/datasource/remote/chat/chats_api_service.dart';
 import 'views/bloc_container.dart';
 import 'data/repositories_impl_container.dart';
@@ -35,13 +35,15 @@ initDependencies() async {
       dio: di(),
       repository: di()
   ));
+  di.registerFactory<ProfileEditBloc>(() => ProfileEditBloc(di()));
   di.registerFactory<CreateEventBloc>(() => CreateEventBloc(di(), di()));
-  di.registerFactory<PickPersonBloc>(() => PickPersonBloc(di()));
+  di.registerFactory<PickPersonBloc>(() => PickPersonBloc(di(), di()));
   di.registerFactory<EventDetailBloc>(() => EventDetailBloc(
     authRepository: di(),
     repository: di(),
     dio: di()
   ));
+  di.registerFactory<EventEditBloc>(() => EventEditBloc(di(), di()));
   di.registerFactory<ForecastBloc>(() => ForecastBloc(di()));
   di.registerFactory<MyEventsBloc>(() => MyEventsBloc(di()));
   di.registerFactory<InvitesBloc>(() => InvitesBloc(di()));

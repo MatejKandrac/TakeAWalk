@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
@@ -28,4 +30,8 @@ abstract class UsersApiService {
   Future<HttpResponse<List<SearchPersonResponse>>> searchPerson(
       @Path('user-id') int userId,
       @Query('username') String username);
+
+  @PUT('/v1/user/{user-id}/profile-picture')
+  @MultiPart()
+  Future<HttpResponse<String>> updateProfilePicture(@Path('user-id') int userId, @Part(name: 'file') File file);
 }

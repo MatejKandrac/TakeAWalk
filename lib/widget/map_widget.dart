@@ -11,10 +11,12 @@ class MapWidget extends StatelessWidget {
     this.height = 300,
     this.borderRadius,
     this.bounds,
+    this.controller,
     this.layers = const [],
     required this.heroTag
   }) : super(key: key);
 
+  final MapController? controller;
   final int heroTag;
   final double height;
   final LatLngBounds? bounds;
@@ -42,10 +44,11 @@ class MapWidget extends StatelessWidget {
                 child: AbsorbPointer(
                   absorbing: onPositionTap == null,
                   child: FlutterMap(
+                    mapController: controller,
                     options: MapOptions(
                         bounds: bounds,
                         center: LatLng(48.148598, 17.107748),
-                        zoom: 10,
+                        zoom: 13,
                         onTap: (tapPosition, point) {
                           if (onPositionTap != null) {
                             onPositionTap!(point);

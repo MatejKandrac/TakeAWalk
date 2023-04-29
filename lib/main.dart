@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
         BlocProvider<SplashBloc>(create: (context) => di()),
         BlocProvider<LoginBloc>(create: (context) => di(), lazy: true),
         BlocProvider<RegisterBloc>(create: (context) => di(), lazy: true),
-        BlocProvider<ProfileBloc>(create: (context) => di(), lazy: true),
         BlocProvider<MyEventsBloc>(create: (context) => di(), lazy: true),
         BlocProvider<InvitesBloc>(create: (context) => di(), lazy: true),
         BlocProvider<ChatBloc>(create: (context) => di(), lazy: true),

@@ -17,7 +17,7 @@ class Location {
     return Location(
       lat: map['lat'] as double,
       lon: map['lon'] as double,
-      name: map['name'] as String,
+      name: (map['name'] as String?) ?? "",
     );
   }
 }

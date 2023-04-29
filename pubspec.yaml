@@ -35,6 +35,7 @@ dependencies:
   floor: ^1.4.2
   rxdart: ^0.27.7
   image_picker: ^0.8.7+4
+  avatar_glow: ^2.0.2
 
 dev_dependencies:
   flutter_test:

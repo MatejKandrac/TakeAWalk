@@ -5,8 +5,11 @@ import 'package:either_dart/either.dart';
 import 'package:take_a_walk_app/data/datasource/remote/event/events_api_service.dart';
 import 'package:take_a_walk_app/data/repository/base_repository.dart';
 import 'package:take_a_walk_app/domain/models/requests/create_event_data.dart';
+import 'package:take_a_walk_app/domain/models/requests/event_edit_request.dart';
+import 'package:take_a_walk_app/domain/models/requests/live_location_request.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_person_response.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
+import 'package:take_a_walk_app/domain/models/responses/picture_response.dart';
 import 'package:take_a_walk_app/domain/repositories/auth_repository.dart';
 import 'package:take_a_walk_app/domain/repositories/events_repository.dart';
 import 'package:take_a_walk_app/utils/request_error.dart';
@@ -123,13 +126,45 @@ class EventsRepositoryImpl extends BaseApiRepository implements EventsRepository
   }
 
   @override
-  Future<Either<RequestError, List<String>>> getEventPictures(int eventId) {
+  Future<Either<RequestError, List<PictureResponse>>> getEventPictures(int eventId) {
     return makeRequest(request: () => eventsApiService.getEventPictures(eventId));
   }
 
   @override
   Future<RequestError?> postEventImage(int eventId, File file) {
     return makeRequest(request: () => eventsApiService.postEventImage(eventId, file)).fold(
+            (left) => left,
+            (right) => null
+    );
+  }
+
+  @override
+  Future<RequestError?> cancelEvent(int eventId) {
+    return makeRequest(request: () => eventsApiService.cancelEvent(eventId)).fold(
+            (left) => left,
+            (right) => null
+    );
+  }
+
+  @override
+  Future<RequestError?> nextLocation(int eventId) {
+    return makeRequest(request: () => eventsApiService.nextLocation(eventId)).fold(
+            (left) => left,
+            (right) => null
+    );
+  }
+
+  @override
+  Future<RequestError?> updateLiveLocation(int eventId, LiveLocationRequest data) {
+    return makeRequest(request: () => eventsApiService.updateLiveLocation(eventId, data)).fold(
+            (left) => left,
+            (right) => null
+    );
+  }
+
+  @override
+  Future<RequestError?> updateEvent(int eventId, EventEditRequest request) {
+    return makeRequest(request: () => eventsApiService.updateEvent(eventId, request)).fold(
             (left) => left,
             (right) => null
     );

@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
 import 'package:take_a_walk_app/utils/transform_locations_mixin.dart';
@@ -24,6 +25,11 @@ class EventItem extends StatelessWidget with TransformLocationsMixin {
 
   @override
   Widget build(BuildContext context) {
+    var points = toListLatLon(event.locations);
+    var bounds = points.isEmpty ? null : LatLngBounds.fromPoints(points);
+    if (bounds != null) {
+      bounds.pad(0.05);
+    }
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15)
@@ -37,6 +43,23 @@ class EventItem extends StatelessWidget with TransformLocationsMixin {
           children: [
             MapWidget(
               heroTag: event.eventId,
+              bounds: bounds,
+              layers: [
+                MarkerLayer(
+                  markers: [
+                    for (var point in points)
+                      Marker(
+                          point: point,
+                          anchorPos: AnchorPos.align(AnchorAlign.top),
+                          builder: (context) => const Icon(
+                            Icons.location_on,
+                            color: Colors.red,
+                            size: 40,
+                          ),
+                      )
+                  ],
+                )
+              ],
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15)
