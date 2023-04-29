@@ -7,7 +7,7 @@ class AppConstants {
 
   static const appName = "TakeAWalk";
 
-  static const baseUrl = "http://192.168.0.10:8080";
+  static const baseUrl = "http://192.168.163.205:8080";
 
   static const storageKeyToken = "TAKEAWALK_TOKEN_KEY";
   static const storageKeyRefreshToken = "TAKEAWALK_REFRESH_TOKEN_KEY";
@@ -32,4 +32,6 @@ class AppAssets {
   static const logoWhite = "assets/icon_white.png";
   static const success = "assets/success.json";
   static const error = "assets/error.json";
+  static const question = "assets/question.json";
+  static const deleted = "assets/removed.json";
 }

@@ -25,7 +25,8 @@ class EventLocalService {
           end: DateTime.parse(event.end),
           peopleGoing: event.people,
           places: event.places,
-          eventId: event.eventId));
+          eventId: event.eventId,
+          locations: []));
       print(event.eventId);
     });
 
@@ -36,9 +37,7 @@ class EventLocalService {
     return eventObjects;
   }
 
-
   Future<List<EventObject>> filterUserEvents(int id, FilterData filter) async {
-
     List<EventObject> events = await getAllUserEvents(filter.showHistory);
 
     events = events.where((event) => event.places! >= filter.places).toList();
@@ -47,7 +46,11 @@ class EventLocalService {
 
     if (filter.date != null) {
       // events = events.where((event) => DateFormat('dd-MM-yyyy', event.start.toString()) == DateFormat('dd-MM-yyyy', filter.date.toString())).toList();
-      events = events.where((event) => AppConstants.dateOnlyFormat.format(event.start).toString() == AppConstants.dateOnlyFormat.format(filter.date!).toString()).toList();
+      events = events
+          .where((event) =>
+              AppConstants.dateOnlyFormat.format(event.start).toString() ==
+              AppConstants.dateOnlyFormat.format(filter.date!).toString())
+          .toList();
     }
 
     if (filter.order == 'name') {
@@ -57,12 +60,10 @@ class EventLocalService {
     } else if (filter.order == 'time') {
       print(AppConstants.timeFormat.format(events.first.start));
       events.sort((a, b) => AppConstants.timeFormat.format(a.start).compareTo(AppConstants.timeFormat.format(b.start)));
-
     }
 
     return events;
   }
-
 
   void saveEvent(EventObject eventData) {
     final eventDao = database.eventDao;
@@ -78,7 +79,6 @@ class EventLocalService {
         eventId: eventData.eventId);
 
     eventDao.insertEvent(event);
-
   }
 
   void updateEvent(EventObject eventData) async {
@@ -123,5 +123,4 @@ class EventLocalService {
       return false;
     }
   }
-
 }

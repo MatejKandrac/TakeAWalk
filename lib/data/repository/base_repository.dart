@@ -28,8 +28,10 @@ abstract class BaseApiRepository {
       } else {
         return Left(response.response.statusCode.toRequestError());
       }
-    } on DioError catch (e) {
+    } on DioError catch (e, stacktrace) {
       print(e.response?.statusCode);
+      print(e);
+      print(stacktrace);
       if (e.response == null) {
         // TODO if has localRequest, try to get local data
 

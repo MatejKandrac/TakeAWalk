@@ -11,7 +11,6 @@ import 'package:take_a_walk_app/di.dart';
 import 'package:take_a_walk_app/domain/models/responses/location.dart';
 import 'package:take_a_walk_app/domain/models/responses/search_person_response.dart';
 import 'package:take_a_walk_app/utils/transform_locations_mixin.dart';
-import 'package:take_a_walk_app/views/event/create/create_event/bloc/create_event_bloc.dart';
 import 'package:take_a_walk_app/widget/location_widget.dart';
 import 'package:take_a_walk_app/widget/loading_dialog.dart';
 import 'package:take_a_walk_app/widget/map_widget.dart';
@@ -19,7 +18,8 @@ import 'package:take_a_walk_app/widget/app_button.dart';
 import 'package:take_a_walk_app/widget/app_text_field.dart';
 import 'package:take_a_walk_app/widget/state_dialog.dart';
 
-import '../../../../widget/person_widget.dart';
+import '../../../widget/person_widget.dart';
+import 'bloc/create_event_bloc.dart';
 
 @RoutePage()
 class CreateEventPage extends HookWidget with TransformLocationsMixin {

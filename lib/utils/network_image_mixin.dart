@@ -8,6 +8,6 @@ class NetworkImageMixin {
   String getImageUrl(String path) => "${AppConstants.baseUrl}/v1/picture/$path";
 
   Map<String, String> getImageHeaders(Dio dio) => <String, String>{
-    "Authorization": dio.options.headers["Authorization"]
+    "Authorization": dio.options.headers["Authorization"] ?? ""
   };
 }

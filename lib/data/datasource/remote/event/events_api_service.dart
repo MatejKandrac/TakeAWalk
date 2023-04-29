@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:take_a_walk_app/domain/models/requests/event_edit_request.dart';
+import 'package:take_a_walk_app/domain/models/requests/live_location_request.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_person_response.dart';
+import 'package:take_a_walk_app/domain/models/responses/picture_response.dart';
 
 import '../../../../domain/models/requests/create_event_data.dart';
 import '../../../../domain/models/requests/filter_data.dart';
@@ -58,7 +61,7 @@ abstract class EventsApiService {
   // Event Progress
 
   @GET('/v1/event/{event-id}/pictures')
-  Future<HttpResponse<List<String>>> getEventPictures(@Path('event-id') int eventId);
+  Future<HttpResponse<List<PictureResponse>>> getEventPictures(@Path('event-id') int eventId);
 
   @DELETE('/v1/event/{event-id}/picture')
   Future<HttpResponse<String>> deleteEventPicture(@Path('event-id') int eventId, @Body() Map<String, dynamic> data);
@@ -78,5 +81,17 @@ abstract class EventsApiService {
   @POST('/v1/event/{event-id}/picture')
   @MultiPart()
   Future<HttpResponse<String>> postEventImage(@Path('event-id') int eventId, @Part(name: 'file') File file);
+
+  @PUT('/v1/event/{event-id}/next-location')
+  Future<HttpResponse<String?>> nextLocation(@Path('event-id') int eventId);
+
+  @DELETE('/v1/event/{event-id}')
+  Future<HttpResponse<int?>> cancelEvent(@Path('event-id') int eventId);
+
+  @PUT('/v1/event/{event-id}/live-location')
+  Future<HttpResponse<String>> updateLiveLocation(@Path('event-id') int eventId, @Body() LiveLocationRequest data);
+
+  @PUT('/v1/event/{event-id}')
+  Future<HttpResponse<String?>> updateEvent(@Path('event-id') int eventId, @Body() EventEditRequest data);
 
 }

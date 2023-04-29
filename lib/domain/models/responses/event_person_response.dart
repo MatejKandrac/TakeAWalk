@@ -1,6 +1,7 @@
 
 class EventPersonResponse {
 
+  final int? id;
   final String status;
   final String username;
   final String? picture;
@@ -8,6 +9,7 @@ class EventPersonResponse {
   const EventPersonResponse({
     required this.status,
     required this.username,
+    this.id,
     this.picture,
   });
 

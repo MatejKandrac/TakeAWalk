@@ -10,7 +10,7 @@ Future showStateDialog({required BuildContext context, required bool isSuccess, 
   return showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => _StateDialog(
+      builder: (context) => _LottieDialog(
         contentText: text,
         asset: isSuccess ? AppAssets.success : AppAssets.error,
         closeOnConfirm: closeOnConfirm,
@@ -18,8 +18,20 @@ Future showStateDialog({required BuildContext context, required bool isSuccess, 
   );
 }
 
-class _StateDialog extends HookWidget {
-  const _StateDialog({Key? key,
+Future showLottieDialog({required BuildContext context, required String text, required String asset, bool closeOnConfirm = false}) {
+  return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => _LottieDialog(
+          contentText: text,
+          asset: asset,
+          closeOnConfirm: closeOnConfirm
+      ),
+  );
+}
+
+class _LottieDialog extends HookWidget {
+  const _LottieDialog({Key? key,
     required this.contentText,
     required this.asset,
     required this.closeOnConfirm
@@ -49,6 +61,9 @@ class _StateDialog extends HookWidget {
         children: [
           Lottie.asset(
               asset,
+              height: 100,
+              width: 100,
+              fit: BoxFit.contain,
               controller: controller,
               onLoaded: (p0) {
                 controller

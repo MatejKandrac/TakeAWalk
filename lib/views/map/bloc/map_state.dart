@@ -5,13 +5,17 @@ abstract class MapState {
 }
 
 class MapDataState extends MapState {
+  final MapController controller;
   final List<MapEventObj> locationData;
-  final LatLng? gpsPosition;
+  final LatLng? userLocation;
   final bool loading;
 
-  const MapDataState({required this.locationData, this.gpsPosition, this.loading = false});
+  const MapDataState({required this.controller, required this.locationData, this.loading = false, this.userLocation});
 
-  factory MapDataState.empty() => const MapDataState(locationData: []);
+}
+
+class MapLoadingState extends MapState {
+  const MapLoadingState();
 }
 
 class MapErrorState extends MapState {
