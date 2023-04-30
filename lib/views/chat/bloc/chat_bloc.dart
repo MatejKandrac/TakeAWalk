@@ -21,15 +21,10 @@ class ChatBloc extends Cubit<ChatState> {
 
   bool _onCloudNotification(int eventId, RemoteMessage message) {
 
-    print('toto sa zavolalo');
     if (eventId == int.parse(message.data['event_id']) && message.data['message'] != null) {
-
-      print('som v i-fe');
 
       var userId = int.parse(message.data['message_userId']);
 
-
-      // TODO create message and emit new state
       var newMessage = MessageObj(
           id: int.parse(message.data['message_id']),
           message: message.data['message'],
@@ -42,7 +37,6 @@ class ChatBloc extends Cubit<ChatState> {
 
       var seen = Set<MessageObj>();
       messages = messages.where((message) => seen.add(message)).toList();
-      // emit(ChatNewMessageState(messages: messages, userId: userId));
       emitNewMessage(messages, currentUserId);
 
       return false;

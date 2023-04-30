@@ -1,11 +1,7 @@
-
 import 'package:flutter/material.dart';
 
 class LoadingDialog extends StatelessWidget {
-  const LoadingDialog({
-    Key? key,
-    this.loadingText = "Loading..."
-  }) : super(key: key);
+  const LoadingDialog({Key? key, this.loadingText = "Loading..."}) : super(key: key);
 
   final String loadingText;
 
@@ -21,7 +17,10 @@ class LoadingDialog extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const CircularProgressIndicator(),
-            Text(loadingText, textAlign: TextAlign.center,)
+            Text(
+              loadingText,
+              textAlign: TextAlign.center,
+            )
           ],
         ),
       ),

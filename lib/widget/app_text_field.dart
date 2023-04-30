@@ -1,20 +1,19 @@
-
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatelessWidget {
-  const AppTextField({
-    Key? key,
-    required this.controller,
-    this.errorText,
-    this.icon,
-    this.labelText,
-    this.obscureText = false,
-    this.inputType = TextInputType.text,
-    this.inputAction = TextInputAction.done,
-    this.capitalizeText = false,
-    this.maxLines,
-    this.hint
-  }) : super(key: key);
+  const AppTextField(
+      {Key? key,
+      required this.controller,
+      this.errorText,
+      this.icon,
+      this.labelText,
+      this.obscureText = false,
+      this.inputType = TextInputType.text,
+      this.inputAction = TextInputAction.done,
+      this.capitalizeText = false,
+      this.maxLines,
+      this.hint})
+      : super(key: key);
 
   final String? errorText;
   final Widget? icon;
@@ -34,14 +33,12 @@ class AppTextField extends StatelessWidget {
         textInputAction: inputAction,
         keyboardType: inputType,
         obscureText: obscureText,
-        textCapitalization:  capitalizeText ? TextCapitalization.words : TextCapitalization.none,
+        textCapitalization: capitalizeText ? TextCapitalization.words : TextCapitalization.none,
         maxLines: maxLines ?? 1,
         decoration: InputDecoration(
-          label: labelText == null ? null : Text(labelText!),
-          errorText: errorText,
-          suffixIcon: icon,
-          hintText: hint
-        )
-    );
+            label: labelText == null ? null : Text(labelText!),
+            errorText: errorText,
+            suffixIcon: icon,
+            hintText: hint));
   }
 }

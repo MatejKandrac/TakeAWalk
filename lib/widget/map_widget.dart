@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 class MapWidget extends StatelessWidget {
-  const MapWidget({
-    Key? key,
-    this.onAddPoint,
-    this.onPositionTap,
-    this.onCenterGps,
-    this.height = 300,
-    this.borderRadius,
-    this.bounds,
-    this.controller,
-    this.layers = const [],
-    required this.heroTag
-  }) : super(key: key);
+  const MapWidget(
+      {Key? key,
+      this.onAddPoint,
+      this.onPositionTap,
+      this.onCenterGps,
+      this.height = 300,
+      this.borderRadius,
+      this.bounds,
+      this.controller,
+      this.layers = const [],
+      required this.heroTag})
+      : super(key: key);
 
   final MapController? controller;
   final int heroTag;
@@ -46,14 +46,14 @@ class MapWidget extends StatelessWidget {
                   child: FlutterMap(
                     mapController: controller,
                     options: MapOptions(
-                        bounds: bounds,
-                        center: LatLng(48.148598, 17.107748),
-                        zoom: 13,
-                        onTap: (tapPosition, point) {
-                          if (onPositionTap != null) {
-                            onPositionTap!(point);
-                          }
-                        },
+                      bounds: bounds,
+                      center: LatLng(48.148598, 17.107748),
+                      zoom: 13,
+                      onTap: (tapPosition, point) {
+                        if (onPositionTap != null) {
+                          onPositionTap!(point);
+                        }
+                      },
                     ),
                     nonRotatedChildren: [
                       TileLayer(
@@ -83,7 +83,7 @@ class MapWidget extends StatelessWidget {
                   onPressed: onCenterGps,
                   child: const Icon(Icons.gps_fixed),
                 ),
-              )
+              ),
           ],
         ),
       ),

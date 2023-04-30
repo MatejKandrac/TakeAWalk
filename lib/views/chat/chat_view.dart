@@ -27,108 +27,109 @@ class ChatPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final messageController = useTextEditingController();
-    final bloc = useMemoized<ChatBloc>(() => BlocProvider.of(context));
+    final bloc = useMemoized<ChatBloc>(() => di());
 
     useEffect(() {
       bloc.getMessageData(eventId, pageNumber);
       return () => bloc.dispose();
     }, const []);
-    return BlocListener<ChatBloc, ChatState>(
-      listener: (context, state) {
-        if (state is ChatNewMessageState) {
-          print('New message received');
-        }
-        if (state is ChatErrorState) {
-          showStateDialog(context: context, isSuccess: false, closeOnConfirm: true, text: state.errorText);
-        }
-      },
-      child: BlocBuilder<ChatBloc, ChatState>(
-        buildWhen: (previous, current) => current is ChatDataState,
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: true,
-              title: Text("Chat", style: Theme.of(context).textTheme.bodyMedium),
-            ),
-            body: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: SingleChildScrollView(
-                        // controller: _controller,
-
-                        scrollDirection: Axis.vertical,
-                        reverse: true,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: IconButton(onPressed: () => _loadMessages(context), icon: const Icon(Icons.refresh)),
-                            ),
-
-                            for (var data in state.messages)
-                              if (data.userId == state.userId)
-                                MyMessage(message: data.message)
-                              else
-                                Message(username: data.username, message: data.message),
-
-                            const SizedBox(
-                              height: 100,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        color: Colors.white,
-                        elevation: 10,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 10, left: 10),
-                          child: Row(
+    return BlocProvider<ChatBloc>(
+      create: (context) => bloc,
+      child: BlocListener<ChatBloc, ChatState>(
+        listener: (context, state) {
+          if (state is ChatNewMessageState) {
+            print('New message received');
+          }
+          if (state is ChatErrorState) {
+            showStateDialog(context: context, isSuccess: false, closeOnConfirm: true, text: state.errorText);
+          }
+        },
+        child: BlocBuilder<ChatBloc, ChatState>(
+          buildWhen: (previous, current) => current is ChatDataState,
+          builder: (context, state) {
+            return Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: true,
+                title: Text("Chat", style: Theme.of(context).textTheme.bodyMedium),
+              ),
+              body: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          reverse: true,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Expanded(
-                                child: TextField(
-                                  style: const TextStyle(color: Colors.black),
-                                  controller: messageController,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Enter message',
-                                    labelStyle: TextStyle(color: Colors.black),
-                                  ),
-                                ),
+                              Align(
+                                alignment: Alignment.topCenter,
+                                child: IconButton(onPressed: () => _loadMessages(context), icon: const Icon(Icons.refresh)),
                               ),
-                              // Spacer(),
+
+                              for (var data in state.messages)
+                                if (data.userId == state.userId)
+                                  MyMessage(message: data.message)
+                                else
+                                  Message(username: data.username, message: data.message),
+
                               const SizedBox(
-                                width: 10,
-                              ),
-                              IconButton(
-                                onPressed: () => {
-                                  _onSendMessage(context, messageController.text),
-                                  messageController.clear()
-                                },
-                                icon: const Icon(
-                                  Icons.send_outlined,
-                                  color: Colors.black,
-                                ),
+                                height: 100,
                               ),
                             ],
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          color: Colors.white,
+                          elevation: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10, left: 10),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    style: const TextStyle(color: Colors.black),
+                                    controller: messageController,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Enter message',
+                                      labelStyle: TextStyle(color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                                // Spacer(),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                IconButton(
+                                  onPressed: () => {
+                                    _onSendMessage(context, messageController.text),
+                                    messageController.clear()
+                                  },
+                                  icon: const Icon(
+                                    Icons.send_outlined,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -72,7 +72,6 @@ class MessagingService {
       print("Initializing messaging service");
       FirebaseMessaging.onMessage.listen((event) {
         var showNotification = true;
-        // print(event.data);
         print(_onChatMessage.toString());
         print('toto teraz zafungovalo');
         if (_onChatMessage != null) {

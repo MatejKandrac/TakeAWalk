@@ -38,8 +38,7 @@ class AppButton extends StatelessWidget {
     Key? key,
     required this.child,
     required this.onPressed,
-    this.gradient = const LinearGradient(
-        colors: <Color>[Color(0xffF20AB8), Color(0xff6C30E8)]),
+    this.gradient = const LinearGradient(colors: <Color>[Color(0xffF20AB8), Color(0xff6C30E8)]),
     this.height = 55,
   })  : outlineColor = null,
         radius = 30,
@@ -83,9 +82,7 @@ class AppButton extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: gradient,
-        border: outlineColor == null
-            ? null
-            : Border.all(color: outlineColor!, width: 2),
+        border: outlineColor == null ? null : Border.all(color: outlineColor!, width: 2),
         borderRadius: BorderRadius.circular(radius),
       ),
       child: ElevatedButton(
@@ -99,8 +96,7 @@ class AppButton extends StatelessWidget {
             }
           }),
           shadowColor: MaterialStateProperty.all(Colors.transparent),
-          shape: MaterialStateProperty.all(RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radius))),
+          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius))),
         ),
         child: child,
       ),

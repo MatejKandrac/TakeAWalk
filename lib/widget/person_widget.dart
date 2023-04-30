@@ -1,16 +1,16 @@
-
 import 'package:flutter/material.dart';
 
 class PersonWidget extends StatelessWidget {
-  const PersonWidget({
-    Key? key,
-    required this.name,
-    required this.onRequestHeaders,
-    required this.onImageUrl,
-    this.bio,
-    this.picture,
-    this.suffix,
-    this.onDelete}) : super(key: key);
+  const PersonWidget(
+      {Key? key,
+      required this.name,
+      required this.onRequestHeaders,
+      required this.onImageUrl,
+      this.bio,
+      this.picture,
+      this.suffix,
+      this.onDelete})
+      : super(key: key);
 
   final String name;
   final String? bio;
@@ -38,31 +38,26 @@ class PersonWidget extends StatelessWidget {
                     width: 40,
                     height: 40,
                     child: picture == null
-                        ? const Icon(Icons.account_circle, size: 40) :
-                        Image.network(
+                        ? const Icon(Icons.account_circle, size: 40)
+                        : Image.network(
                             onImageUrl(picture!),
-                          headers: onRequestHeaders(),
-                          fit: BoxFit.cover,
-                        ),
+                            headers: onRequestHeaders(),
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
                 const SizedBox(width: 10),
-                Expanded(child: Text(
-                    name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall
-                ))
+                Expanded(
+                    child: Text(name,
+                        maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall))
               ],
             ),
           ),
-          if (onDelete != null) Material(
-            color: const Color(0xff27283D),
-            child: IconButton(
-                onPressed: onDelete!,
-                icon: const Icon(Icons.delete)
+          if (onDelete != null)
+            Material(
+              color: const Color(0xff27283D),
+              child: IconButton(onPressed: onDelete!, icon: const Icon(Icons.delete)),
             ),
-          ),
           if (suffix != null) suffix!
         ],
       ),

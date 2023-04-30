@@ -33,8 +33,6 @@ class UsersRepositoryImpl extends BaseApiRepository implements UsersRepository {
 
     if (response.isRight) {
 
-      print('It is right');
-
       var isPresent = await profileLocalService.isPresent(userId);
 
       if (isPresent) {

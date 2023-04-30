@@ -22,6 +22,4 @@ class Profile {
     this.profilePicture
 });
 
-  // Profile(this.id, this.username, this.email, this.bio, this.profilePicture);
-
 }

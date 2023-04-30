@@ -1,5 +1,4 @@
 
-
 class LiveLocationRequest {
 
   final double lat;

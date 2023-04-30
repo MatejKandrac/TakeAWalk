@@ -1,12 +1,10 @@
 
 import 'dart:io';
 
-import 'package:take_a_walk_app/data/datasource/local/profile_local_service.dart';
-import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
-import 'package:take_a_walk_app/utils/request_error.dart';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:retrofit/dio.dart';
+import 'package:take_a_walk_app/utils/request_error.dart';
 
 abstract class BaseApiRepository {
 
@@ -33,8 +31,6 @@ abstract class BaseApiRepository {
       print(e);
       print(stacktrace);
       if (e.response == null) {
-        // TODO if has localRequest, try to get local data
-
         if (localRequest != null) {
           final localResponse = await localRequest();
           return Right(localResponse);

@@ -47,15 +47,12 @@ class EventsRepositoryImpl extends BaseApiRepository implements EventsRepository
         localRequest: () => eventLocalService.getAllUserEvents(false));
 
     if (response.isRight) {
-      print('It is right');
       for (EventObject event in response.right) {
         var isPresent = await eventLocalService.isPresent(event.eventId);
         if (isPresent) {
-          print('Updating event');
           print(event.end);
           eventLocalService.updateEvent(event);
         } else {
-          print('Saving event');
           eventLocalService.saveEvent(event);
         }
       }
@@ -71,7 +68,6 @@ class EventsRepositoryImpl extends BaseApiRepository implements EventsRepository
       return Left(RequestError.unauthenticated());
     }
     var result = await makeRequest(request: () => eventsApiService.getUserInvitations(id));
-    // return await makeRequest<List<EventObject>>(request: () => eventsApiService.getUserEvents(id));
     return result;
   }
 

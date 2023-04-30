@@ -1,7 +1,5 @@
 
 
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:take_a_walk_app/domain/models/requests/weather_request.dart';

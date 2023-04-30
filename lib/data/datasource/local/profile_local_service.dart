@@ -1,8 +1,3 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
-import 'package:dio/src/response.dart';
-import 'package:retrofit/dio.dart';
 import 'package:take_a_walk_app/domain/models/responses/profile_response.dart';
 import 'package:take_a_walk_app/utils/persistence/app_database.dart';
 
@@ -14,7 +9,6 @@ class ProfileLocalService {
   ProfileLocalService(this.database);
 
   Future<ProfileResponse> getProfile(int userId) async {
-    print('Getting profile data from SQLite');
 
     final profileDao = database.profileDao;
 
@@ -33,8 +27,6 @@ class ProfileLocalService {
 
   void saveProfile(ProfileResponse profileData, int userId) {
 
-    print('Saving profile');
-
     var profile = Profile(
         id: userId,
         email: profileData.email,
@@ -48,7 +40,6 @@ class ProfileLocalService {
   }
 
   void updateProfile(int userId, ProfileResponse profileData) {
-    print('Updating profile');
 
     final profileDao = database.profileDao;
 

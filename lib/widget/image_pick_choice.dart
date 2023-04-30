@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
 
@@ -24,12 +23,11 @@ class ImagePickChoice extends StatelessWidget {
                   children: [
                     const Icon(Icons.image),
                     Text(
-                        "From gallery",
+                      "From gallery",
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
-                )
-            ),
+                )),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -46,8 +44,7 @@ class ImagePickChoice extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
-                )
-            ),
+                )),
           ),
         ],
       ),

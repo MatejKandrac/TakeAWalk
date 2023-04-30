@@ -19,6 +19,4 @@ class WeatherRepositoryImpl extends BaseApiRepository implements WeatherReposito
     return makeRequest(request: () => service.getWeather(request));
   }
 
-
-
 }

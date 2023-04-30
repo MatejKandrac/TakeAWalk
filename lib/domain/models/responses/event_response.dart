@@ -161,9 +161,7 @@ class MapEventObj {
       lat: map['lat'] as double,
       lon: map['lon'] as double,
       name: map['name'] as String,
-      // dateStart: map['dateStart'] as DateTime,
       dateStart: DateTime.parse(map['dateStart'] as String).toLocal(),
-      // dateEnd: map['dateEnd'] as DateTime,
       dateEnd: DateTime.parse(map['dateEnd'] as String).toLocal(),
       eventId: map['eventId'] as int,
     );

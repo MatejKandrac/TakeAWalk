@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/domain/models/requests/filter_data.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
@@ -45,7 +44,6 @@ class EventLocalService {
     events = events.where((event) => event.peopleGoing! >= filter.peopleGoing).toList();
 
     if (filter.date != null) {
-      // events = events.where((event) => DateFormat('dd-MM-yyyy', event.start.toString()) == DateFormat('dd-MM-yyyy', filter.date.toString())).toList();
       events = events
           .where((event) =>
               AppConstants.dateOnlyFormat.format(event.start).toString() ==
@@ -99,17 +97,7 @@ class EventLocalService {
     eventDao.deleteEvent(eventData.eventId);
     eventDao.insertEvent(newEvent);
 
-    // await eventDao.updateEvent(eventData.eventId,
-    //     eventData.name,
-    //     eventData.owner,
-    //     eventData.start.toString(),
-    //     eventData.end.toIso8601String(),
-    //     eventData.peopleGoing ?? 0,
-    //     eventData.places ?? 0,
-    //     eventData.eventId);
-
     var newDbEvent = await eventDao.isPresent(eventData.eventId);
-    print('This is new end ${newDbEvent!.end}');
   }
 
   Future<bool> isPresent(int id) async {

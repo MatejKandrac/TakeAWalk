@@ -1,21 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:take_a_walk_app/config/constants.dart';
 import 'package:take_a_walk_app/domain/models/responses/event_response.dart';
 import 'package:take_a_walk_app/utils/transform_locations_mixin.dart';
-import 'package:take_a_walk_app/widget/map_widget.dart';
 import 'package:take_a_walk_app/widget/app_button.dart';
+import 'package:take_a_walk_app/widget/map_widget.dart';
 
 class EventItem extends StatelessWidget with TransformLocationsMixin {
-  const EventItem({
-    Key? key,
-    required this.event,
-    required this.onTap,
-    required this.status,
-    this.onAccept,
-    this.onDecline
-  }) : super(key: key);
+  const EventItem(
+      {Key? key, required this.event, required this.onTap, required this.status, this.onAccept, this.onDecline})
+      : super(key: key);
 
   final EventObject event;
   final Status status;
@@ -31,9 +25,7 @@ class EventItem extends StatelessWidget with TransformLocationsMixin {
       bounds.pad(0.05);
     }
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       color: event.start.isBefore(DateTime.now()) ? const Color(0xff7740c2) : null,
       child: InkWell(
         onTap: onTap,
@@ -49,21 +41,18 @@ class EventItem extends StatelessWidget with TransformLocationsMixin {
                   markers: [
                     for (var point in points)
                       Marker(
-                          point: point,
-                          anchorPos: AnchorPos.align(AnchorAlign.top),
-                          builder: (context) => const Icon(
-                            Icons.location_on,
-                            color: Colors.red,
-                            size: 40,
-                          ),
+                        point: point,
+                        anchorPos: AnchorPos.align(AnchorAlign.top),
+                        builder: (context) => const Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                          size: 40,
+                        ),
                       )
                   ],
                 )
               ],
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15)
-              ),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
             ),
             Padding(
               padding: const EdgeInsets.all(10),
@@ -84,8 +73,10 @@ class EventItem extends StatelessWidget with TransformLocationsMixin {
                           children: [
                             Icon(Icons.access_time_outlined),
                             const SizedBox(width: 5),
-                            Text("${AppConstants.timeFormat.format(event.start)} - ${AppConstants.timeFormat.format(event.end)}",
-                              style: Theme.of(context).textTheme.bodySmall,)
+                            Text(
+                              "${AppConstants.timeFormat.format(event.start)} - ${AppConstants.timeFormat.format(event.end)}",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            )
                           ],
                         ),
                       ),
@@ -96,7 +87,10 @@ class EventItem extends StatelessWidget with TransformLocationsMixin {
                           children: [
                             Icon(Icons.person_2_outlined),
                             const SizedBox(width: 5),
-                            Text(event.peopleGoing.toString(), style: Theme.of(context).textTheme.bodySmall,)
+                            Text(
+                              event.peopleGoing.toString(),
+                              style: Theme.of(context).textTheme.bodySmall,
+                            )
                           ],
                         ),
                       ),
@@ -113,8 +107,10 @@ class EventItem extends StatelessWidget with TransformLocationsMixin {
                           children: [
                             Icon(Icons.date_range),
                             const SizedBox(width: 5),
-                            Text("${AppConstants.dateOnlyFormat.format(event.start)} - ${AppConstants.dateOnlyFormat.format(event.end)}",
-                              style: Theme.of(context).textTheme.bodySmall,)
+                            Text(
+                              "${AppConstants.dateOnlyFormat.format(event.start)} - ${AppConstants.dateOnlyFormat.format(event.end)}",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            )
                           ],
                         ),
                       ),
@@ -125,31 +121,29 @@ class EventItem extends StatelessWidget with TransformLocationsMixin {
                           children: [
                             Icon(Icons.location_on_outlined),
                             const SizedBox(width: 5),
-                            Text(event.places.toString(), style: Theme.of(context).textTheme.bodySmall,)
+                            Text(
+                              event.places.toString(),
+                              style: Theme.of(context).textTheme.bodySmall,
+                            )
                           ],
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
-                  if (status == Status.PENDING) Row(
-                    children: [
-                      Expanded(
-                        child: AppButton.outlined(
-                            outlineColor: const Color(0xffF20AB8),
-                            onPressed: onDecline,
-                            child: Text("Decline")
+                  if (status == Status.PENDING)
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppButton.outlined(
+                              outlineColor: const Color(0xffF20AB8), onPressed: onDecline, child: Text("Decline")),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: AppButton.primary(
-                            onPressed: onAccept,
-                            child: Text("Accept")
-                        ),
-                      )
-                    ],
-                  ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: AppButton.primary(onPressed: onAccept, child: Text("Accept")),
+                        )
+                      ],
+                    ),
                   const SizedBox(height: 10),
                 ],
               ),

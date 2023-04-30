@@ -2,10 +2,10 @@ import 'dart:core';
 
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:take_a_walk_app/config/constants.dart';
 
 import '../../../../domain/models/requests/message_data_request.dart';
 import '../../../../domain/models/responses/chat_response.dart';
+
 part 'chats_api_service.g.dart';
 
 @RestApi(parser: Parser.MapSerializable)
