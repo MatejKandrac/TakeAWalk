@@ -53,11 +53,11 @@ class MessagingService {
 
   final AuthRepository _authRepository;
   final FlutterLocalNotificationsPlugin notificationsPlugin;
-  bool Function(RemoteMessage message)? _onChatMessage;
+  Future<bool> Function(RemoteMessage message)? _onChatMessage;
 
   MessagingService(this._authRepository, this.notificationsPlugin);
 
-  registerListener(bool Function(RemoteMessage) listener) {
+  registerListener(Future<bool> Function(RemoteMessage) listener) {
     _onChatMessage = listener;
   }
 
@@ -70,12 +70,12 @@ class MessagingService {
       FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
       await _initNotifications(notificationsPlugin);
       print("Initializing messaging service");
-      FirebaseMessaging.onMessage.listen((event) {
+      FirebaseMessaging.onMessage.listen((event) async {
         var showNotification = true;
         print(_onChatMessage.toString());
         print('toto teraz zafungovalo');
         if (_onChatMessage != null) {
-          showNotification = _onChatMessage!(event);
+          showNotification = await _onChatMessage!(event);
         }
         if (showNotification) {
           _showNotification(notificationsPlugin, event);

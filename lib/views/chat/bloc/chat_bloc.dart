@@ -19,28 +19,28 @@ class ChatBloc extends Cubit<ChatState> {
   List<MessageObj> messages = [];
   int currentUserId = -1;
 
-  bool _onCloudNotification(int eventId, RemoteMessage message) {
+  Future<bool> _onCloudNotification(int eventId, RemoteMessage message) async {
 
     if (eventId == int.parse(message.data['event_id']) && message.data['message'] != null) {
-
       var userId = int.parse(message.data['message_userId']);
+      if (userId != currentUserId) {
+        var newMessage = MessageObj(
+            id: int.parse(message.data['message_id']),
+            message: message.data['message'],
+            sent: DateTime.parse(message.data['message_sent']),
+            username: message.data['message_username'],
+            userId: userId
+        );
 
-      var newMessage = MessageObj(
-          id: int.parse(message.data['message_id']),
-          message: message.data['message'],
-          sent: DateTime.parse(message.data['message_sent']),
-          username: message.data['message_username'],
-          userId: userId
-      );
+        messages.add(newMessage);
 
-      messages.add(newMessage);
-
-      var seen = Set<MessageObj>();
-      messages = messages.where((message) => seen.add(message)).toList();
-      emitNewMessage(messages, currentUserId);
-
+        var seen = Set<MessageObj>();
+        messages = messages.where((message) => seen.add(message)).toList();
+        emitNewMessage(messages, currentUserId);
+      }
       return false;
     }
+
     return true;
   }
 
